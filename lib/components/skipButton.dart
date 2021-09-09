@@ -14,11 +14,12 @@ class SkipButton extends StatelessWidget {
             textStyle: const TextStyle(fontSize: 15, letterSpacing: 2),
           ),
           onPressed: () {
-            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
           },
           child: const Text('SKIP'),
         ),
       ],
-    );;
+    );
   }
 }

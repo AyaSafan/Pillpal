@@ -9,8 +9,6 @@ class MedicinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
-
-    );
+    return PageLayout();
   }
 }

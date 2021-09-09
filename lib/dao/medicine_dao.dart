@@ -1,26 +1,26 @@
 import 'package:floor/floor.dart';
 import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/services/ListConverter.dart';
+import 'package:pill_pal/services/ListStringConverter.dart';
 
 @dao
 abstract class MedicineDao {
-  @Query('SELECT * FROM medicine')
+  @Query('SELECT * FROM medicines')
   Future<List<Medicine>> findAllMedicines();
 
-  @Query('SELECT * FROM medicine WHERE name =:name')
+  @Query('SELECT * FROM medicines WHERE name =:name')
   Future<List<Medicine>> findMedicineByName(String name);
 
-  @Query('SELECT * FROM medicine WHERE id = :id')
+  @Query('SELECT * FROM medicines WHERE id = :id')
   Future<Medicine?> findMedicineById(int id);
 
-  @Query("UPDATE medicine SET amountAvailable =:amount WHERE id = :id")
+  @Query("UPDATE medicines SET amountAvailable =:amount WHERE id = :id")
   Future<void> updateAmountAvailable(int amount, int id);
 
-  @Query("UPDATE medicine SET amountAvailable = amountAvailable-dose WHERE id = :id")
+  @Query("UPDATE medicines SET amountAvailable = amountAvailable-dose WHERE id = :id")
   Future<void> takeDose(int id);
 
-  @TypeConverters([ListConverter])
-  @Query("UPDATE medicine SET tags IN (:tags) WHERE id = :id")
+  @TypeConverters([ListStringConverter])
+  @Query("UPDATE medicines SET tags IN (:tags) WHERE id = :id")
   Future<void> updateTags(List<String> tags, int id);
 
   @insert
@@ -32,7 +32,7 @@ abstract class MedicineDao {
   @delete
   Future<void> deleteMedicine(Medicine medicine);
 
-  @Query('DELETE FROM medicine')
+  @Query('DELETE FROM medicines')
   Future<void> deleteAllMedicine();
 
 }

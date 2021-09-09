@@ -64,7 +64,7 @@ class _$AppDatabase extends AppDatabase {
 
   ReminderDao? _reminderDaoInstance;
 
-  CyclicReminderDao? _cyclicDaoInstance;
+  ReminderCheckDao? _reminderCheckDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
@@ -85,11 +85,11 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `medicine` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `desc` TEXT NOT NULL, `amountAvailable` INTEGER NOT NULL, `supplyMin` INTEGER NOT NULL, `dose` INTEGER NOT NULL, `capSize` INTEGER NOT NULL, `pillShape` TEXT NOT NULL, `pillColor` INTEGER NOT NULL, `tags` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `medicines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `desc` TEXT NOT NULL, `amountAvailable` INTEGER NOT NULL, `supplyMin` INTEGER NOT NULL, `dose` INTEGER NOT NULL, `capSize` INTEGER NOT NULL, `pillShape` TEXT NOT NULL, `pillColor` INTEGER NOT NULL, `tags` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reminder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `checked` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicine` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `repeated` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `cyclic_reminder` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `dates` TEXT NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `checked` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicine` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER NOT NULL, `scheduledDateTime` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -108,8 +108,9 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  CyclicReminderDao get cyclicDao {
-    return _cyclicDaoInstance ??= _$CyclicReminderDao(database, changeListener);
+  ReminderCheckDao get reminderCheckDao {
+    return _reminderCheckDaoInstance ??=
+        _$ReminderCheckDao(database, changeListener);
   }
 }
 
@@ -118,7 +119,7 @@ class _$MedicineDao extends MedicineDao {
       : _queryAdapter = QueryAdapter(database),
         _medicineInsertionAdapter = InsertionAdapter(
             database,
-            'medicine',
+            'medicines',
             (Medicine item) => <String, Object?>{
                   'id': item.id,
                   'name': item.name,
@@ -129,11 +130,11 @@ class _$MedicineDao extends MedicineDao {
                   'capSize': item.capSize,
                   'pillShape': item.pillShape,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
-                  'tags': _listConverter.encode(item.tags)
+                  'tags': _listStringConverter.encode(item.tags)
                 }),
         _medicineUpdateAdapter = UpdateAdapter(
             database,
-            'medicine',
+            'medicines',
             ['id'],
             (Medicine item) => <String, Object?>{
                   'id': item.id,
@@ -145,11 +146,11 @@ class _$MedicineDao extends MedicineDao {
                   'capSize': item.capSize,
                   'pillShape': item.pillShape,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
-                  'tags': _listConverter.encode(item.tags)
+                  'tags': _listStringConverter.encode(item.tags)
                 }),
         _medicineDeletionAdapter = DeletionAdapter(
             database,
-            'medicine',
+            'medicines',
             ['id'],
             (Medicine item) => <String, Object?>{
                   'id': item.id,
@@ -161,7 +162,7 @@ class _$MedicineDao extends MedicineDao {
                   'capSize': item.capSize,
                   'pillShape': item.pillShape,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
-                  'tags': _listConverter.encode(item.tags)
+                  'tags': _listStringConverter.encode(item.tags)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -178,7 +179,7 @@ class _$MedicineDao extends MedicineDao {
 
   @override
   Future<List<Medicine>> findAllMedicines() async {
-    return _queryAdapter.queryList('SELECT * FROM medicine',
+    return _queryAdapter.queryList('SELECT * FROM medicines',
         mapper: (Map<String, Object?> row) => Medicine(
             id: row['id'] as int?,
             name: row['name'] as String,
@@ -189,12 +190,12 @@ class _$MedicineDao extends MedicineDao {
             capSize: row['capSize'] as int,
             pillShape: row['pillShape'] as String,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
-            tags: _listConverter.decode(row['tags'] as String)));
+            tags: _listStringConverter.decode(row['tags'] as String)));
   }
 
   @override
   Future<List<Medicine>> findMedicineByName(String name) async {
-    return _queryAdapter.queryList('SELECT * FROM medicine WHERE name =?1',
+    return _queryAdapter.queryList('SELECT * FROM medicines WHERE name =?1',
         mapper: (Map<String, Object?> row) => Medicine(
             id: row['id'] as int?,
             name: row['name'] as String,
@@ -205,13 +206,13 @@ class _$MedicineDao extends MedicineDao {
             capSize: row['capSize'] as int,
             pillShape: row['pillShape'] as String,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
-            tags: _listConverter.decode(row['tags'] as String)),
+            tags: _listStringConverter.decode(row['tags'] as String)),
         arguments: [name]);
   }
 
   @override
   Future<Medicine?> findMedicineById(int id) async {
-    return _queryAdapter.query('SELECT * FROM medicine WHERE id = ?1',
+    return _queryAdapter.query('SELECT * FROM medicines WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Medicine(
             id: row['id'] as int?,
             name: row['name'] as String,
@@ -222,21 +223,21 @@ class _$MedicineDao extends MedicineDao {
             capSize: row['capSize'] as int,
             pillShape: row['pillShape'] as String,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
-            tags: _listConverter.decode(row['tags'] as String)),
+            tags: _listStringConverter.decode(row['tags'] as String)),
         arguments: [id]);
   }
 
   @override
   Future<void> updateAmountAvailable(int amount, int id) async {
     await _queryAdapter.queryNoReturn(
-        'UPDATE medicine SET amountAvailable =?1 WHERE id = ?2',
+        'UPDATE medicines SET amountAvailable =?1 WHERE id = ?2',
         arguments: [amount, id]);
   }
 
   @override
   Future<void> takeDose(int id) async {
     await _queryAdapter.queryNoReturn(
-        'UPDATE medicine SET amountAvailable = amountAvailable-dose WHERE id = ?1',
+        'UPDATE medicines SET amountAvailable = amountAvailable-dose WHERE id = ?1',
         arguments: [id]);
   }
 
@@ -247,7 +248,7 @@ class _$MedicineDao extends MedicineDao {
         Iterable<String>.generate(tags.length, (i) => '?${i + offset}')
             .join(',');
     await _queryAdapter.queryNoReturn(
-        'UPDATE medicine SET tags IN (' +
+        'UPDATE medicines SET tags IN (' +
             _sqliteVariablesForTags +
             ') WHERE id = ?1',
         arguments: [id, ...tags]);
@@ -255,7 +256,7 @@ class _$MedicineDao extends MedicineDao {
 
   @override
   Future<void> deleteAllMedicine() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM medicine');
+    await _queryAdapter.queryNoReturn('DELETE FROM medicines');
   }
 
   @override
@@ -279,35 +280,41 @@ class _$ReminderDao extends ReminderDao {
       : _queryAdapter = QueryAdapter(database),
         _reminderInsertionAdapter = InsertionAdapter(
             database,
-            'reminder',
+            'reminders',
             (Reminder item) => <String, Object?>{
                   'id': item.id,
                   'medicine_id': item.medicineId,
+                  'date': item.date,
+                  'day': item.day,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'label': item.label,
-                  'checked': item.checked ? 1 : 0
+                  'repeated': item.repeated ? 1 : 0
                 }),
         _reminderUpdateAdapter = UpdateAdapter(
             database,
-            'reminder',
+            'reminders',
             ['id'],
             (Reminder item) => <String, Object?>{
                   'id': item.id,
                   'medicine_id': item.medicineId,
+                  'date': item.date,
+                  'day': item.day,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'label': item.label,
-                  'checked': item.checked ? 1 : 0
+                  'repeated': item.repeated ? 1 : 0
                 }),
         _reminderDeletionAdapter = DeletionAdapter(
             database,
-            'reminder',
+            'reminders',
             ['id'],
             (Reminder item) => <String, Object?>{
                   'id': item.id,
                   'medicine_id': item.medicineId,
+                  'date': item.date,
+                  'day': item.day,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'label': item.label,
-                  'checked': item.checked ? 1 : 0
+                  'repeated': item.repeated ? 1 : 0
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -324,42 +331,77 @@ class _$ReminderDao extends ReminderDao {
 
   @override
   Future<List<Reminder>> findAllReminders() async {
-    return _queryAdapter.queryList('SELECT * FROM reminder',
+    return _queryAdapter.queryList('SELECT * FROM reminders',
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: row['dateTime'] as int,
             label: row['label'] as String,
-            checked: (row['checked'] as int) != 0));
+            repeated: (row['repeated'] as int) != 0));
   }
 
   @override
   Future<Reminder?> findReminderById(int id) async {
-    return _queryAdapter.query('SELECT * FROM reminder WHERE id = ?1',
+    return _queryAdapter.query('SELECT * FROM reminders WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: row['dateTime'] as int,
             label: row['label'] as String,
-            checked: (row['checked'] as int) != 0),
+            repeated: (row['repeated'] as int) != 0),
         arguments: [id]);
   }
 
   @override
-  Future<List<Reminder>> findReminderByDate(DateTime dateTime) async {
-    return _queryAdapter.queryList('SELECT * FROM reminder WHERE dateTime = ?1',
+  Future<List<Reminder>> findReminderByDate(String date) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1',
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: row['dateTime'] as int,
             label: row['label'] as String,
-            checked: (row['checked'] as int) != 0),
-        arguments: [_dateTimeConverter.encode(dateTime)]);
+            repeated: (row['repeated'] as int) != 0),
+        arguments: [date]);
+  }
+
+  @override
+  Future<List<Reminder>> findRepeatedReminders() async {
+    return _queryAdapter.queryList('SELECT * FROM reminders WHERE repeated = 1',
+        mapper: (Map<String, Object?> row) => Reminder(
+            id: row['id'] as int?,
+            medicineId: row['medicine_id'] as int,
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: row['dateTime'] as int,
+            label: row['label'] as String,
+            repeated: (row['repeated'] as int) != 0));
+  }
+
+  @override
+  Future<List<Reminder>> findRepeatedReminderByDay(int day) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM reminders WHERE repeated = 1 AND day =?1',
+        mapper: (Map<String, Object?> row) => Reminder(
+            id: row['id'] as int?,
+            medicineId: row['medicine_id'] as int,
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: row['dateTime'] as int,
+            label: row['label'] as String,
+            repeated: (row['repeated'] as int) != 0),
+        arguments: [day]);
   }
 
   @override
   Future<void> deleteAllReminders() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM reminder');
+    await _queryAdapter.queryNoReturn('DELETE FROM reminders');
   }
 
   @override
@@ -378,43 +420,43 @@ class _$ReminderDao extends ReminderDao {
   }
 }
 
-class _$CyclicReminderDao extends CyclicReminderDao {
-  _$CyclicReminderDao(this.database, this.changeListener)
+class _$ReminderCheckDao extends ReminderCheckDao {
+  _$ReminderCheckDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
-        _cyclicReminderInsertionAdapter = InsertionAdapter(
+        _reminderCheckInsertionAdapter = InsertionAdapter(
             database,
-            'cyclic_reminder',
-            (CyclicReminder item) => <String, Object?>{
+            'reminders_check',
+            (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
-                  'medicine_id': item.medicineId,
-                  'dates': _listConverter.encode(item.dates),
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'label': item.label,
-                  'checked': item.checked ? 1 : 0
+                  'reminder_id': item.reminderID,
+                  'scheduledDateTime':
+                      _dateTimeConverter.encode(item.scheduledDateTime),
+                  'checkedDateTime':
+                      _dateTimeConverter.encode(item.checkedDateTime)
                 }),
-        _cyclicReminderUpdateAdapter = UpdateAdapter(
+        _reminderCheckUpdateAdapter = UpdateAdapter(
             database,
-            'cyclic_reminder',
+            'reminders_check',
             ['id'],
-            (CyclicReminder item) => <String, Object?>{
+            (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
-                  'medicine_id': item.medicineId,
-                  'dates': _listConverter.encode(item.dates),
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'label': item.label,
-                  'checked': item.checked ? 1 : 0
+                  'reminder_id': item.reminderID,
+                  'scheduledDateTime':
+                      _dateTimeConverter.encode(item.scheduledDateTime),
+                  'checkedDateTime':
+                      _dateTimeConverter.encode(item.checkedDateTime)
                 }),
-        _cyclicReminderDeletionAdapter = DeletionAdapter(
+        _reminderCheckDeletionAdapter = DeletionAdapter(
             database,
-            'cyclic_reminder',
+            'reminders_check',
             ['id'],
-            (CyclicReminder item) => <String, Object?>{
+            (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
-                  'medicine_id': item.medicineId,
-                  'dates': _listConverter.encode(item.dates),
-                  'dateTime': _dateTimeConverter.encode(item.dateTime),
-                  'label': item.label,
-                  'checked': item.checked ? 1 : 0
+                  'reminder_id': item.reminderID,
+                  'scheduledDateTime':
+                      _dateTimeConverter.encode(item.scheduledDateTime),
+                  'checkedDateTime':
+                      _dateTimeConverter.encode(item.checkedDateTime)
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -423,61 +465,72 @@ class _$CyclicReminderDao extends CyclicReminderDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<CyclicReminder> _cyclicReminderInsertionAdapter;
+  final InsertionAdapter<ReminderCheck> _reminderCheckInsertionAdapter;
 
-  final UpdateAdapter<CyclicReminder> _cyclicReminderUpdateAdapter;
+  final UpdateAdapter<ReminderCheck> _reminderCheckUpdateAdapter;
 
-  final DeletionAdapter<CyclicReminder> _cyclicReminderDeletionAdapter;
+  final DeletionAdapter<ReminderCheck> _reminderCheckDeletionAdapter;
 
   @override
-  Future<List<CyclicReminder>> findAllCyclicReminder() async {
-    return _queryAdapter.queryList('SELECT * FROM cyclic_reminder',
-        mapper: (Map<String, Object?> row) => CyclicReminder(
+  Future<List<ReminderCheck>> findAllReminderChecks() async {
+    return _queryAdapter.queryList('SELECT * FROM reminders_check',
+        mapper: (Map<String, Object?> row) => ReminderCheck(
             id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            dates: _listConverter.decode(row['dates'] as String),
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            checked: (row['checked'] as int) != 0));
+            reminderID: row['reminder_id'] as int,
+            scheduledDateTime:
+                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
+            checkedDateTime: row['checkedDateTime'] as int));
   }
 
   @override
-  Future<CyclicReminder?> findCyclicReminderById(int id) async {
-    return _queryAdapter.query('SELECT * FROM cyclic_reminder WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => CyclicReminder(
+  Future<ReminderCheck?> findReminderCheckById(int id) async {
+    return _queryAdapter.query('SELECT * FROM reminders_check WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => ReminderCheck(
             id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            dates: _listConverter.decode(row['dates'] as String),
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            checked: (row['checked'] as int) != 0),
+            reminderID: row['reminder_id'] as int,
+            scheduledDateTime:
+                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
+            checkedDateTime: row['checkedDateTime'] as int),
         arguments: [id]);
   }
 
   @override
-  Future<void> deleteAllCyclicReminders() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM cyclic_reminder');
+  Future<List<ReminderCheck>> findReminderByScheduledDate(
+      DateTime datetime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM reminders_check WHERE scheduledDateTime =?1',
+        mapper: (Map<String, Object?> row) => ReminderCheck(
+            id: row['id'] as int?,
+            reminderID: row['reminder_id'] as int,
+            scheduledDateTime:
+                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
+            checkedDateTime: row['checkedDateTime'] as int),
+        arguments: [_dateTimeConverter.encode(datetime)]);
   }
 
   @override
-  Future<void> insertCyclicReminder(CyclicReminder reminder) async {
-    await _cyclicReminderInsertionAdapter.insert(
-        reminder, OnConflictStrategy.abort);
+  Future<void> deleteAllReminderChecks() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM reminders_check');
   }
 
   @override
-  Future<void> updateCyclicReminder(CyclicReminder reminder) async {
-    await _cyclicReminderUpdateAdapter.update(
-        reminder, OnConflictStrategy.abort);
+  Future<void> insertReminderCheck(ReminderCheck check) async {
+    await _reminderCheckInsertionAdapter.insert(
+        check, OnConflictStrategy.abort);
   }
 
   @override
-  Future<void> deleteCyclicReminder(CyclicReminder reminder) async {
-    await _cyclicReminderDeletionAdapter.delete(reminder);
+  Future<void> updateReminderCheck(ReminderCheck check) async {
+    await _reminderCheckUpdateAdapter.update(check, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> deleteReminderCheck(ReminderCheck check) async {
+    await _reminderCheckDeletionAdapter.delete(check);
   }
 }
 
 // ignore_for_file: unused_element
 final _dateTimeConverter = DateTimeConverter();
-final _listConverter = ListConverter();
+final _listStringConverter = ListStringConverter();
 final _colorIntConverter = ColorIntConverter();

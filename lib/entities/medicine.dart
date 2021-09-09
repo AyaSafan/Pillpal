@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 
 
 @Entity(
-  tableName: 'medicine',
+  tableName: 'medicines',
 )
 class Medicine {
   @PrimaryKey(autoGenerate: true)
