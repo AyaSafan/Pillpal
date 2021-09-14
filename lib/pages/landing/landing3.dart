@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/components/nextButton.dart';
-import 'package:pill_pal/components/textSection.dart';
+import 'package:pill_pal/pages/landing/components/customImage.dart';
+import 'package:pill_pal/pages/landing/components/nextButton.dart';
+import 'package:pill_pal/pages/landing/components/textSection.dart';
 
 
 class Landing3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    
-    Widget image = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset('assets/landing3.png', height: 307, width: 300)
-      ],
-    );
-
 
     Widget body = Column(
         children:[
           //skipButton,
           Expanded(
-            child: ListView(
-                children: [
-                  image,
-                  TextSection('PillPal Tracker',
-                      'Pill tracker with a logbook for skipped and confirmed intakes. '
-                      'Track your tablets, dose, measurements in a comprehensive health journal. '
-                  ),
-                ]
+            child:
+            Center(
+              child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    CustomImage(imagePath: 'assets/landing3.png'),
+                    TextSection('PillPal Tracker',
+                        'Pill tracker with a logbook for skipped and confirmed intakes. '
+                        'Track your tablets, dose, measurements in a comprehensive health journal. '
+                    ),
+                  ]
+              ),
             ),
           ),
           NextButton('/home'),

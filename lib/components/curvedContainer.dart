@@ -7,13 +7,16 @@ class CurvedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    final curveSize = MediaQuery. of(context). size. width / 20;
+    return
+      Flexible(
+      fit: FlexFit.tight,
       child: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(curveSize),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(
-            top: const Radius.circular(30),
+            top: Radius.circular(curveSize),
           ),
         ),
         child: child,

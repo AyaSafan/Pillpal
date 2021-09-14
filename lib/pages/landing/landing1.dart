@@ -1,36 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/components/skipButton.dart';
-import 'package:pill_pal/components/nextButton.dart';
-import 'package:pill_pal/components/textSection.dart';
+import 'package:pill_pal/pages/landing/components/customImage.dart';
+import 'package:pill_pal/pages/landing/components/skipButton.dart';
+import 'package:pill_pal/pages/landing/components/nextButton.dart';
+import 'package:pill_pal/pages/landing/components/textSection.dart';
 
 
 class Landing1 extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-
-
-    Widget image = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset('assets/landing1.png', height: 294, width: 300)
-      ],
-    );
-
-
 
     Widget body = Column(
         children:[
           SkipButton(),
           Expanded(
-            child: ListView(
-                children: [
-                  image,
-                  TextSection(
-                      'Your PillPal is Here!',
-                      'Pill Pal fulfills all your medication needs in one place. '
-                  ),
-                ]
+            child:
+            Center(
+              child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    CustomImage(imagePath: 'assets/landing1.png'),
+                    TextSection(
+                        'Your PillPal is Here!',
+                        'Pill Pal fulfills all your medication needs in one place. '
+                    ),
+                  ]
+              ),
             ),
           ),
           NextButton('/landing2'),

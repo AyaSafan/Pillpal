@@ -6,12 +6,11 @@ class MedicineCard extends StatelessWidget {
 
   final Medicine medicineItem;
 
-
   @override
   Widget build(BuildContext context) {
     return
       GestureDetector(
-        onTap: (){print('click!');},
+        onTap: (){Navigator.pushNamed(context, '/reminder_item', arguments: medicineItem);},
         child: Card(
         elevation: 8,
         child: Column(

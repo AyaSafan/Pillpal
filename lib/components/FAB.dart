@@ -4,6 +4,13 @@ import 'package:fab_circular_menu/fab_circular_menu.dart';
 
 class FAB extends StatelessWidget {
   const FAB({Key? key}) : super(key: key);
+  // const FAB({Key? key,
+  //   this.color = MyColors.Landing2,
+  //   this.colorFAB = MyColors.MiddleBlueGreen,
+  // }) : super(key: key);
+  //
+  // final Color color;
+  // final Color colorFAB;
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +24,12 @@ class FAB extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.medication),
               tooltip: 'Add Medicine',
-              onPressed: () {}
+              onPressed: () {Navigator.pushNamed(context, '/medicine_add');}
           ),
           IconButton(
               icon: Icon(Icons.notification_add),
               tooltip: 'Add Reminder',
-              onPressed: () {}
+              onPressed: () {Navigator.pushNamed(context, '/reminder_add');}
           )
         ]
     );

@@ -9,17 +9,21 @@ class PageLayout extends StatelessWidget {
   PageLayout(
       {
         this.appBarTitle ='',
-        this.child =  const SizedBox(height: 0, width: 0) ,
+        this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
         this.appBarRight = const SizedBox(height: 0, width: 0),
-        this.color = MyColors.Landing1
+        this.color = MyColors.Landing2,
+        //this.colorFAB = MyColors.MiddleBlueGreen,
+        this.showFAB = true
       });
 
-  final Widget child;
+  final Widget topChild;
   final Widget containerChild;
   final Widget appBarRight;
   final String appBarTitle;
   final Color color;
+  //final Color colorFAB;
+  final bool showFAB;
 
 
   @override
@@ -46,15 +50,17 @@ class PageLayout extends StatelessWidget {
           color: Colors.black, //change your color here
         ),
       ),
-      body: Column(
+      body:
+      Column(
         children: [
-          child,
-          CurvedContainer(
-              containerChild
-          ),
+        topChild,
+        CurvedContainer(
+            containerChild
+        ),
         ],
       ),
-      floatingActionButton: FAB(),
+      floatingActionButton:
+      Visibility(child: FAB(), visible: showFAB,),
     );
   }
 }

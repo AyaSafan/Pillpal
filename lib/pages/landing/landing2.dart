@@ -1,36 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/components/skipButton.dart';
-import 'package:pill_pal/components/nextButton.dart';
-import 'package:pill_pal/components/textSection.dart';
+import 'package:pill_pal/pages/landing/components/customImage.dart';
+import 'package:pill_pal/pages/landing/components/skipButton.dart';
+import 'package:pill_pal/pages/landing/components/nextButton.dart';
+import 'package:pill_pal/pages/landing/components/textSection.dart';
 
 
 class Landing2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Widget image = Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset('assets/landing2.png', height: 280, width: 300)
-      ],
-    );
-
-
-
     Widget body = Column(
         children:[
           SkipButton(),
           Expanded(
-            child: ListView(
-                children: [
-                  TextSection(
-                      'PillPal Reminders',
-                      'Pill reminder app for all medications. '
-                      'Support for a wide range of dosing schemes within medication reminder. '
-                  ),
-                  image,
-                ]
+            child:
+            Center(
+              child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    TextSection(
+                        'PillPal Reminders',
+                        'Pill reminder app for all medications. '
+                        'Support for a wide range of dosing schemes within medication reminder. '
+                    ),
+                    CustomImage(imagePath: 'assets/landing2.png'),
+                  ]
+              ),
             ),
           ),
           NextButton('/landing3'),

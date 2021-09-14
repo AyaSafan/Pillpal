@@ -30,6 +30,7 @@ dependencies:
   percent_indicator: "^2.1.7+2"
   floor: ^1.1.0
   sqflite: ^2.0.0+3
+  flutter_colorpicker: ^0.6.0
 
 dev_dependencies:
   flutter_test:

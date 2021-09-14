@@ -4,10 +4,11 @@ import 'package:pill_pal/colors.dart';
 
 import 'package:pill_pal/components/pageLayout.dart';
 
-import 'package:pill_pal/components/dateCard.dart';
+import 'package:pill_pal/pages/calender/components/dateCard.dart';
 
 import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/reminder.dart';
+import 'package:pill_pal/pages/calender/components/detailsButton.dart';
 
 import 'package:table_calendar/table_calendar.dart';
 //import 'package:percent_indicator/percent_indicator.dart';
@@ -20,7 +21,7 @@ class Calender extends StatefulWidget {
 }
 
 class _CalenderState extends State<Calender> {
-  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
   List<Reminder> _selectedEvents = [];
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -41,20 +42,24 @@ class _CalenderState extends State<Calender> {
   Future<void> getRepeatedReminders() async {
     final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
     final reminderDao = database.reminderDao;
-    final mondayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.monday);
-    cyclicEvents[1]= mondayRepeatedReminders;
-    final tuesdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.tuesday);
-    cyclicEvents[2]= tuesdayRepeatedReminders;
-    final wednesdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.wednesday);
-    cyclicEvents[3]= wednesdayRepeatedReminders;
-    final thursdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.thursday);
-    cyclicEvents[4]= thursdayRepeatedReminders;
-    final fridayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.friday);
-    cyclicEvents[5]= fridayRepeatedReminders;
-    final saturdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.saturday);
-    cyclicEvents[6]= saturdayRepeatedReminders;
-    final sundayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.sunday);
-    cyclicEvents[7]= sundayRepeatedReminders;
+    for (var i = 1 ; i <= 7; i++){
+      final dayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(i);
+      cyclicEvents[i]= dayRepeatedReminders;
+    }
+    // final mondayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.monday);
+    // cyclicEvents[1]= mondayRepeatedReminders;
+    // final tuesdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.tuesday);
+    // cyclicEvents[2]= tuesdayRepeatedReminders;
+    // final wednesdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.wednesday);
+    // cyclicEvents[3]= wednesdayRepeatedReminders;
+    // final thursdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.thursday);
+    // cyclicEvents[4]= thursdayRepeatedReminders;
+    // final fridayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.friday);
+    // cyclicEvents[5]= fridayRepeatedReminders;
+    // final saturdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.saturday);
+    // cyclicEvents[6]= saturdayRepeatedReminders;
+    // final sundayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.sunday);
+    // cyclicEvents[7]= sundayRepeatedReminders;
     return;
   }
 
@@ -91,32 +96,21 @@ class _CalenderState extends State<Calender> {
 
   @override
   Widget build(BuildContext context) {
-    Widget detailsButton = TextButton(
-      style: TextButton.styleFrom(
-        primary: Colors.black,
-        //backgroundColor: MyColors.TealBlue,
-        padding: EdgeInsets.only(bottom: 0),
-        alignment: Alignment.bottomLeft,
-        textStyle: const TextStyle(
-            fontSize: 15, letterSpacing: 1, fontFamily: 'Raleway'),
-      ),
-      onPressed: () {},
-      child: Row(
-        children: [
-          Text("More details "),
-          Icon(
-            Icons.double_arrow_outlined,
-            size: 15,
-          ),
-        ],
-      ),
-    );
 
     return PageLayout(
-      appBarTitle: "Calender",
-      child: Column(
+      appBarTitle: "My Calender",
+      color: MyColors.Landing1,
+      //colorFAB: MyColors.MiddleRed,
+      topChild: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TableCalendar(
+            headerStyle: HeaderStyle(
+              //titleCentered: true,
+              //formatButtonVisible: false,
+              formatButtonShowsNext: false,
+            ),
+            availableCalendarFormats: const {CalendarFormat.month : 'Month',CalendarFormat.week : 'Week'},
             calendarStyle: CalendarStyle(
               selectedDecoration: BoxDecoration(
                   color: MyColors.TealBlue, shape: BoxShape.circle),
@@ -131,23 +125,16 @@ class _CalenderState extends State<Calender> {
             onDaySelected: _onDaySelected,
 
             selectedDayPredicate: (day) {
-              // Use `selectedDayPredicate` to determine which day is currently selected.
-              // If this returns true, then `day` will be marked as selected.
-
-              // Using `isSameDay` is recommended to disregard
-              // the time-part of compared DateTime objects.
               return isSameDay(_selectedDay, day);
             },
             onFormatChanged: (format) {
               if (_calendarFormat != format) {
-                // Call `setState()` when updating calendar format
                 setState(() {
                   _calendarFormat = format;
                 });
               }
             },
             onPageChanged: (focusedDay) {
-              // No need to call `setState()` here
               _focusedDay = focusedDay;
             },
           ),
@@ -165,7 +152,7 @@ class _CalenderState extends State<Calender> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               DateCard(_focusedDay),
-              detailsButton,
+              DetailsButton(),
             ],
           ),
           SizedBox(height: 32),

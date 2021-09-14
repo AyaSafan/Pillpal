@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageLayout.dart';
-import 'package:pill_pal/components/medicineCard.dart';
+import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
 
 
 import 'package:pill_pal/database.dart';
@@ -28,8 +28,7 @@ class _CabinetState extends State<Cabinet> {
   Widget build(BuildContext context) {
     return PageLayout(
       appBarTitle: "My Cabinet",
-      color: MyColors.Landing2,
-      child: Container(
+      topChild: Container(
         margin: EdgeInsets.fromLTRB(30,0,30,15),
         child: TextField(
           onChanged: (value) {
@@ -38,10 +37,12 @@ class _CabinetState extends State<Cabinet> {
             });
 
           },
+          cursorColor: Theme.of(context).primaryColor,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
+            prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
             hintText: 'Search',
             fillColor: Colors.white,
+            focusColor: Theme.of(context).primaryColor,
             filled: true,
             contentPadding:
             const EdgeInsets.only(left: 14.0, bottom: 8.0, top: 8.0),
@@ -53,7 +54,7 @@ class _CabinetState extends State<Cabinet> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(color: MyColors.TealBlue),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor),
             ),
           ),
 
