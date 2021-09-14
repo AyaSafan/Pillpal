@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
 
-import 'package:pill_pal/components/pageLayout.dart';
+import 'package:pill_pal/components/pageFirstLayout.dart';
+import 'package:pill_pal/components/pageSecondLayout.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
 
@@ -12,11 +13,10 @@ class MedicineItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final med = ModalRoute.of(context)!.settings.arguments as Medicine;
-    return PageLayout(
+    return PageSecondLayout(
       appBarTitle: med.name ,
       showFAB: false,
-      topChild:
-      Column(
+      topChild:  Column(
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
@@ -59,23 +59,20 @@ class MedicineItemPage extends StatelessWidget {
         ],
       ),
       containerChild:
-      Center(
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 4,
-          childAspectRatio: 2,
-          shrinkWrap: true,
-          children: <Widget>[
-            CustomCard(
-              title: 'Current Supply',
-              data: '${med.supplyCurrent} pills',
-              icon: Icon(
-                Icons.assignment_turned_in,
+      Column(
+        children: [
+          Row(
+            children: [
+              CustomCard(
+                title: 'Current Supply',
+                data: '${med.supplyCurrent} pills',
+                icon: Icon(
+                  Icons.assignment_turned_in,
+                  color: MyColors.TealBlue,
+                ),
                 color: MyColors.TealBlue,
               ),
-              color: MyColors.TealBlue,
-            ),
-            CustomCard(
+              CustomCard(
                 title: 'Minimun Supply',
                 data: '${med.supplyMin} pills',
                 icon: Icon(
@@ -83,8 +80,12 @@ class MedicineItemPage extends StatelessWidget {
                   color: Color(0xffda4625),
                 ),
                 color: Color(0xffda4625),
-            ),
-            CustomCard(
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              CustomCard(
                 title: 'Dose',
                 data: '${med.dose} pills/dose',
                 icon: Icon(
@@ -92,17 +93,19 @@ class MedicineItemPage extends StatelessWidget {
                   color: Colors.purple,
                 ),
                 color: Colors.purple,
-            ),
-
-            CustomCard(
-              title: 'Daily Amount',
-              data: '${med.doseFrequency} dose/day',
-              icon: Icon(
-                Icons.access_time_filled,
+              ),
+              CustomCard(
+                title: 'Daily Amount',
+                data: '${med.doseFrequency} dose/day',
+                icon: Icon(
+                  Icons.access_time_filled,
+                  color: MyColors.MiddleBlueGreen,
+                ),
                 color: MyColors.MiddleBlueGreen,
               ),
-              color: MyColors.MiddleBlueGreen,
-            ),
+            ],
+          ),
+          Row(children: [
             CustomCard(
               title: 'Cap Size',
               data: '${med.capSize} mg',
@@ -121,8 +124,8 @@ class MedicineItemPage extends StatelessWidget {
               ),
               color: MyColors.Aero,
             ),
-          ],
-        ),
+          ],)
+        ],
       )
     );
   }

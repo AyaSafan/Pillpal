@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/components/pageLayout.dart';
+import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
 
 
@@ -26,7 +26,7 @@ class _CabinetState extends State<Cabinet> {
 
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
+    return PageFirstLayout(
       appBarTitle: "My Cabinet",
       topChild: Container(
         margin: EdgeInsets.fromLTRB(30,0,30,15),

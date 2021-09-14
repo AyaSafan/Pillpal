@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
+import 'package:pill_pal/components/FAB.dart';
 
-import 'package:pill_pal/components/pageLayout.dart';
+import 'package:pill_pal/components/pageFirstLayout.dart';
+import 'package:pill_pal/components/pageSecondLayout.dart';
 
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
 
@@ -29,37 +31,26 @@ class _CalenderState extends State<Calender> {
   var cyclicEvents = new Map();
 
 
-
   Future<List<Reminder>> getDayReminders(DateTime date) async {
-    final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
+        .build();
     final reminderDao = database.reminderDao;
-    final reminders = await reminderDao.findReminderByDate(DateTime(date.year, date.month, date.day).toString());
+    final reminders = await reminderDao.findReminderByDate(
+        DateTime(date.year, date.month, date.day).toString());
     // final repeatedReminders =await reminderDao.findRepeatedReminderByDay(date.weekday);
-    reminders.addAll(cyclicEvents[date.weekday]??[]);
+    reminders.addAll(cyclicEvents[date.weekday] ?? []);
     return reminders;
   }
 
   Future<void> getRepeatedReminders() async {
-    final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
+        .build();
     final reminderDao = database.reminderDao;
-    for (var i = 1 ; i <= 7; i++){
-      final dayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(i);
-      cyclicEvents[i]= dayRepeatedReminders;
+    for (var i = 1; i <= 7; i++) {
+      final dayRepeatedReminders = await reminderDao.findRepeatedReminderByDay(
+          i);
+      cyclicEvents[i] = dayRepeatedReminders;
     }
-    // final mondayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.monday);
-    // cyclicEvents[1]= mondayRepeatedReminders;
-    // final tuesdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.tuesday);
-    // cyclicEvents[2]= tuesdayRepeatedReminders;
-    // final wednesdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.wednesday);
-    // cyclicEvents[3]= wednesdayRepeatedReminders;
-    // final thursdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.thursday);
-    // cyclicEvents[4]= thursdayRepeatedReminders;
-    // final fridayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.friday);
-    // cyclicEvents[5]= fridayRepeatedReminders;
-    // final saturdayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.saturday);
-    // cyclicEvents[6]= saturdayRepeatedReminders;
-    // final sundayRepeatedReminders =await reminderDao.findRepeatedReminderByDay(DateTime.sunday);
-    // cyclicEvents[7]= sundayRepeatedReminders;
     return;
   }
 
@@ -68,16 +59,15 @@ class _CalenderState extends State<Calender> {
   void initState() {
     super.initState();
     setState(() {
-          _selectedDay = _focusedDay;
+      _selectedDay = _focusedDay;
     });
-    getDayReminders(_selectedDay!).then((value){
+    getDayReminders(_selectedDay!).then((value) {
       setState(() {
-            _selectedEvents = value;
+        _selectedEvents = value;
       });
     });
 
     getRepeatedReminders().then((value) => null);
-
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -86,7 +76,7 @@ class _CalenderState extends State<Calender> {
         _focusedDay = focusedDay;
         _selectedDay = selectedDay;
       });
-      getDayReminders(_selectedDay!).then((value){
+      getDayReminders(_selectedDay!).then((value) {
         setState(() {
           _selectedEvents = value;
         });
@@ -97,7 +87,8 @@ class _CalenderState extends State<Calender> {
   @override
   Widget build(BuildContext context) {
 
-    return PageLayout(
+
+    return PageSecondLayout(
       appBarTitle: "My Calender",
       color: MyColors.Landing1,
       //colorFAB: MyColors.MiddleRed,
@@ -144,7 +135,7 @@ class _CalenderState extends State<Calender> {
           ),
         ],
       ),
-      containerChild: ListView(
+      containerChild: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
@@ -184,6 +175,6 @@ class _CalenderState extends State<Calender> {
           ),
         ],
       ),
-    );
+    );;
   }
 }

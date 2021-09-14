@@ -3,7 +3,7 @@ import 'package:pill_pal/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-import 'package:pill_pal/components/pageLayout.dart';
+import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
 
 import 'package:pill_pal/database.dart';
@@ -144,7 +144,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
         ));
 
 
-    return PageLayout(
+    return PageFirstLayout(
       appBarTitle: 'Add Medicine',
       //appBarRight: Image.asset('assets/pillpal.png', height: 80, width: 66) ,
       color: MyColors.Landing2,

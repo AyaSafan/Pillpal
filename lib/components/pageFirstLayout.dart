@@ -5,14 +5,14 @@ import 'package:pill_pal/components/curvedContainer.dart';
 import 'package:pill_pal/components/FAB.dart';
 
 
-class PageLayout extends StatelessWidget {
-  PageLayout(
+class PageFirstLayout extends StatelessWidget {
+  PageFirstLayout(
       {
         this.appBarTitle ='',
-        this.topChild =  const SizedBox(height: 0, width: 0) ,
-        this.containerChild = const SizedBox(height: 0, width: 0) ,
         this.appBarRight = const SizedBox(height: 0, width: 0),
         this.color = MyColors.Landing2,
+        this.topChild =  const SizedBox(height: 0, width: 0) ,
+        this.containerChild = const SizedBox(height: 0, width: 0) ,
         //this.colorFAB = MyColors.MiddleBlueGreen,
         this.showFAB = true
       });

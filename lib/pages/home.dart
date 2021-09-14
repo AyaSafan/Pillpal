@@ -3,7 +3,7 @@ import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/curvedContainer.dart';
 
 import 'package:pill_pal/components/FAB.dart';
-import 'package:pill_pal/components/pageLayout.dart';
+import 'package:pill_pal/components/pageFirstLayout.dart';
 
 
 import 'package:pill_pal/entities/reminder.dart';
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
+    return PageFirstLayout(
       appBarTitle: 'PillPal',
       appBarRight:Padding(
         padding: const EdgeInsets.only(top: 20),
