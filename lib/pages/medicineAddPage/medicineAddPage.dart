@@ -181,6 +181,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Current Supply',
               suffixText: 'pills',
+              initialValue: '0',
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double) {
                   return 'Please enter a number';
@@ -195,6 +196,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Minimum Supply',
               suffixText: 'pills',
+              initialValue: '0',
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
                   return 'Please enter a number';
@@ -209,6 +211,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Dose',
               suffixText: 'pill/dose',
+              initialValue: '1',
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
                   return 'Please enter a number';
@@ -223,6 +226,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Daily Amount',
               suffixText: 'dose/day',
+              initialValue: '1',
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
                   return 'Please enter a number';
@@ -237,6 +241,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Cap Size',
               suffixText: 'mg',
+              initialValue: '0',
               validator: (value) {
               if (!(value == null || value.isEmpty)) {
                 if (double

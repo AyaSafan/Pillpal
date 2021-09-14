@@ -116,7 +116,7 @@ class _$AppDatabase extends AppDatabase {
 
 class _$MedicineDao extends MedicineDao {
   _$MedicineDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _medicineInsertionAdapter = InsertionAdapter(
             database,
             'medicines',
@@ -132,7 +132,8 @@ class _$MedicineDao extends MedicineDao {
                   'pillShape': item.pillShape,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
                   'tags': _listStringConverter.encode(item.tags)
-                }),
+                },
+            changeListener),
         _medicineUpdateAdapter = UpdateAdapter(
             database,
             'medicines',
@@ -149,7 +150,8 @@ class _$MedicineDao extends MedicineDao {
                   'pillShape': item.pillShape,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
                   'tags': _listStringConverter.encode(item.tags)
-                }),
+                },
+            changeListener),
         _medicineDeletionAdapter = DeletionAdapter(
             database,
             'medicines',
@@ -166,7 +168,8 @@ class _$MedicineDao extends MedicineDao {
                   'pillShape': item.pillShape,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
                   'tags': _listStringConverter.encode(item.tags)
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -181,8 +184,8 @@ class _$MedicineDao extends MedicineDao {
   final DeletionAdapter<Medicine> _medicineDeletionAdapter;
 
   @override
-  Future<List<Medicine>> findAllMedicines() async {
-    return _queryAdapter.queryList('SELECT * FROM medicines',
+  Stream<List<Medicine>> findAllMedicines() {
+    return _queryAdapter.queryListStream('SELECT * FROM medicines',
         mapper: (Map<String, Object?> row) => Medicine(
             id: row['id'] as int?,
             name: row['name'] as String,
@@ -194,7 +197,9 @@ class _$MedicineDao extends MedicineDao {
             capSize: row['capSize'] as double,
             pillShape: row['pillShape'] as String,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
-            tags: _listStringConverter.decode(row['tags'] as String)));
+            tags: _listStringConverter.decode(row['tags'] as String)),
+        queryableName: 'medicines',
+        isView: false);
   }
 
   @override

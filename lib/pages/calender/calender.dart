@@ -5,6 +5,7 @@ import 'package:pill_pal/components/FAB.dart';
 
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
+import 'package:pill_pal/dao/reminder_dao.dart';
 
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
 
@@ -16,7 +17,13 @@ import 'package:table_calendar/table_calendar.dart';
 //import 'package:percent_indicator/percent_indicator.dart';
 
 class Calender extends StatefulWidget {
-  const Calender({Key? key}) : super(key: key);
+  const Calender({
+    Key? key,
+    required this.reminderDao
+  }) : super(key: key);
+
+
+  final ReminderDao reminderDao;
 
   @override
   _CalenderState createState() => _CalenderState();
@@ -32,10 +39,10 @@ class _CalenderState extends State<Calender> {
 
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
-    final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
-        .build();
-    final reminderDao = database.reminderDao;
-    final reminders = await reminderDao.findReminderByDate(
+    // final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
+    //     .build();
+    // final reminderDao = database.reminderDao;
+    final reminders = await widget.reminderDao.findReminderByDate(
         DateTime(date.year, date.month, date.day).toString());
     // final repeatedReminders =await reminderDao.findRepeatedReminderByDay(date.weekday);
     reminders.addAll(cyclicEvents[date.weekday] ?? []);
@@ -43,11 +50,11 @@ class _CalenderState extends State<Calender> {
   }
 
   Future<void> getRepeatedReminders() async {
-    final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
-        .build();
-    final reminderDao = database.reminderDao;
+    // final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
+    //     .build();
+    // final reminderDao = database.reminderDao;
     for (var i = 1; i <= 7; i++) {
-      final dayRepeatedReminders = await reminderDao.findRepeatedReminderByDay(
+      final dayRepeatedReminders = await widget.reminderDao.findRepeatedReminderByDay(
           i);
       cyclicEvents[i] = dayRepeatedReminders;
     }

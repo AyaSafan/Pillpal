@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
+import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
 
 
@@ -9,6 +10,15 @@ import 'package:pill_pal/entities/medicine.dart';
 
 
 class Cabinet extends StatefulWidget {
+
+  const Cabinet({
+    Key? key,
+    required this.medicineDao
+  }) : super(key: key);
+
+
+  final MedicineDao medicineDao;
+
   @override
   _CabinetState createState() => _CabinetState();
 }
@@ -17,12 +27,24 @@ class _CabinetState extends State<Cabinet> {
 
   String searchString = "";
 
-  Future<List<Medicine>> getAllMedicines() async{
-    final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    final medicineDao = database.medicineDao;
-    final result = await medicineDao.findAllMedicines();
-    return result;
-  }
+  //
+  // late AppDatabase database;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   $FloorAppDatabase.databaseBuilder('app_database.db').build().then((database) {
+  //     setState(() {
+  //       this.database = database;
+  //     });
+  //     print('init');
+  //   });
+  // }
+
+  // Stream<List<Medicine>> getAllMedicines() {
+  //   final result = database.medicineDao.findAllMedicines();
+  //   return result;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -61,16 +83,20 @@ class _CabinetState extends State<Cabinet> {
 
         ),
       ),
-      containerChild:  FutureBuilder<List<Medicine>> (
-          future: this.getAllMedicines(),
+      containerChild:  StreamBuilder<List<Medicine>> (
+          stream: widget.medicineDao.findAllMedicines(),
           builder: (context, snapshot) {
-            if(snapshot.connectionState != ConnectionState.done) {
-              return Text('loading');
-            }
+            // if(snapshot.connectionState != ConnectionState.done) {
+            //   print(snapshot.requireData);
+            // }
             if(snapshot.hasError) {
               return Text('error');
             }
-            List<Medicine> medList = snapshot.data ?? [];
+            //List<Medicine> medList = snapshot.data ?? [];
+            if (!snapshot.hasData) return Container();
+
+            final medList = snapshot.requireData;
+
             return ListView.builder(
                 itemCount: medList.length,
                 itemBuilder: (context, index) {
