@@ -10,10 +10,11 @@ class MedicineCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       GestureDetector(
-        onTap: (){Navigator.pushNamed(context, '/reminder_item', arguments: medicineItem);},
+        onTap: (){Navigator.pushNamed(context, '/medicine_item', arguments: medicineItem);},
         child: Card(
         elevation: 8,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
              Padding(
                padding: const EdgeInsets.fromLTRB(15, 15, 15, 10),

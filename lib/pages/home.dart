@@ -18,40 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // late AppDatabase database;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  //   initDb().then((database) async {
-  //     this.database = database;
-  //
-  //
-  //     // final medicineDao = database.medicineDao;
-  //     // await medicineDao.deleteAllMedicine();
-  //     // final med = Medicine(id:12, name: 'Paracetamol', pillColor: Colors.amber,
-  //     //     //tags: ['After Breakfast', 'One hell of a very very long tag', 'Important!'],
-  //     //     tags: ['After Breakfast'],
-  //     //     desc: 'Paracetamol is a common painkiller used to treat aches and pain. '
-  //     //     'It can also be used to reduce a high temperature.\n'
-  //     //     ' It\'s available combined with other painkillers and anti-sickness medicines. '
-  //     //     'It\'s also an ingredient in a wide range of cold and flu remedies.'
-  //     // );
-  //     // await medicineDao.insertMedicine(med);
-  //     //
-  //     // final reminderDao = database.reminderDao;
-  //     // await reminderDao.deleteAllReminders();
-  //     // final reminder = Reminder(medicineId: 12, label: 'first reminder');
-  //     //
-  //     // await reminderDao.insertReminder(reminder);
-  //     // final reminder2 = Reminder(medicineId: 12,  day: DateTime.monday, label: 'cyclic reminder', repeated: true);
-  //     // await reminderDao.insertReminder(reminder2);
-  //
-  //     setState(() {});
-  //   }
-  //   );
-  // }
+
 
   @override
   Widget build(BuildContext context) {

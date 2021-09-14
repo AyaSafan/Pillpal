@@ -39,20 +39,13 @@ class _CalenderState extends State<Calender> {
 
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
-    // final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
-    //     .build();
-    // final reminderDao = database.reminderDao;
     final reminders = await widget.reminderDao.findReminderByDate(
         DateTime(date.year, date.month, date.day).toString());
-    // final repeatedReminders =await reminderDao.findRepeatedReminderByDay(date.weekday);
     reminders.addAll(cyclicEvents[date.weekday] ?? []);
     return reminders;
   }
 
   Future<void> getRepeatedReminders() async {
-    // final database = await $FloorAppDatabase.databaseBuilder('app_database.db')
-    //     .build();
-    // final reminderDao = database.reminderDao;
     for (var i = 1; i <= 7; i++) {
       final dayRepeatedReminders = await widget.reminderDao.findRepeatedReminderByDay(
           i);
@@ -98,7 +91,6 @@ class _CalenderState extends State<Calender> {
     return PageSecondLayout(
       appBarTitle: "My Calender",
       color: MyColors.Landing1,
-      //colorFAB: MyColors.MiddleRed,
       topChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

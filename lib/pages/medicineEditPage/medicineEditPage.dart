@@ -11,22 +11,26 @@ import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
 
 
-class MedicineAddPage extends StatefulWidget {
-  const MedicineAddPage({
+class MedicineEditPage extends StatefulWidget {
+  const MedicineEditPage({
     Key? key,
-    required this.medicineDao
+    required this.medicineDao,
+    required this.med
   }) : super(key: key);
 
 
   final MedicineDao medicineDao;
+  final Medicine med;
 
   @override
   _MedicineAddPageState createState() => _MedicineAddPageState();
 }
 
-class _MedicineAddPageState extends State<MedicineAddPage> {
+class _MedicineAddPageState extends State<MedicineEditPage> {
   final _formKey = GlobalKey<FormState>();
 
+  Medicine editedMedicine =new Medicine(name: '');
+  int? id;
   String name ='';
   String description ='';
   double supplyCurrent =0;
@@ -36,6 +40,24 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   double capSize=0;
   Color pillColor = Color(0xFFCCCCCC);
   List<String> tags =[];
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      editedMedicine = widget.med;
+      id = widget.med.id;
+      name = widget.med.name;
+      description = widget.med.desc;
+      supplyCurrent = widget.med.supplyCurrent;
+      supplyMin = widget.med.supplyMin;
+      dose = widget.med.dose;
+      doseFrequency = widget.med.doseFrequency;
+      capSize = widget.med.capSize;
+      pillColor = widget.med.pillColor;
+      tags= widget.med.tags;
+    });
+  }
 
   final myTagController = TextEditingController();
 
@@ -47,33 +69,34 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
 
   void changeColor(Color color) => setState(() => pillColor = color);
 
-  Future<void> insertMedicine() async{
-    final med = Medicine(
-      name: name,
-      desc: description,
-      supplyCurrent: supplyCurrent,
-      supplyMin: supplyMin,
-      dose: dose,
-      doseFrequency: doseFrequency,
-      capSize:capSize,
-      pillColor: pillColor,
-      tags: tags
-    );
-    await widget.medicineDao.insertMedicine(med);
+  Future<void> updateMedicine() async{
+    await widget.medicineDao.updateMedicine(editedMedicine);
   }
 
   onSubmit(){
     _formKey.currentState!.save();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Adding to Cabinet ...' )),
-    );
-    insertMedicine().then((value) => null);
-    Navigator.pop(context);
+    setState(() {
+      editedMedicine = Medicine(
+          id: id,
+          name: name,
+          desc: description,
+          supplyCurrent: supplyCurrent,
+          supplyMin: supplyMin,
+          dose: dose,
+          doseFrequency: doseFrequency,
+          capSize:capSize,
+          pillColor: pillColor,
+          tags: tags
+      );
+    });
+    updateMedicine().then((value) => null);
+    Navigator.pushNamedAndRemoveUntil(context, '/medicine_item',  ModalRoute.withName('/cabinet'), arguments: editedMedicine,);
   }
 
 
   @override
   Widget build(BuildContext context) {
+
 
     List<Widget> chips = tags.map((tag) =>
         Chip(
@@ -150,7 +173,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
 
 
     return PageFirstLayout(
-      appBarTitle: 'Add Medicine',
+      appBarTitle: name,
       color: MyColors.Landing2,
       showFAB: false,
       containerChild: ListView(
@@ -162,6 +185,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
           children: [
             CustomUnderLineInput(
               labelText: 'Name',
+              initialValue: "$name",
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter medicine name';
@@ -177,6 +201,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
               keyboardType: TextInputType.multiline,
               maxLines: null,
               labelText: 'Description',
+              initialValue: "$description",
               onSaved: (value){setState(() {
                 description = value ?? '';
               });},
@@ -185,7 +210,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Current Supply',
               suffixText: 'pills',
-              initialValue: '0',
+              initialValue: "$supplyCurrent",
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double) {
                   return 'Please enter a number';
@@ -200,7 +225,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Minimum Supply',
               suffixText: 'pills',
-              initialValue: '0',
+              initialValue: "$supplyMin",
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
                   return 'Please enter a number';
@@ -215,7 +240,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Dose',
               suffixText: 'pill/dose',
-              initialValue: '1',
+              initialValue: "$dose",
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
                   return 'Please enter a number';
@@ -230,7 +255,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Daily Amount',
               suffixText: 'dose/day',
-              initialValue: '1',
+              initialValue: "$doseFrequency",
               validator: (value) {
                 if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
                   return 'Please enter a number';
@@ -245,7 +270,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
             CustomUnderLineInput(
               labelText: 'Cap Size',
               suffixText: 'mg',
-              initialValue: '0',
+              initialValue: "$capSize",
               validator: (value) {
               if (!(value == null || value.isEmpty)) {
                 if (double
@@ -321,11 +346,11 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                     onSubmit();
                   }
                 },
-                icon: Icon(Icons.add),
+                icon: Icon(Icons.edit),
                 label:
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Text('Add to Cabinet', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white),),
+                  child: Text('Edit Medicine', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white),),
                 ),
               ),
             ),

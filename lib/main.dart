@@ -14,6 +14,7 @@ import 'package:pill_pal/pages/home.dart';
 import 'package:pill_pal/pages/calender/calender.dart';
 import 'package:pill_pal/pages/cabinet/cabinet.dart';
 import 'package:pill_pal/pages/medicineAddPage/medicineAddPage.dart';
+import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
 
@@ -81,10 +82,22 @@ Future<void> main() async {
       '/home': (context) => Home(),
       '/calender': (context) => Calender(reminderDao: reminderDao,),
       '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
-      '/medicine_add': (context) => MedicineAddPage(),
+      '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
       '/reminder_add': (context) => ReminderAddPage(),
-      '/reminder_item': (context) => MedicineItemPage(),
+      '/medicine_item': (context) => MedicineItemPage(),
     },
+      onGenerateRoute: (settings) {
+        if (settings.name == '/medicine_edit') {
+          final med = settings.arguments as Medicine;
+          return MaterialPageRoute(
+            builder: (context) {
+              return MedicineEditPage(medicineDao: medicineDao, med: med);
+            },
+          );
+        }
+        print('Need to implement ${settings.name}');
+        return null;
+      }
   ));
 
 }

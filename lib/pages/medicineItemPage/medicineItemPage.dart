@@ -15,6 +15,13 @@ class MedicineItemPage extends StatelessWidget {
     final med = ModalRoute.of(context)!.settings.arguments as Medicine;
     return PageSecondLayout(
       appBarTitle: med.name ,
+      appBarRight: IconButton(
+        icon: Icon(Icons.more_vert),
+        onPressed: (){
+          print('hi');
+          Navigator.pushNamed(context, '/medicine_edit', arguments: med);
+        },
+      ),
       showFAB: false,
       topChild:  Column(
         children: [
@@ -58,8 +65,8 @@ class MedicineItemPage extends StatelessWidget {
           ),
         ],
       ),
-      containerChild:
-      Column(
+      containerChild: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Row(
             children: [
