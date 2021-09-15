@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-
 import 'package:pill_pal/components/pageSecondLayout.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:pill_pal/dao/reminder_dao.dart';
+import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
 import 'package:pill_pal/pages/calender/components/detailsButton.dart';
-
-import 'package:pill_pal/entities/reminder.dart';
-import 'package:pill_pal/dao/reminder_dao.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Calender extends StatefulWidget {
   const Calender({
@@ -35,19 +33,13 @@ class _CalenderState extends State<Calender> {
   Future<List<Reminder>> getDayReminders(DateTime date) async {
     final reminders = await widget.reminderDao.findReminderByDate(
         DateTime(date.year, date.month, date.day).toString());
+    if(!cyclicEvents.containsKey(date.weekday)) {
+      final dayRepeatedReminders = await widget.reminderDao.findRepeatedReminderByDay(date.weekday);
+      cyclicEvents[date.weekday] = dayRepeatedReminders;
+    }
     reminders.addAll(cyclicEvents[date.weekday] ?? []);
     return reminders;
   }
-
-  Future<void> getRepeatedReminders() async {
-    for (var i = 1; i <= 7; i++) {
-      final dayRepeatedReminders = await widget.reminderDao.findRepeatedReminderByDay(
-          i);
-      cyclicEvents[i] = dayRepeatedReminders;
-    }
-    return;
-  }
-
 
   @override
   void initState() {
@@ -61,7 +53,7 @@ class _CalenderState extends State<Calender> {
       });
     });
 
-    getRepeatedReminders().then((value) => null);
+    //getRepeatedReminders().then((value) => null);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -147,23 +139,16 @@ class _CalenderState extends State<Calender> {
                 style: TextStyle(
                     fontSize: 18, letterSpacing: 1, fontFamily: 'Raleway'),
               ),
-              Column(
-                children: _selectedEvents
-                    .map((reminderItem) => Text('${reminderItem.label}'))
-                    .toList(),
-              )
             ],
           ),
           SizedBox(height: 16),
           Row(
             children: [
-              // new LinearPercentIndicator(
-              //   width:  MediaQuery.of(context).size.width - 60 ,
-              //   lineHeight: 10.0,
-              //   percent: 0.1,
-              //   backgroundColor: MyColors.Landing2,
-              //   progressColor: MyColors.TealBlue,
-              // ),
+              Column(
+                children: _selectedEvents
+                    .map((reminderItem) => Text('${reminderItem.label}'))
+                    .toList(),
+              )
             ],
           ),
         ],
