@@ -83,8 +83,8 @@ Future<void> main() async {
       '/calender': (context) => Calender(reminderDao: reminderDao,),
       '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
       '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
+      '/medicine_item': (context) => MedicineItemPage(medicineDao: medicineDao),
       '/reminder_add': (context) => ReminderAddPage(),
-      '/medicine_item': (context) => MedicineItemPage(),
     },
       onGenerateRoute: (settings) {
         if (settings.name == '/medicine_edit') {

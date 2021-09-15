@@ -4,11 +4,14 @@ import 'package:pill_pal/colors.dart';
 
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
+import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
 
 class MedicineItemPage extends StatelessWidget {
-  const MedicineItemPage({Key? key}) : super(key: key);
+  const MedicineItemPage({Key? key, required this.medicineDao}) : super(key: key);
+
+  final MedicineDao medicineDao;
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +21,100 @@ class MedicineItemPage extends StatelessWidget {
       appBarRight: IconButton(
         icon: Icon(Icons.more_vert),
         onPressed: (){
-          print('hi');
-          Navigator.pushNamed(context, '/medicine_edit', arguments: med);
+          //Navigator.pushNamed(context, '/medicine_edit', arguments: med);
+          showModalBottomSheet<void>(
+            context: context,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(MediaQuery. of(context). size. width / 20),
+            ),
+            builder: (BuildContext context) {
+              return Container(
+                height: 200,
+                child:
+                Padding(
+                  padding: EdgeInsets.all(MediaQuery. of(context). size. width / 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        label: Text('Add Reminder'),
+                        icon: Icon(
+                          Icons.notification_add,
+                        ),
+                        onPressed: () {
+                        },
+                      ),
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        label: Text('Edit Medicine'),
+                        icon: Icon(
+                          Icons.edit,
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/medicine_edit', arguments: med);
+                        },
+                      ),
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: Theme.of(context).textTheme.bodyText2,
+                        ),
+                        label: Text('Delete Medicine'),
+                        icon: Icon(
+                          Icons.delete,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: SingleChildScrollView(
+                                  child:
+                                  Column(
+                                    children: [
+                                      Text('${med.name} will be permanently deleted.',
+                                        style: Theme.of(context).textTheme.bodyText2,
+                                      ),
+                                    ],
+                                  )
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: Text("Delete"),
+                                    onPressed: () {
+                                      medicineDao.deleteMedicine(med).then((value) => null);
+                                      Navigator.popUntil(context, ModalRoute.withName('/cabinet') );
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text("Cancel"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                        },
+                      ),
+
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
         },
       ),
       showFAB: false,
