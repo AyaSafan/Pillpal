@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
 
-
-import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
 
 

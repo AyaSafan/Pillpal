@@ -1,11 +1,5 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/entities/reminder.dart';
 
 import 'package:pill_pal/pages/landing/landing1.dart';
 import 'package:pill_pal/pages/landing/landing2.dart';
@@ -18,15 +12,6 @@ import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
 
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//
-//   final database = await $FloorAppDatabase
-//       .databaseBuilder('app_database.db')
-//       .build();
-//
-//   runApp(FloorApp(dao));
-// }
 
 import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';

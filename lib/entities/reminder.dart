@@ -20,27 +20,26 @@ class Reminder {
 
   @ColumnInfo(name: 'medicine_id')
   final int medicineId;
+  //to query reminders with date
   final String date;
+  // to query reminders with weekday (for repeated reminders)
   final int day;
+  // mostly to get the time actually
   final DateTime dateTime;  
   final String label;
+  // is it repeated or a one time thing
   final bool repeated;
-  //final bool checked;
 
   @TypeConverters([DateTimeConverter])
   Reminder(
       {
         this.id,
         required this.medicineId,
-        // required this.date,
-        // required this.day,
-        // required this.dateTime,
         String? date,
         int? day,
         int? dateTime,
         this.label: '',
         this.repeated: false
-        //this.checked: false,
 
       }) : this.dateTime = DateTime.fromMillisecondsSinceEpoch(dateTime?? DateTime.now().millisecondsSinceEpoch ) ,
            this.date = date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toString(),

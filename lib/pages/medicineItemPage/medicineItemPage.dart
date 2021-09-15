@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
 
-import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
-import 'package:pill_pal/dao/medicine_dao.dart';
-import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
+
+import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/dao/medicine_dao.dart';
 
 class MedicineItemPage extends StatelessWidget {
   const MedicineItemPage({Key? key, required this.medicineDao}) : super(key: key);

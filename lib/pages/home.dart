@@ -4,12 +4,6 @@ import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 
 
-
-import 'package:pill_pal/database.dart';
-import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/entities/reminder.dart';
-
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 

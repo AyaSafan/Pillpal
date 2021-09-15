@@ -1,20 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/components/FAB.dart';
 
-import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
-import 'package:pill_pal/dao/reminder_dao.dart';
-
+import 'package:table_calendar/table_calendar.dart';
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
-
-import 'package:pill_pal/database.dart';
-import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/pages/calender/components/detailsButton.dart';
 
-import 'package:table_calendar/table_calendar.dart';
-//import 'package:percent_indicator/percent_indicator.dart';
+import 'package:pill_pal/entities/reminder.dart';
+import 'package:pill_pal/dao/reminder_dao.dart';
 
 class Calender extends StatefulWidget {
   const Calender({
@@ -174,6 +168,6 @@ class _CalenderState extends State<Calender> {
           ),
         ],
       ),
-    );;
+    );
   }
 }

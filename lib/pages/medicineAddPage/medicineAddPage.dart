@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import 'package:pill_pal/components/pageFirstLayout.dart';
-import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
 
-import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/dao/medicine_dao.dart';
+
 
 
 class MedicineAddPage extends StatefulWidget {
