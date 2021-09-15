@@ -18,6 +18,7 @@ class CustomCard extends StatelessWidget {
       ConstrainedBox(
         constraints: BoxConstraints(
         minWidth: screenWidth*0.45,
+        maxWidth: screenWidth*0.45,
       ),
         child: Card(
         elevation: 8,
@@ -34,16 +35,18 @@ class CustomCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child:
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('$title', overflow: TextOverflow.ellipsis,),
-                    Text('$data', overflow: TextOverflow.ellipsis, style: TextStyle(color: color, fontWeight: FontWeight.bold),)
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child:
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('$title', overflow: TextOverflow.ellipsis,),
+                      Text('$data', overflow: TextOverflow.ellipsis, style: TextStyle(color: color, fontWeight: FontWeight.bold),)
+                    ],
+                  ),
                 ),
               )
             ],

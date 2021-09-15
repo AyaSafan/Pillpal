@@ -41,6 +41,8 @@ Future<void> main() async {
       .build();
   final medicineDao = database.medicineDao;
 
+  ////////////////////////////////////////////////////////////////////////////////////////////
+
   await medicineDao.deleteAllMedicine();
   final med = Medicine(id:12, name: 'Paracetamol', pillColor: Colors.amber,
       //tags: ['After Breakfast', 'One hell of a very very long tag', 'Important!'],
@@ -48,7 +50,8 @@ Future<void> main() async {
       desc: 'Paracetamol is a common painkiller used to treat aches and pain. '
           'It can also be used to reduce a high temperature.\n'
           ' It\'s available combined with other painkillers and anti-sickness medicines. '
-          'It\'s also an ingredient in a wide range of cold and flu remedies.'
+          'It\'s also an ingredient in a wide range of cold and flu remedies.',
+    pillShape: 'a very long vivid description of shape'
   );
   await medicineDao.insertMedicine(med);
 
@@ -60,6 +63,8 @@ Future<void> main() async {
   final reminder2 = Reminder(medicineId: 12,  day: DateTime.monday, label: 'cyclic reminder', repeated: true);
   await reminderDao.insertReminder(reminder2);
   print('added');
+
+  ////////////////////////////////////////////////////////////////////////////////////////////
 
 
   runApp(MaterialApp(
@@ -95,7 +100,7 @@ Future<void> main() async {
             },
           );
         }
-        print('Need to implement ${settings.name}');
+        //print('Need to implement ${settings.name}');
         return null;
       }
   ));
