@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-
+import 'package:pill_pal/database.dart';
+import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/entities/reminder.dart';
+import 'package:pill_pal/pages/cabinet/cabinet.dart';
+import 'package:pill_pal/pages/calender/calender.dart';
+import 'package:pill_pal/pages/home.dart';
 import 'package:pill_pal/pages/landing/landing1.dart';
 import 'package:pill_pal/pages/landing/landing2.dart';
 import 'package:pill_pal/pages/landing/landing3.dart';
-import 'package:pill_pal/pages/home.dart';
-import 'package:pill_pal/pages/calender/calender.dart';
-import 'package:pill_pal/pages/cabinet/cabinet.dart';
 import 'package:pill_pal/pages/medicineAddPage/medicineAddPage.dart';
 import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
-
-
-import 'package:pill_pal/database.dart';
-import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/entities/reminder.dart';
 
 Future<void> main() async {
 
@@ -36,7 +33,8 @@ Future<void> main() async {
           'It can also be used to reduce a high temperature.\n'
           ' It\'s available combined with other painkillers and anti-sickness medicines. '
           'It\'s also an ingredient in a wide range of cold and flu remedies.',
-    pillShape: 'a very long vivid description of shape'
+    pillShape: 'a very long vivid description of shape',
+    supplyCurrent: 10,
   );
   await medicineDao.insertMedicine(med);
 
@@ -73,7 +71,6 @@ Future<void> main() async {
       '/calender': (context) => Calender(reminderDao: reminderDao,),
       '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
       '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
-      '/medicine_item': (context) => MedicineItemPage(medicineDao: medicineDao),
       '/reminder_add': (context) => ReminderAddPage(),
     },
       onGenerateRoute: (settings) {
@@ -82,6 +79,14 @@ Future<void> main() async {
           return MaterialPageRoute(
             builder: (context) {
               return MedicineEditPage(medicineDao: medicineDao, med: med);
+            },
+          );
+        }
+        else if (settings.name == '/medicine_item') {
+          final med = settings.arguments as Medicine;
+          return MaterialPageRoute(
+            builder: (context) {
+              return MedicineItemPage(medicineDao: medicineDao, med: med);
             },
           );
         }

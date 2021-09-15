@@ -34,4 +34,34 @@ class Medicine {
         this.pillColor: const Color(0xFFCCCCCC),
         this.tags: const [],
       });
+
+    Medicine copyWith({
+       int? id,
+       String? name,
+       String? desc,
+       double? supplyCurrent,
+       double? supplyMin,
+       double? dose,
+       double? doseFrequency,
+       double? capSize,
+       String? pillShape,
+       Color? pillColor,
+       List<String>? tags,
+
+    }){
+      return Medicine(
+          id: id ?? this.id,
+          name: name ?? this.name,
+          desc: desc ?? this.desc,
+          supplyCurrent: supplyCurrent ?? this.supplyCurrent,
+          supplyMin: supplyMin ?? this.supplyMin,
+          dose: dose ?? this.dose,
+          doseFrequency: doseFrequency ?? this.doseFrequency,
+          capSize: capSize ?? this.capSize,
+          pillShape: pillShape ?? this.pillShape,
+          pillColor: pillColor ?? this.pillColor,
+          tags: tags ?? this.tags,
+
+      );
+    }
 }

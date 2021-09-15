@@ -13,10 +13,10 @@ abstract class MedicineDao {
   @Query('SELECT * FROM medicines WHERE id = :id')
   Future<Medicine?> findMedicineById(int id);
 
-  @Query("UPDATE medicines SET amountAvailable =:amount WHERE id = :id")
-  Future<void> updateAmountAvailable(int amount, int id);
+  @Query("UPDATE medicines SET supplyCurrent =:amount WHERE id = :id")
+  Future<void> updateSupplyCurrent(int amount, int id);
 
-  @Query("UPDATE medicines SET amountAvailable = amountAvailable-dose WHERE id = :id")
+  @Query("UPDATE medicines SET supplyCurrent = supplyCurrent-dose WHERE id = :id")
   Future<void> takeDose(int id);
 
   @TypeConverters([ListStringConverter])
