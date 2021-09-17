@@ -184,7 +184,7 @@ class _$MedicineDao extends MedicineDao {
   final DeletionAdapter<Medicine> _medicineDeletionAdapter;
 
   @override
-  Stream<List<Medicine>> findAllMedicines() {
+  Stream<List<Medicine>> findAllMedicinesAsStream() {
     return _queryAdapter.queryListStream('SELECT * FROM medicines',
         mapper: (Map<String, Object?> row) => Medicine(
             id: row['id'] as int?,
@@ -200,6 +200,23 @@ class _$MedicineDao extends MedicineDao {
             tags: _listStringConverter.decode(row['tags'] as String)),
         queryableName: 'medicines',
         isView: false);
+  }
+
+  @override
+  Future<List<Medicine>> findAllMedicines() async {
+    return _queryAdapter.queryList('SELECT * FROM medicines',
+        mapper: (Map<String, Object?> row) => Medicine(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            desc: row['desc'] as String,
+            supplyCurrent: row['supplyCurrent'] as double,
+            supplyMin: row['supplyMin'] as double,
+            dose: row['dose'] as double,
+            doseFrequency: row['doseFrequency'] as double,
+            capSize: row['capSize'] as double,
+            pillShape: row['pillShape'] as String,
+            pillColor: _colorIntConverter.decode(row['pillColor'] as int),
+            tags: _listStringConverter.decode(row['tags'] as String)));
   }
 
   @override

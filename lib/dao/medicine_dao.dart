@@ -5,7 +5,10 @@ import 'package:pill_pal/services/ListStringConverter.dart';
 @dao
 abstract class MedicineDao {
   @Query('SELECT * FROM medicines')
-  Stream<List<Medicine>> findAllMedicines();
+  Stream<List<Medicine>> findAllMedicinesAsStream();
+
+  @Query('SELECT * FROM medicines')
+  Future<List<Medicine>> findAllMedicines();
 
   @Query('SELECT * FROM medicines WHERE name =:name')
   Future<List<Medicine>> findMedicineByName(String name);

@@ -22,6 +22,7 @@ Future<void> main() async {
       .databaseBuilder('app_database.db')
       .build();
   final medicineDao = database.medicineDao;
+  final reminderDao = database.reminderDao;
 
   ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -37,8 +38,11 @@ Future<void> main() async {
     supplyCurrent: 10,
   );
   await medicineDao.insertMedicine(med);
+  await medicineDao.insertMedicine(Medicine(name: 'a'));
+  await medicineDao.insertMedicine(Medicine(name: 'b'));
+  await medicineDao.insertMedicine(Medicine(name: 'c'));
+  await medicineDao.insertMedicine(Medicine(name: 'd'));
 
-  final reminderDao = database.reminderDao;
   await reminderDao.deleteAllReminders();
   final reminder = Reminder(medicineId: 12, label: 'first reminder');
 
@@ -72,7 +76,7 @@ Future<void> main() async {
       '/calender': (context) => Calender(reminderDao: reminderDao,),
       '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
       '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
-      '/reminder_add': (context) => ReminderAddPage(),
+      '/reminder_add': (context) => ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao,),
     },
       onGenerateRoute: (settings) {
         if (settings.name == '/medicine_edit') {

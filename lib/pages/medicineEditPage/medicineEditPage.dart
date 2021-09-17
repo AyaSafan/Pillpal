@@ -331,7 +331,6 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
               child:
               ElevatedButton.icon(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).primaryColor),
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),

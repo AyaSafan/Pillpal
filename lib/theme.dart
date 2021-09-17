@@ -45,6 +45,11 @@ ThemeData _buildCustomTheme() {
     buttonTheme: ButtonThemeData(
       colorScheme: _MyColorScheme,
       textTheme: ButtonTextTheme.normal,
+      shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+      )
+
+
     ),
     //primaryIconTheme: _customIconTheme(base.iconTheme),
     textTheme: _buildCustomTextTheme(base.textTheme),
@@ -77,11 +82,11 @@ TextTheme _buildCustomTextTheme(TextTheme base) {
     //headline1: base.headline1?.copyWith( fontSize: 24, fontFamily: 'Raleway',color: Colors.black, ),
     //headline2: base.headline2?.copyWith(fontSize: 18, letterSpacing: 2, fontFamily: 'Raleway',),
     bodyText2: base.bodyText2?.copyWith(fontSize: 16, fontFamily: 'Raleway', ),
+  )
+      .apply(
+    fontFamily: 'Raleway',
+    // displayColor: MyColors.TealBlue,
+    // bodyColor: MyColors.TealBlue,
   );
-  //     .apply(
-  //   fontFamily: 'Raleway',
-  //   displayColor: MyColors.TealBlue,
-  //   bodyColor: MyColors.TealBlue,
-  // );
 }
 

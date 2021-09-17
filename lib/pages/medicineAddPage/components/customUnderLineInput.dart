@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pill_pal/theme.dart';
 
 class CustomUnderLineInput extends StatelessWidget {
   const CustomUnderLineInput({Key? key, this.labelText , this.initialValue, this.suffixText, this.maxLines:1, this.keyboardType ,this.validator, this.onSaved}) : super(key: key);
@@ -23,6 +24,7 @@ class CustomUnderLineInput extends StatelessWidget {
       decoration: InputDecoration(
         suffixText: suffixText,
         labelText: labelText,
+        errorStyle: TextStyle(color: MyColors.MiddleRed),
         // labelStyle: TextStyle(
         //     color: Colors.black54
         // ),

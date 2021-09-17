@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
-import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
-
 import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
 
 
 class Cabinet extends StatefulWidget {
@@ -81,7 +80,7 @@ class _CabinetState extends State<Cabinet> {
         ),
       ),
       containerChild:  StreamBuilder<List<Medicine>> (
-          stream: widget.medicineDao.findAllMedicines(),
+          stream: widget.medicineDao.findAllMedicinesAsStream(),
           builder: (context, snapshot) {
             // if(snapshot.connectionState != ConnectionState.done) {
             //   print(snapshot.requireData);
