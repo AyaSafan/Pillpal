@@ -22,7 +22,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
 
   var medTextController = TextEditingController();
   String searchString ='';
-  bool dropdownShow = true;
+  bool dropdownShow = false;
   Medicine? selectedMedicine;
 
 
@@ -36,6 +36,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
           onChanged: (value) {
             setState((){
               searchString = value;
+              dropdownShow = true;
             });
           },
           validator: (value){

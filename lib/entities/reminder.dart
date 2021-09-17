@@ -37,11 +37,12 @@ class Reminder {
         required this.medicineId,
         String? date,
         int? day,
-        int? dateTime,
+        required this.dateTime,
         this.label: '',
         this.repeated: false
 
-      }) : this.dateTime = DateTime.fromMillisecondsSinceEpoch(dateTime?? DateTime.now().millisecondsSinceEpoch ) ,
+      }) : //this.dateTime = DateTime.fromMillisecondsSinceEpoch(dateTime?? DateTime.now().millisecondsSinceEpoch ) ,
+           //this.dateTime = dateTime ?? DateTime.now(),
            this.date = date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toString(),
            this.day = day ?? DateTime.now().day ;
 }

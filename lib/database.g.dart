@@ -365,7 +365,7 @@ class _$ReminderDao extends ReminderDao {
             medicineId: row['medicine_id'] as int,
             date: row['date'] as String,
             day: row['day'] as int,
-            dateTime: row['dateTime'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0));
   }
@@ -378,7 +378,7 @@ class _$ReminderDao extends ReminderDao {
             medicineId: row['medicine_id'] as int,
             date: row['date'] as String,
             day: row['day'] as int,
-            dateTime: row['dateTime'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0),
         arguments: [id]);
@@ -393,7 +393,7 @@ class _$ReminderDao extends ReminderDao {
             medicineId: row['medicine_id'] as int,
             date: row['date'] as String,
             day: row['day'] as int,
-            dateTime: row['dateTime'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0),
         arguments: [date]);
@@ -407,7 +407,7 @@ class _$ReminderDao extends ReminderDao {
             medicineId: row['medicine_id'] as int,
             date: row['date'] as String,
             day: row['day'] as int,
-            dateTime: row['dateTime'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0));
   }
@@ -421,7 +421,7 @@ class _$ReminderDao extends ReminderDao {
             medicineId: row['medicine_id'] as int,
             date: row['date'] as String,
             day: row['day'] as int,
-            dateTime: row['dateTime'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0),
         arguments: [day]);

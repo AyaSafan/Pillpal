@@ -4,6 +4,7 @@ import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
 import 'package:pill_pal/pages/reminderAddPage/components/customDropdownMenu.dart';
 import 'package:pill_pal/pages/reminderAddPage/components/dayChip.dart';
@@ -26,18 +27,13 @@ final MedicineDao medicineDao;
 class _ReminderAddPageState extends State<ReminderAddPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TimeOfDay _time = TimeOfDay(hour: 7, minute: 15);
+  TimeOfDay _time = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
   bool repeat = false;
   List<int> days = [];
   String label = '';
   List<Medicine> allMedicine = [];
 
   Medicine? savedSelectedMedicine;
-
-  // var medTextController = TextEditingController();
-  // String searchString ='';
-  // Medicine? selectedMedicine;
-  // bool dropdownShow = true;
 
     Future<List<Medicine>> getAllMedicine() async {
       final medicines = await widget.medicineDao.findAllMedicines();
@@ -69,15 +65,43 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
     onSubmit() {
       _formKey.currentState!.save();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Adding to Cabinet ...')),
+        SnackBar(content: Text('Adding to Calender ...')),
       );
+      if (repeat){
+        days.forEach((day) {
+          Reminder reminder = Reminder(
+              repeated: true,
+              medicineId: savedSelectedMedicine?.id ?? 0,
+              day: day,
+              label: label,
+              dateTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, _time.hour, _time.minute)
+          );
+          widget.reminderDao.insertReminder(reminder).then((value) => null);
+        });
+      }
+      else{
+        days.forEach((day) {
+          var dateTime = new DateTime.now();
+          while(dateTime.weekday!=day)
+          {
+            dateTime=dateTime.add(new Duration(days: 1));
+          }
+          Reminder reminder = Reminder(
+              medicineId: savedSelectedMedicine?.id ?? 0,
+              day: day,
+              label: label,
+              dateTime: DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute),
+              date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
+          );
+          widget.reminderDao.insertReminder(reminder).then((value) => null);
+        });
+      }
       Navigator.pop(context);
     }
 
 
     @override
     Widget build(BuildContext context) {
-      // final curveSize = MediaQuery. of(context). size. width / 20;
 
       return PageFirstLayout(
         appBarTitle: 'Add Reminder',
@@ -85,6 +109,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         showFAB: false,
         containerChild:
         ListView(
+          shrinkWrap: true,
           children: [
             Form(
               key: _formKey,
@@ -216,7 +241,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                     },
                   ),
                   SizedBox(height: 24,),
-
                   CustomDropdownMenu(formKey: _formKey, allMedicine: allMedicine,
                     onSaved:(value){
                       allMedicine.forEach((element){
@@ -229,90 +253,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       print(savedSelectedMedicine?.name);
                     },
                   ),
-
-                  // TextFormField(
-                  //   onChanged: (value) {
-                  //     setState((){
-                  //       searchString = value;
-                  //     });
-                  //   },
-                  //   validator: (value){
-                  //     if(!allMedicine.any((element) => element.name == medTextController.text)){
-                  //       return 'Please select medicine from cabinet';
-                  //       }
-                  //       return null;
-                  //   },
-                  //
-                  //   controller: medTextController,
-                  //   decoration: InputDecoration(
-                  //     labelText: '${'select medicine' }',
-                  //     labelStyle: TextStyle(
-                  //         color: dropdownShow? MyColors.TealBlue : Colors.black54
-                  //     ),
-                  //     errorStyle: TextStyle(color: MyColors.MiddleRed),
-                  //     suffixIcon: IconButton(
-                  //       onPressed:(){
-                  //         setState(() {
-                  //           dropdownShow = !dropdownShow;
-                  //         });
-                  //       },
-                  //       icon: Icon( Icons.arrow_drop_down_outlined,
-                  //       color: dropdownShow? MyColors.TealBlue : Colors.grey,)
-                  //       ),
-                  //     disabledBorder: UnderlineInputBorder(
-                  //       borderSide: BorderSide(color: dropdownShow? MyColors.TealBlue : Colors.grey,),
-                  //     ),
-                  //   ),
-                  // ),
-                  //
-                  // //This Widget is actually the dropdown List
-                  // Visibility(
-                  //   visible: dropdownShow,
-                  //     child:
-                  //     LimitedBox(
-                  //       maxHeight: 150,
-                  //       child: Card(
-                  //         elevation: 8,
-                  //         child: Container(
-                  //           padding: EdgeInsets.symmetric(horizontal: curveSize),
-                  //           child: ListView.builder(
-                  //               shrinkWrap: true,
-                  //               itemCount: allMedicine.length,
-                  //               itemBuilder: (context, index) {
-                  //                 Medicine med = allMedicine[index];
-                  //                 return med.name.toLowerCase().contains(searchString.toLowerCase())
-                  //                     ? TextButton.icon(
-                  //                     style: TextButton.styleFrom(
-                  //                       primary: Colors.black,
-                  //                       padding: EdgeInsets.zero,
-                  //                       alignment:Alignment.centerLeft,
-                  //                       textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 16),
-                  //                     ),
-                  //                     icon: Icon(
-                  //                       Icons.medication,
-                  //                       color: med.pillColor,
-                  //                     ),
-                  //                     onPressed: (){
-                  //                       setState(() {
-                  //                         medTextController.text = med.name;
-                  //                         searchString = med.name;
-                  //                         selectedMedicine = med;
-                  //                         dropdownShow = false;
-                  //                         _formKey.currentState!.validate();
-                  //                       });
-                  //                     },
-                  //                     label: Text('${med.name}',
-                  //                     )
-                  //                 )
-                  //                     :Container();
-                  //               }
-                  //           ),
-                  //
-                  //         ),
-                  //       ),
-                  //     )
-                  // ),
-
                   SizedBox(height: 32,),
                   Center(
                     child:
@@ -339,6 +279,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

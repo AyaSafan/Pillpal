@@ -44,10 +44,10 @@ Future<void> main() async {
   await medicineDao.insertMedicine(Medicine(name: 'd'));
 
   await reminderDao.deleteAllReminders();
-  final reminder = Reminder(medicineId: 12, label: 'first reminder');
+  final reminder = Reminder(medicineId: 12, label: 'first reminder', dateTime: DateTime.now());
 
   await reminderDao.insertReminder(reminder);
-  final reminder2 = Reminder(medicineId: 12,  day: DateTime.monday, label: 'cyclic reminder', repeated: true);
+  final reminder2 = Reminder(medicineId: 12,  day: DateTime.monday, label: 'cyclic reminder', repeated: true, dateTime: DateTime.now());
   await reminderDao.insertReminder(reminder2);
   print('added');
 
