@@ -5,6 +5,7 @@ import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
+import 'package:pill_pal/pages/reminderAddPage/components/customDropdownMenu.dart';
 import 'package:pill_pal/pages/reminderAddPage/components/dayChip.dart';
 import 'package:pill_pal/theme.dart';
 
@@ -31,10 +32,12 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   String label = '';
   List<Medicine> allMedicine = [];
 
-  var medTextController = TextEditingController();
-  String searchString ='';
-  Medicine? selectedMedicine;
-  bool dropdownShow = true;
+  Medicine? savedSelectedMedicine;
+
+  // var medTextController = TextEditingController();
+  // String searchString ='';
+  // Medicine? selectedMedicine;
+  // bool dropdownShow = true;
 
     Future<List<Medicine>> getAllMedicine() async {
       final medicines = await widget.medicineDao.findAllMedicines();
@@ -74,7 +77,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
 
     @override
     Widget build(BuildContext context) {
-      final curveSize = MediaQuery. of(context). size. width / 20;
+      // final curveSize = MediaQuery. of(context). size. width / 20;
 
       return PageFirstLayout(
         appBarTitle: 'Add Reminder',
@@ -214,88 +217,101 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                   ),
                   SizedBox(height: 24,),
 
-                  TextFormField(
-                    onChanged: (value) {
-                      setState((){
-                        searchString = value;
-                      });
-                    },
-                    validator: (value){
-                      if(!allMedicine.any((element) => element.name == medTextController.text)){
-                        return 'Please select medicine from cabinet';
-                        }
-                        return null;
-                    },
-
-                    controller: medTextController,
-                    decoration: InputDecoration(
-                      labelText: '${'select medicine' }',
-                      labelStyle: TextStyle(
-                          color: dropdownShow? MyColors.TealBlue : Colors.black54
-                      ),
-                      errorStyle: TextStyle(color: MyColors.MiddleRed),
-                      suffixIcon: IconButton(
-                        onPressed:(){
+                  CustomDropdownMenu(formKey: _formKey, allMedicine: allMedicine,
+                    onSaved:(value){
+                      allMedicine.forEach((element){
+                        if(element.name == value){
                           setState(() {
-                            dropdownShow = !dropdownShow;
+                            savedSelectedMedicine = element;
                           });
-                        },
-                        icon: Icon( Icons.arrow_drop_down_outlined,
-                        color: dropdownShow? MyColors.TealBlue : Colors.grey,)
-                        ),
-                      disabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: dropdownShow? MyColors.TealBlue : Colors.grey,),
-                      ),
-                    ),
+                        }
+                      });
+                      print(savedSelectedMedicine?.name);
+                    },
                   ),
 
-                  //This Widget is actually the dropdown List
-                  Visibility(
-                    visible: dropdownShow,
-                      child:
-                      LimitedBox(
-                        maxHeight: 150,
-                        child: Card(
-                          elevation: 8,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: curveSize),
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: allMedicine.length,
-                                itemBuilder: (context, index) {
-                                  Medicine med = allMedicine[index];
-                                  return med.name.toLowerCase().contains(searchString.toLowerCase())
-                                      ? TextButton.icon(
-                                      style: TextButton.styleFrom(
-                                        primary: Colors.black,
-                                        padding: EdgeInsets.zero,
-                                        alignment:Alignment.centerLeft,
-                                        textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 16),
-                                      ),
-                                      icon: Icon(
-                                        Icons.medication,
-                                        color: med.pillColor,
-                                      ),
-                                      onPressed: (){
-                                        setState(() {
-                                          medTextController.text = med.name;
-                                          searchString = med.name;
-                                          selectedMedicine = med;
-                                          dropdownShow = false;
-                                          _formKey.currentState!.validate();
-                                        });
-                                      },
-                                      label: Text('${med.name}',
-                                      )
-                                  )
-                                      :Container();
-                                }
-                            ),
-
-                          ),
-                        ),
-                      )
-                  ),
+                  // TextFormField(
+                  //   onChanged: (value) {
+                  //     setState((){
+                  //       searchString = value;
+                  //     });
+                  //   },
+                  //   validator: (value){
+                  //     if(!allMedicine.any((element) => element.name == medTextController.text)){
+                  //       return 'Please select medicine from cabinet';
+                  //       }
+                  //       return null;
+                  //   },
+                  //
+                  //   controller: medTextController,
+                  //   decoration: InputDecoration(
+                  //     labelText: '${'select medicine' }',
+                  //     labelStyle: TextStyle(
+                  //         color: dropdownShow? MyColors.TealBlue : Colors.black54
+                  //     ),
+                  //     errorStyle: TextStyle(color: MyColors.MiddleRed),
+                  //     suffixIcon: IconButton(
+                  //       onPressed:(){
+                  //         setState(() {
+                  //           dropdownShow = !dropdownShow;
+                  //         });
+                  //       },
+                  //       icon: Icon( Icons.arrow_drop_down_outlined,
+                  //       color: dropdownShow? MyColors.TealBlue : Colors.grey,)
+                  //       ),
+                  //     disabledBorder: UnderlineInputBorder(
+                  //       borderSide: BorderSide(color: dropdownShow? MyColors.TealBlue : Colors.grey,),
+                  //     ),
+                  //   ),
+                  // ),
+                  //
+                  // //This Widget is actually the dropdown List
+                  // Visibility(
+                  //   visible: dropdownShow,
+                  //     child:
+                  //     LimitedBox(
+                  //       maxHeight: 150,
+                  //       child: Card(
+                  //         elevation: 8,
+                  //         child: Container(
+                  //           padding: EdgeInsets.symmetric(horizontal: curveSize),
+                  //           child: ListView.builder(
+                  //               shrinkWrap: true,
+                  //               itemCount: allMedicine.length,
+                  //               itemBuilder: (context, index) {
+                  //                 Medicine med = allMedicine[index];
+                  //                 return med.name.toLowerCase().contains(searchString.toLowerCase())
+                  //                     ? TextButton.icon(
+                  //                     style: TextButton.styleFrom(
+                  //                       primary: Colors.black,
+                  //                       padding: EdgeInsets.zero,
+                  //                       alignment:Alignment.centerLeft,
+                  //                       textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 16),
+                  //                     ),
+                  //                     icon: Icon(
+                  //                       Icons.medication,
+                  //                       color: med.pillColor,
+                  //                     ),
+                  //                     onPressed: (){
+                  //                       setState(() {
+                  //                         medTextController.text = med.name;
+                  //                         searchString = med.name;
+                  //                         selectedMedicine = med;
+                  //                         dropdownShow = false;
+                  //                         _formKey.currentState!.validate();
+                  //                       });
+                  //                     },
+                  //                     label: Text('${med.name}',
+                  //                     )
+                  //                 )
+                  //                     :Container();
+                  //               }
+                  //           ),
+                  //
+                  //         ),
+                  //       ),
+                  //     )
+                  // ),
 
                   SizedBox(height: 32,),
                   Center(
