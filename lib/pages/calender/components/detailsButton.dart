@@ -25,6 +25,5 @@ class DetailsButton extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

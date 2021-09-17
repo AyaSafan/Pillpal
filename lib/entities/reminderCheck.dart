@@ -18,6 +18,7 @@ class ReminderCheck {
 
   @ColumnInfo(name: 'reminder_id')
   final int reminderID;
+  //added for repeated reminders check
   final DateTime scheduledDateTime;
   final DateTime checkedDateTime;
 

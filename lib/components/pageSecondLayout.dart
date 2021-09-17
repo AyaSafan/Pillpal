@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/colors.dart';
-import 'package:pill_pal/components/curvedContainer.dart';
-
 import 'package:pill_pal/components/FAB.dart';
 
 

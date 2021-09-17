@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 
 class ReminderAddPage extends StatefulWidget {
@@ -17,6 +17,9 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   Widget build(BuildContext context) {
 
     return PageFirstLayout(
+      appBarTitle: 'Add Reminder',
+      color: MyColors.Landing1,
+
 
     );
   }

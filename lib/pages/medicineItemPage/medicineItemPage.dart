@@ -39,7 +39,6 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
       appBarRight: IconButton(
         icon: Icon(Icons.more_vert),
         onPressed: (){
-          //Navigator.pushNamed(context, '/medicine_edit', arguments: med);
           showModalBottomSheet<void>(
             context: context,
             shape: RoundedRectangleBorder(
@@ -47,7 +46,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
             ),
             builder: (BuildContext context) {
               return Container(
-                height: 250,
+                height: 240,
                 child:
                 SingleChildScrollView(
                   child: Padding(
@@ -67,7 +66,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                             Icons.timelapse,
                           ),
                           onPressed: () {
-                            if(medicineItem.supplyCurrent > medicineItem.dose) {
+                            if(medicineItem.supplyCurrent >= medicineItem.dose) {
                               //widget.medicineDao.takeDose(medicineItem.id ?? 0).then((value) => print('taken'));
                               setState(() {
                                 medicineItem = medicineItem.copyWith(
@@ -77,6 +76,12 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                               widget.medicineDao.updateMedicine(medicineItem).then((value) {
                                   Navigator.pop(context);
                               });
+                            }
+                            else{
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Current Supply Empty' )),
+                              );
                             }
                           },
                         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
+
 class CustomCard extends StatelessWidget {
   const CustomCard({Key? key, this.icon = const SizedBox(), this.title='', this.data='', this.color=Colors.grey}) : super(key: key);
 
