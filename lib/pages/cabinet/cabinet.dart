@@ -23,25 +23,6 @@ class _CabinetState extends State<Cabinet> {
 
   String searchString = "";
 
-  //
-  // late AppDatabase database;
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   $FloorAppDatabase.databaseBuilder('app_database.db').build().then((database) {
-  //     setState(() {
-  //       this.database = database;
-  //     });
-  //     print('init');
-  //   });
-  // }
-
-  // Stream<List<Medicine>> getAllMedicines() {
-  //   final result = database.medicineDao.findAllMedicines();
-  //   return result;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return PageFirstLayout(

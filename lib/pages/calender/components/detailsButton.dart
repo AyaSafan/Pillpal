@@ -8,7 +8,6 @@ class DetailsButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         primary: Colors.black,
-        //backgroundColor: MyColors.TealBlue,
         padding: EdgeInsets.only(bottom: 0),
         alignment: Alignment.bottomLeft,
         textStyle: const TextStyle(

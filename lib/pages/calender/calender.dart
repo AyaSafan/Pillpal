@@ -82,8 +82,6 @@ class _CalenderState extends State<Calender> {
         children: [
           TableCalendar(
             headerStyle: HeaderStyle(
-              //titleCentered: true,
-              //formatButtonVisible: false,
               formatButtonShowsNext: false,
             ),
             availableCalendarFormats: const {CalendarFormat.month : 'Month',CalendarFormat.week : 'Week'},
@@ -121,7 +119,6 @@ class _CalenderState extends State<Calender> {
         ],
       ),
       containerChild: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

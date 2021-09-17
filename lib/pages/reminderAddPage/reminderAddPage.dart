@@ -49,8 +49,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           allMedicine = value;
         });
       });
-
-
     }
 
     void _selectTime() async {
@@ -215,42 +213,13 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                     },
                   ),
                   SizedBox(height: 24,),
-                  // InputDecorator(
-                  //   decoration: InputDecoration(
-                  //       hintText: 'select medicine *',
-                  //       border: UnderlineInputBorder()
-                  //   ),
-                  //   isEmpty: selectedMedicine == null,
-                  //   child:
-                  //   DropdownButtonHideUnderline(
-                  //     child: DropdownButton<Medicine>(
-                  //       value: selectedMedicine,
-                  //       isDense: true,
-                  //       isExpanded: true,
-                  //       menuMaxHeight: MediaQuery.of(context).size.height/5,
-                  //       onChanged: (Medicine? newValue) {
-                  //         setState(() {
-                  //           selectedMedicine = newValue;
-                  //         });
-                  //       },
-                  //       items: allMedicine.map((Medicine med) {
-                  //         return DropdownMenuItem<Medicine>(
-                  //           value: med,
-                  //           child: Text(med.name),
-                  //         );
-                  //       }).toList(),
-                  //     ),
-                  //   ),
-                  // ),
 
                   TextFormField(
-                    //enabled: false,
                     onChanged: (value) {
                       setState((){
                         searchString = value;
                       });
                     },
-                    //autovalidateMode:AutovalidateMode.onUserInteraction,
                     validator: (value){
                       if(!allMedicine.any((element) => element.name == medTextController.text)){
                         return 'Please select medicine from cabinet';
@@ -260,7 +229,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
 
                     controller: medTextController,
                     decoration: InputDecoration(
-                      //labelText: '${selectedMedicine?.name ?? 'select medicine *' }',
                       labelText: '${'select medicine' }',
                       labelStyle: TextStyle(
                           color: dropdownShow? MyColors.TealBlue : Colors.black54
@@ -280,6 +248,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       ),
                     ),
                   ),
+
                   //This Widget is actually the dropdown List
                   Visibility(
                     visible: dropdownShow,
