@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/pages/landing/components/customImage.dart';
-import 'package:pill_pal/pages/landing/components/skipButton.dart';
 import 'package:pill_pal/pages/landing/components/nextButton.dart';
+import 'package:pill_pal/pages/landing/components/skipButton.dart';
 import 'package:pill_pal/pages/landing/components/textSection.dart';
+import 'package:pill_pal/theme.dart';
 
 
 class Landing1 extends StatelessWidget {

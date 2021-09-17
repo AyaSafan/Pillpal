@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
 import 'package:pill_pal/pages/calender/components/detailsButton.dart';
+import 'package:pill_pal/theme.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calender extends StatefulWidget {

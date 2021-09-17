@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
 import 'package:pill_pal/components/pageFirstLayout.dart';
-import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
-
-import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
+import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
+import 'package:pill_pal/theme.dart';
 
 
 
@@ -325,7 +323,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                 label:
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Text('Add to Cabinet', style: Theme.of(context).textTheme.headline2?.copyWith(color: Colors.white),),
+                  child: Text('Add to Cabinet'),
                 ),
               ),
             ),

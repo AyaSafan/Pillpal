@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/entities/reminder.dart';
@@ -13,6 +12,7 @@ import 'package:pill_pal/pages/medicineAddPage/medicineAddPage.dart';
 import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
+import 'package:pill_pal/theme.dart';
 
 Future<void> main() async {
 
@@ -52,16 +52,17 @@ Future<void> main() async {
 
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      primaryColor: MyColors.TealBlue,
-      accentColor: MyColors.MiddleBlueGreen,
-      errorColor: MyColors.MiddleRed,
-      textTheme: const TextTheme(
-        headline1: TextStyle( fontSize: 24, fontFamily: 'Raleway',color: Colors.black, ),
-        headline2: TextStyle(fontSize: 18, letterSpacing: 2, fontFamily: 'Raleway',),
-        bodyText2:TextStyle(fontSize: 16, fontFamily: 'Raleway', ),
-      ),
-    ),
+    theme: defaultTheme,
+    // ThemeData(
+    //   primaryColor: MyColors.TealBlue,
+    //   accentColor: MyColors.MiddleBlueGreen,
+    //   errorColor: MyColors.MiddleRed,
+    //   textTheme: const TextTheme(
+    //     headline1: TextStyle( fontSize: 24, fontFamily: 'Raleway',color: Colors.black, ),
+    //     headline2: TextStyle(fontSize: 18, letterSpacing: 2, fontFamily: 'Raleway',),
+    //     bodyText2:TextStyle(fontSize: 16, fontFamily: 'Raleway', ),
+    //   ),
+    // ),
     initialRoute: '/landing1',
     routes: {
       '/landing1': (context) => Landing1(),

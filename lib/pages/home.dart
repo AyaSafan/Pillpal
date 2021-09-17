@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
-
 import 'package:pill_pal/components/pageFirstLayout.dart';
+import 'package:pill_pal/theme.dart';
 
 
 class Home extends StatefulWidget {
@@ -29,7 +28,6 @@ class _HomeState extends State<Home> {
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: Theme.of(context).textTheme.headline2,
                   ),
                   label: Text('My Calender'),
                   icon: Icon(
@@ -47,7 +45,6 @@ class _HomeState extends State<Home> {
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: Theme.of(context).textTheme.headline2,
                   ),
                   label: Text('My Cabinet'),
                   icon: Icon(Icons.medical_services_outlined,

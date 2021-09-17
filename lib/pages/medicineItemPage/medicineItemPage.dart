@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
+import 'package:pill_pal/theme.dart';
 
 class MedicineItemPage extends StatefulWidget {
   const MedicineItemPage({Key? key,

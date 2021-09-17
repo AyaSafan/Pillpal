@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pill_pal/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:pill_pal/theme.dart';
 
 
 class DateCard extends StatelessWidget {

@@ -89,7 +89,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `repeated` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER NOT NULL, `scheduledDateTime` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -440,6 +440,8 @@ class _$ReminderCheckDao extends ReminderCheckDao {
             (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
                   'reminder_id': item.reminderID,
+                  'scheduledDateTime':
+                      _dateTimeConverter.encode(item.scheduledDateTime),
                   'checkedDateTime':
                       _dateTimeConverter.encode(item.checkedDateTime)
                 }),
@@ -450,6 +452,8 @@ class _$ReminderCheckDao extends ReminderCheckDao {
             (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
                   'reminder_id': item.reminderID,
+                  'scheduledDateTime':
+                      _dateTimeConverter.encode(item.scheduledDateTime),
                   'checkedDateTime':
                       _dateTimeConverter.encode(item.checkedDateTime)
                 }),
@@ -460,6 +464,8 @@ class _$ReminderCheckDao extends ReminderCheckDao {
             (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
                   'reminder_id': item.reminderID,
+                  'scheduledDateTime':
+                      _dateTimeConverter.encode(item.scheduledDateTime),
                   'checkedDateTime':
                       _dateTimeConverter.encode(item.checkedDateTime)
                 });
@@ -482,6 +488,8 @@ class _$ReminderCheckDao extends ReminderCheckDao {
         mapper: (Map<String, Object?> row) => ReminderCheck(
             id: row['id'] as int?,
             reminderID: row['reminder_id'] as int,
+            scheduledDateTime:
+                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
             checkedDateTime: row['checkedDateTime'] as int));
   }
 
@@ -491,8 +499,24 @@ class _$ReminderCheckDao extends ReminderCheckDao {
         mapper: (Map<String, Object?> row) => ReminderCheck(
             id: row['id'] as int?,
             reminderID: row['reminder_id'] as int,
+            scheduledDateTime:
+                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
             checkedDateTime: row['checkedDateTime'] as int),
         arguments: [id]);
+  }
+
+  @override
+  Future<List<ReminderCheck>> findReminderByScheduledDate(
+      DateTime datetime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM reminders_check WHERE scheduledDateTime =?1',
+        mapper: (Map<String, Object?> row) => ReminderCheck(
+            id: row['id'] as int?,
+            reminderID: row['reminder_id'] as int,
+            scheduledDateTime:
+                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
+            checkedDateTime: row['checkedDateTime'] as int),
+        arguments: [_dateTimeConverter.encode(datetime)]);
   }
 
   @override
