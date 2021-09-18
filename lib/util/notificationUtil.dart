@@ -12,8 +12,7 @@ initializeNotifications() async {
   var IOS = new IOSInitializationSettings();
 
   var settings = new InitializationSettings(android: android, iOS: IOS);
-  flutterLocalNotificationsPlugin.initialize(settings);
-
+  flutterLocalNotificationsPlugin.initialize(settings, onSelectNotification: onSelectNotification);
   currentTimezone = await FlutterNativeTimezone.getLocalTimezone();
 
 }
