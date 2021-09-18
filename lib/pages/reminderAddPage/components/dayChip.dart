@@ -15,7 +15,11 @@ class DayChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilterChip(
-      label: Text('$label', style: TextStyle(fontFamily: 'Raleway'),),
+      label: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 20,
+          ),
+          child: Text('$label', style: TextStyle(fontFamily: 'Raleway'),)),
       selected: selected,
       onSelected: onSelected,
       selectedColor: MyColors.MiddleBlueGreen,

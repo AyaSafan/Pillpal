@@ -36,8 +36,11 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
           onChanged: (value) {
             setState((){
               searchString = value;
-              dropdownShow = true;
             });
+          },
+          onTap:(){setState(() {
+            dropdownShow = true;
+          });
           },
           validator: (value){
             if(!widget.allMedicine.any((element) => element.name == medTextController.text)){
@@ -101,8 +104,8 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
                                 medTextController.text = med.name;
                                 searchString = med.name;
                                 selectedMedicine = med;
-                                dropdownShow = false;
                                 widget.formKey.currentState!.validate();
+                                dropdownShow = false;
                               });
                             },
                             label: Text('${med.name}',

@@ -67,7 +67,18 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Adding to Calender ...')),
       );
-      if (repeat){
+      if (days.isEmpty){
+        var dateTime = new DateTime.now();
+        Reminder reminder = Reminder(
+            medicineId: savedSelectedMedicine?.id ?? 0,
+            day: dateTime.weekday,
+            label: label,
+            dateTime: DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute),
+            date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
+        );
+        widget.reminderDao.insertReminder(reminder).then((value) => null);
+      }
+      else if (repeat){
         days.forEach((day) {
           Reminder reminder = Reminder(
               repeated: true,
@@ -146,6 +157,8 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                     ],
                   ),
                   Wrap(
+                    runSpacing: 1,
+                    spacing: 6,
                     children: [
                       DayChip(
                         label: 'Sun',
@@ -157,7 +170,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           });
                         },
                       ),
-                      SizedBox(width: 8,),
                       DayChip(
                         label: 'Mon',
                         selected: days.contains(DateTime.monday) ? true : false,
@@ -168,7 +180,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           });
                         },
                       ),
-                      SizedBox(width: 8,),
                       DayChip(
                         label: 'Tue',
                         selected: days.contains(DateTime.tuesday)
@@ -181,7 +192,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           });
                         },
                       ),
-                      SizedBox(width: 8,),
                       DayChip(
                         label: 'Wed',
                         selected: days.contains(DateTime.wednesday)
@@ -194,7 +204,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           });
                         },
                       ),
-                      SizedBox(width: 8,),
                       DayChip(
                         label: 'Thu',
                         selected: days.contains(DateTime.thursday)
@@ -207,7 +216,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           });
                         },
                       ),
-                      SizedBox(width: 8,),
                       DayChip(
                         label: 'Fri',
                         selected: days.contains(DateTime.friday) ? true : false,
@@ -218,7 +226,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           });
                         },
                       ),
-                      SizedBox(width: 8,),
                       DayChip(
                         label: 'Sat',
                         selected: days.contains(DateTime.saturday) ? true : false,
@@ -258,6 +265,8 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                     child:
                     ElevatedButton.icon(
                       style: ButtonStyle(
+                         // backgroundColor: MaterialStateProperty.all<
+                         //     Color>(MyColors.MiddleRed),
                           shape: MaterialStateProperty.all<
                               RoundedRectangleBorder>(
                               RoundedRectangleBorder(
