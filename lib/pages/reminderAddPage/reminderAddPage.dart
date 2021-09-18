@@ -13,12 +13,14 @@ import 'package:pill_pal/theme.dart';
 class ReminderAddPage extends StatefulWidget {
   const ReminderAddPage({Key? key,
       required this.reminderDao,
-      required this.medicineDao
+      required this.medicineDao,
+      this.savedSelectedMedicine
   }) : super(key: key);
 
 
 final ReminderDao reminderDao;
 final MedicineDao medicineDao;
+final Medicine? savedSelectedMedicine;
 
   @override
   _ReminderAddPageState createState() => _ReminderAddPageState();
@@ -43,6 +45,9 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
     @override
     void initState() {
       super.initState();
+      setState(() {
+        savedSelectedMedicine = widget.savedSelectedMedicine;
+      });
       getAllMedicine().then((value) {
         setState(() {
           allMedicine = value;
@@ -249,14 +254,20 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                   ),
                   SizedBox(height: 24,),
                   CustomDropdownMenu(formKey: _formKey, allMedicine: allMedicine,
+                    selectedMedicine: widget.savedSelectedMedicine,
                     onSaved:(value){
-                      allMedicine.forEach((element){
-                        if(element.name == value){
-                          setState(() {
-                            savedSelectedMedicine = element;
-                          });
-                        }
-                      });
+                    // if condition is optimization if route is from med item and selected medicine didn't change
+                    // if the saved medicine name here doesn't equal the nam from the dropdown
+                    // if user changed to another med, then search for the med with that name and set it
+                      if (savedSelectedMedicine?.name != value) {
+                        allMedicine.forEach((element) {
+                          if (element.name == value) {
+                            setState(() {
+                              savedSelectedMedicine = element;
+                            });
+                          }
+                        });
+                      }
                       print(savedSelectedMedicine?.name);
                     },
                   ),

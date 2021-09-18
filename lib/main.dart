@@ -66,7 +66,7 @@ Future<void> main() async {
       '/calender': (context) => Calender(reminderDao: reminderDao,),
       '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
       '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
-      '/reminder_add': (context) => ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao,),
+      //'/reminder_add': (context) => ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao,),
     },
       onGenerateRoute: (settings) {
         if (settings.name == '/medicine_edit') {
@@ -82,6 +82,14 @@ Future<void> main() async {
           return MaterialPageRoute(
             builder: (context) {
               return MedicineItemPage(medicineDao: medicineDao, med: med);
+            },
+          );
+        }
+        else if (settings.name == '/reminder_add') {
+          final med = settings.arguments as Medicine;
+          return MaterialPageRoute(
+            builder: (context) {
+              return ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao, savedSelectedMedicine: med);
             },
           );
         }

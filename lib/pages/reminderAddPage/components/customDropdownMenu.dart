@@ -6,10 +6,12 @@ class CustomDropdownMenu extends StatefulWidget {
   const CustomDropdownMenu({Key? key,
     this.allMedicine = const [],
     this.onSaved,
-    required this.formKey
+    required this.formKey,
+    this.selectedMedicine,
   }) : super(key: key);
 
   final List<Medicine> allMedicine;
+  final Medicine? selectedMedicine;
   final void Function(String?)? onSaved;
   final formKey;
 
@@ -24,6 +26,17 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
   String searchString ='';
   bool dropdownShow = false;
   Medicine? selectedMedicine;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      selectedMedicine = widget.selectedMedicine;
+      searchString = widget.selectedMedicine?.name ?? '';
+      medTextController.text = widget.selectedMedicine?.name ??'';
+    });
+  }
+
 
 
   @override

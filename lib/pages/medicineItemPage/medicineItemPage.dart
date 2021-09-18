@@ -95,6 +95,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                             Icons.notification_add,
                           ),
                           onPressed: () {
+                          Navigator.pushNamed(context, '/reminder_add', arguments: medicineItem);
                           },
                         ),
                         TextButton.icon(
