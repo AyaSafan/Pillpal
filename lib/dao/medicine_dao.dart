@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/services/ListStringConverter.dart';
+import 'package:pill_pal/util/converters/ListStringConverter.dart';
 
 @dao
 abstract class MedicineDao {

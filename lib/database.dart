@@ -2,22 +2,19 @@
 
 // required package imports
 import 'dart:async';
+
 import 'package:floor/floor.dart';
+import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/entities/reminder.dart';
+import 'package:pill_pal/entities/reminderCheck.dart';
+import 'package:pill_pal/util/converters/ColorIntConverter.dart';
+import 'package:pill_pal/util/converters/DateTimeConverter.dart';
+import 'package:pill_pal/util/converters/ListStringConverter.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'dao/medicine_dao.dart';
-import 'package:pill_pal/entities/medicine.dart';
-
-import 'dao/reminder_dao.dart';
-import 'package:pill_pal/entities/reminder.dart';
-
 import 'dao/reminder_check_dao.dart';
-import 'package:pill_pal/entities/reminderCheck.dart';
-
-import 'package:pill_pal/services/DateTimeConverter.dart';
-import 'package:pill_pal/services/ListStringConverter.dart';
-
-import 'package:pill_pal/services/ColorIntConverter.dart';
+import 'dao/reminder_dao.dart';
 
 part 'database.g.dart'; // the generated code will be there
 

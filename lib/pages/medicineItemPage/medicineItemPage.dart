@@ -306,11 +306,11 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
 
     if(medicineItem.supplyCurrent == 0){
       singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply empty.',
-          DateTime.now()).then((value) => null);
+          DateTime.now(), '').then((value) => null);
     }
     else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
       singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply running out.',
-          DateTime.now()).then((value) => null);
+          DateTime.now(), '').then((value) => null);
     }
   }
 }

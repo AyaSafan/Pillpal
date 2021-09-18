@@ -24,7 +24,7 @@ Future singleNotification(
     String message,
     String subtext,
     tz.TZDateTime datetime,
-    String? docId,
+    String? payload,
     {String? sound}) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'your channel id',
@@ -40,17 +40,17 @@ Future singleNotification(
     );
   flutterLocalNotificationsPlugin.zonedSchedule(
         hashcode, message, subtext, datetime, platformChannelSpecifics,
-        payload: docId,
+        payload: payload,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime);
 }
 
-Future<void> singleNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime) async {
+Future<void> singleNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload) async {
   var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
   .add(Duration(seconds: 1));
   await singleNotification( notificationId , title, subtext,
-  tzDateTime , '').then((value) => null);
+  tzDateTime , payload).then((value) => null);
   //print('single $tzDateTime');
 }
 
@@ -59,7 +59,7 @@ Future repeatingNotification(
     String message,
     String subtext,
     tz.TZDateTime datetime,
-    String? docId,
+    String? payload,
     {String? sound}) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
   AndroidNotificationDetails(
@@ -73,18 +73,18 @@ Future repeatingNotification(
   NotificationDetails(android: androidPlatformChannelSpecifics);
   await flutterLocalNotificationsPlugin.zonedSchedule(
       hashcode, message, subtext, datetime, platformChannelSpecifics,
-      payload: docId,
+      payload: payload,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 }
 
-Future<void> repeatingNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime) async {
+Future<void> repeatingNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload) async {
   var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
       .add(Duration(seconds: 1));
   await repeatingNotification( notificationId , title, subtext,
-      tzDateTime , '').then((value) => null);
+      tzDateTime , payload).then((value) => null);
   //print('repeat $tzDateTime');
 }
 

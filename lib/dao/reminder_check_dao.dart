@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 import 'package:pill_pal/entities/reminderCheck.dart';
-import 'package:pill_pal/services/DateTimeConverter.dart';
+import 'package:pill_pal/util/converters/DateTimeConverter.dart';
 
 @dao
 abstract class ReminderCheckDao {

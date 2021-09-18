@@ -64,4 +64,18 @@ class Medicine {
 
       );
     }
+
+  Map toJson() => {
+    'id': this.id,
+    'name': this.name,
+    'desc': this.desc,
+    'supplyCurrent': this.supplyCurrent,
+    'supplyMin': this.supplyMin,
+    'dose': this.dose,
+    'doseFrequency': this.doseFrequency,
+    'capSize': this.capSize,
+    'pillShape': this.pillShape,
+    'pillColor': this.pillColor,
+    'tags': this.tags,
+  };
 }
