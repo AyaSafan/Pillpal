@@ -57,16 +57,6 @@ Future<void> main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: defaultTheme,
-    // ThemeData(
-    //   primaryColor: MyColors.TealBlue,
-    //   accentColor: MyColors.MiddleBlueGreen,
-    //   errorColor: MyColors.MiddleRed,
-    //   textTheme: const TextTheme(
-    //     headline1: TextStyle( fontSize: 24, fontFamily: 'Raleway',color: Colors.black, ),
-    //     headline2: TextStyle(fontSize: 18, letterSpacing: 2, fontFamily: 'Raleway',),
-    //     bodyText2:TextStyle(fontSize: 16, fontFamily: 'Raleway', ),
-    //   ),
-    // ),
     initialRoute: '/landing1',
     routes: {
       '/landing1': (context) => Landing1(),
