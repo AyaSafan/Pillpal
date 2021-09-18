@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
@@ -9,6 +11,8 @@ import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.d
 import 'package:pill_pal/pages/reminderAddPage/components/customDropdownMenu.dart';
 import 'package:pill_pal/pages/reminderAddPage/components/dayChip.dart';
 import 'package:pill_pal/theme.dart';
+import 'package:pill_pal/util/notificationUtil.dart';
+
 
 class ReminderAddPage extends StatefulWidget {
   const ReminderAddPage({Key? key,
@@ -72,9 +76,19 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Adding to Calender ...')),
       );
+      registerReminders();
+      Navigator.pop(context);
+    }
+
+
+    void registerReminders() {
+      var notificationSubtext = label.isNotEmpty? label : '${savedSelectedMedicine?.name} dose ${savedSelectedMedicine?.dose} pills';
+      //no day is marked
       if (days.isEmpty){
+        int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
         var dateTime = new DateTime.now();
         Reminder reminder = Reminder(
+            id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,
             day: dateTime.weekday,
             label: label,
@@ -82,37 +96,59 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
             date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
         );
         widget.reminderDao.insertReminder(reminder).then((value) => null);
+
+        singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
+            dateTime).then((value) => null);
+
       }
+      //repeat days are marked
       else if (repeat){
         days.forEach((day) {
-          Reminder reminder = Reminder(
-              repeated: true,
-              medicineId: savedSelectedMedicine?.id ?? 0,
-              day: day,
-              label: label,
-              dateTime: DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, _time.hour, _time.minute)
-          );
-          widget.reminderDao.insertReminder(reminder).then((value) => null);
-        });
-      }
-      else{
-        days.forEach((day) {
+          int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
           var dateTime = new DateTime.now();
           while(dateTime.weekday!=day)
           {
             dateTime=dateTime.add(new Duration(days: 1));
           }
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.millisecond, dateTime.microsecond);
           Reminder reminder = Reminder(
+              repeated: true,
+              id : reminderId,
               medicineId: savedSelectedMedicine?.id ?? 0,
               day: day,
               label: label,
-              dateTime: DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute),
+              dateTime: dateTime
+          );
+          widget.reminderDao.insertReminder(reminder).then((value) => null);
+
+          repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
+              dateTime).then((value) => null);
+        });
+      }
+      //upcoming days are marked
+      else{
+        days.forEach((day) {
+          int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
+          var dateTime = new DateTime.now();
+          while(dateTime.weekday!=day)
+          {
+            dateTime=dateTime.add(new Duration(days: 1));
+          }
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.millisecond, dateTime.microsecond);
+          Reminder reminder = Reminder(
+              id : reminderId,
+              medicineId: savedSelectedMedicine?.id ?? 0,
+              day: day,
+              label:label,
+              dateTime: dateTime,
               date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
           );
           widget.reminderDao.insertReminder(reminder).then((value) => null);
+
+          singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
+              dateTime ).then((value) => null);
         });
       }
-      Navigator.pop(context);
     }
 
 
@@ -268,7 +304,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                           }
                         });
                       }
-                      print(savedSelectedMedicine?.name);
                     },
                   ),
                   SizedBox(height: 32,),

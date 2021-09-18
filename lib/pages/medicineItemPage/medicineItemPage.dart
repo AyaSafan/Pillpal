@@ -5,6 +5,10 @@ import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
 import 'package:pill_pal/theme.dart';
+import 'package:pill_pal/util/notificationUtil.dart';
+
+
+
 
 class MedicineItemPage extends StatefulWidget {
   const MedicineItemPage({Key? key,
@@ -66,6 +70,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                             Icons.timelapse,
                           ),
                           onPressed: () {
+
                             if(medicineItem.supplyCurrent >= medicineItem.dose) {
                               //widget.medicineDao.takeDose(medicineItem.id ?? 0).then((value) => print('taken'));
                               setState(() {
@@ -83,6 +88,15 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                                 SnackBar(content: Text('Current Supply Empty' )),
                               );
                             }
+                            if(medicineItem.supplyCurrent == 0){
+                              singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply empty.',
+                                  DateTime.now()).then((value) => null);
+                            }
+
+                            else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
+                              singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply running out.',
+                                  DateTime.now()).then((value) => null);
+                            }
                           },
                         ),
                         TextButton.icon(
@@ -95,6 +109,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                             Icons.notification_add,
                           ),
                           onPressed: () {
+                          Navigator.pop(context);
                           Navigator.pushNamed(context, '/reminder_add', arguments: medicineItem);
                           },
                         ),

@@ -32,9 +32,10 @@ dependencies:
   sqflite: ^2.0.0+3
   flutter_colorpicker: ^0.6.0
   # Use with the Workmanger class for background jobs headless execution.
-  workmanager: ^0.2.3
+  # workmanager: ^0.4.1
   # Use with FlutterLocalNotificationsPlugin class for local push notifications.
-  flutter_local_notifications: ^1.4.4+2
+  flutter_local_notifications: ^8.2.0
+  flutter_native_timezone: ^2.0.0
 
 dev_dependencies:
   flutter_test:
