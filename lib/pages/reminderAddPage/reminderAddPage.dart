@@ -87,16 +87,16 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       if (days.isEmpty){
         int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
         var dateTime = new DateTime.now();
+        dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.second ,dateTime.millisecond, dateTime.microsecond);
         Reminder reminder = Reminder(
             id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,
             day: dateTime.weekday,
             label: label,
-            dateTime: DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute),
+            dateTime: dateTime,
             date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
         );
         widget.reminderDao.insertReminder(reminder).then((value) => null);
-
         singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
             dateTime).then((value) => null);
 
@@ -110,7 +110,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           {
             dateTime=dateTime.add(new Duration(days: 1));
           }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.millisecond, dateTime.microsecond);
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.second ,dateTime.millisecond, dateTime.microsecond);
           Reminder reminder = Reminder(
               repeated: true,
               id : reminderId,
@@ -120,7 +120,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
               dateTime: dateTime
           );
           widget.reminderDao.insertReminder(reminder).then((value) => null);
-
           repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
               dateTime).then((value) => null);
         });
@@ -134,7 +133,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           {
             dateTime=dateTime.add(new Duration(days: 1));
           }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.millisecond, dateTime.microsecond);
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.second ,dateTime.millisecond, dateTime.microsecond);
           Reminder reminder = Reminder(
               id : reminderId,
               medicineId: savedSelectedMedicine?.id ?? 0,

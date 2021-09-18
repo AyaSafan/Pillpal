@@ -9,6 +9,9 @@ abstract class ReminderDao {
   @Query('SELECT * FROM reminders WHERE id = :id')
   Future<Reminder?> findReminderById(int id);
 
+  @Query('SELECT * FROM reminders WHERE medicine_id = :medicineId')
+  Future<List<Reminder>> findReminderByMedicineId(int medicineId);
+
   @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date')
   Future<List<Reminder>> findReminderByDate(String date);
 

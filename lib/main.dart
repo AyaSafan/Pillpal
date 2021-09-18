@@ -61,7 +61,7 @@ Future<void> main() async {
           final med = settings.arguments as Medicine;
           return MaterialPageRoute(
             builder: (context) {
-              return MedicineItemPage(medicineDao: medicineDao, med: med);
+              return MedicineItemPage(medicineDao: medicineDao,reminderDao: reminderDao ,med: med);
             },
           );
         }

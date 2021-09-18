@@ -385,6 +385,21 @@ class _$ReminderDao extends ReminderDao {
   }
 
   @override
+  Future<List<Reminder>> findReminderByMedicineId(int medicineId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM reminders WHERE medicine_id = ?1',
+        mapper: (Map<String, Object?> row) => Reminder(
+            id: row['id'] as int?,
+            medicineId: row['medicine_id'] as int,
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            label: row['label'] as String,
+            repeated: (row['repeated'] as int) != 0),
+        arguments: [medicineId]);
+  }
+
+  @override
   Future<List<Reminder>> findReminderByDate(String date) async {
     return _queryAdapter.queryList(
         'SELECT * FROM reminders WHERE repeated = 0 AND date =?1',

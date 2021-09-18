@@ -28,7 +28,7 @@ Future singleNotification(
     {String? sound}) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'your channel id',
-        'your channel name',
+        'PillPal',
         'your channel description',
         importance: Importance.max,
         priority: Priority.high
@@ -38,7 +38,6 @@ Future singleNotification(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics
     );
-  print(datetime);
   flutterLocalNotificationsPlugin.zonedSchedule(
         hashcode, message, subtext, datetime, platformChannelSpecifics,
         payload: docId,
@@ -48,10 +47,11 @@ Future singleNotification(
 }
 
 Future<void> singleNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime) async {
-var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
-.add(Duration(seconds: 1));
-await singleNotification( notificationId , title, subtext,
-tzDateTime , '').then((value) => null);
+  var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
+  .add(Duration(seconds: 1));
+  await singleNotification( notificationId , title, subtext,
+  tzDateTime , '').then((value) => null);
+  //print('single $tzDateTime');
 }
 
 Future repeatingNotification(
@@ -64,7 +64,7 @@ Future repeatingNotification(
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
   AndroidNotificationDetails(
       'repeating channel id',
-      'repeating channel name',
+      'PillPal',
       'repeating description',
       importance: Importance.max,
       priority: Priority.high
@@ -85,12 +85,14 @@ Future<void> repeatingNotificationCallback(int notificationId, String title, Str
       .add(Duration(seconds: 1));
   await repeatingNotification( notificationId , title, subtext,
       tzDateTime , '').then((value) => null);
+  //print('repeat $tzDateTime');
 }
 
 
 
-Future<void> cancelAlarm(int id) async {
+Future<void> cancelNotification(int id) async {
   await flutterLocalNotificationsPlugin.cancel(id);
+  //print('$id deleted');
 }
 
 void requestPermissions() {

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
+import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
 import 'package:pill_pal/theme.dart';
@@ -13,11 +14,13 @@ import 'package:pill_pal/util/notificationUtil.dart';
 class MedicineItemPage extends StatefulWidget {
   const MedicineItemPage({Key? key,
     required this.medicineDao,
+    required this.reminderDao,
     required this.med
   }) : super(key: key);
 
 
   final MedicineDao medicineDao;
+  final ReminderDao reminderDao;
   final Medicine med;
 
   @override
@@ -70,33 +73,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                             Icons.timelapse,
                           ),
                           onPressed: () {
-
-                            if(medicineItem.supplyCurrent >= medicineItem.dose) {
-                              //widget.medicineDao.takeDose(medicineItem.id ?? 0).then((value) => print('taken'));
-                              setState(() {
-                                medicineItem = medicineItem.copyWith(
-                                    supplyCurrent: medicineItem
-                                        .supplyCurrent - medicineItem.dose);
-                              });
-                              widget.medicineDao.updateMedicine(medicineItem).then((value) {
-                                  Navigator.pop(context);
-                              });
-                            }
-                            else{
-                              Navigator.pop(context);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Current Supply Empty' )),
-                              );
-                            }
-                            if(medicineItem.supplyCurrent == 0){
-                              singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply empty.',
-                                  DateTime.now()).then((value) => null);
-                            }
-
-                            else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
-                              singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply running out.',
-                                  DateTime.now()).then((value) => null);
-                            }
+                            takeDose(context);
                           },
                         ),
                         TextButton.icon(
@@ -136,38 +113,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                             Icons.delete,
                           ),
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  content: SingleChildScrollView(
-                                    child:
-                                    Column(
-                                      children: [
-                                        Text('${medicineItem.name} will be permanently deleted.',
-                                          style: Theme.of(context).textTheme.bodyText2,
-                                        ),
-                                      ],
-                                    )
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: Text("Delete"),
-                                      onPressed: () {
-                                        widget.medicineDao.deleteMedicine(medicineItem).then((value) => null);
-                                        Navigator.popUntil(context, ModalRoute.withName('/cabinet') );
-                                      },
-                                    ),
-                                    TextButton(
-                                      child: Text("Cancel"),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                            showDeleteDialog(context);
 
                           },
                         ),
@@ -293,5 +239,78 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
         ],
       )
     );
+  }
+
+  void showDeleteDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child:
+            Column(
+              children: [
+                Text('${medicineItem.name} will be permanently deleted.',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+              ],
+            )
+          ),
+          actions: [
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () {
+                onDeleteMedicine(context);
+              },
+            ),
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onDeleteMedicine(BuildContext context) {
+    widget.reminderDao.findReminderByMedicineId(medicineItem.id ?? 0).then((reminders) {
+      reminders.forEach((reminder) {
+        cancelNotification(reminder.id ?? 0);
+      });
+      widget.medicineDao.deleteMedicine(medicineItem).then((value) => null);
+      Navigator.popUntil(context, ModalRoute.withName('/cabinet'));
+    });
+
+  }
+
+  void takeDose(BuildContext context) {
+    if(medicineItem.supplyCurrent >= medicineItem.dose) {
+      setState(() {
+        medicineItem = medicineItem.copyWith(
+            supplyCurrent: medicineItem
+                .supplyCurrent - medicineItem.dose);
+      });
+      widget.medicineDao.updateMedicine(medicineItem).then((value) {
+          Navigator.pop(context);
+      });
+    }
+    else{
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Current Supply Empty' )),
+      );
+    }
+
+    if(medicineItem.supplyCurrent == 0){
+      singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply empty.',
+          DateTime.now()).then((value) => null);
+    }
+    else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
+      singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply running out.',
+          DateTime.now()).then((value) => null);
+    }
   }
 }

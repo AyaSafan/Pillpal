@@ -143,7 +143,7 @@ class _CalenderState extends State<Calender> {
             children: [
               Column(
                 children: _selectedEvents
-                    .map((reminderItem) => Text('${reminderItem.label}'))
+                    .map((reminderItem) => Text('${reminderItem.label} ${reminderItem.dateTime}'))
                     .toList(),
               )
             ],
