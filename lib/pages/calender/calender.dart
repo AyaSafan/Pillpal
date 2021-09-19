@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
+import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
@@ -11,11 +12,13 @@ import 'package:table_calendar/table_calendar.dart';
 class Calender extends StatefulWidget {
   const Calender({
     Key? key,
-    required this.reminderDao
+    required this.reminderDao,
+    required this.medicineDao
   }) : super(key: key);
 
 
   final ReminderDao reminderDao;
+  final MedicineDao medicineDao;
 
   @override
   _CalenderState createState() => _CalenderState();
@@ -28,6 +31,7 @@ class _CalenderState extends State<Calender> {
   DateTime? _selectedDay;
 
   var cyclicEvents = new Map();
+  var medNames = new Map();
 
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
@@ -41,6 +45,15 @@ class _CalenderState extends State<Calender> {
     return reminders;
   }
 
+  //reconsider
+  Future<void> getMedicinesById(List<Reminder> reminders) async {
+    reminders.forEach((reminder) async {
+      final med = await widget.medicineDao.findMedicineById(reminder.medicineId);
+      medNames[reminder.id] = med?.name;
+    });
+    return;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,9 +64,9 @@ class _CalenderState extends State<Calender> {
       setState(() {
         _selectedEvents = value;
       });
+      //reconsider
+      getMedicinesById(_selectedEvents).then((value) => null);
     });
-
-    //getRepeatedReminders().then((value) => null);
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -72,7 +85,7 @@ class _CalenderState extends State<Calender> {
 
   @override
   Widget build(BuildContext context) {
-
+   final defaultPadding = MediaQuery. of(context). size. width / 20;
 
     return PageSecondLayout(
       appBarTitle: "My Calender",
@@ -118,38 +131,78 @@ class _CalenderState extends State<Calender> {
           ),
         ],
       ),
-      containerChild: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              DateCard(_focusedDay),
-              DetailsButton(_focusedDay),
-            ],
-          ),
-          SizedBox(height: 32),
-          Row(
-            children: [
-              Text(
-                'YOUR PLAN PROGRESS ',
-                style: TextStyle(
-                    fontSize: 18, letterSpacing: 1, fontFamily: 'Raleway'),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Column(
-                children: _selectedEvents
-                    .map((reminderItem) => Text('${reminderItem.label} ${reminderItem.dateTime}'))
-                    .toList(),
-              )
-            ],
-          ),
-        ],
+      containerChild: Padding(
+        padding: EdgeInsets.fromLTRB(defaultPadding, defaultPadding, 0,0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                DateCard(_focusedDay),
+                DetailsButton(_focusedDay),
+              ],
+            ),
+            SizedBox(height: 32),
+            Row(
+              children: [
+                Column(
+                  children: _selectedEvents
+                      .map((reminderItem) =>
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(
+                                  minWidth: 75,
+                                ),
+                                child: Text('${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour} :'
+                                    '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}'),
+
+                              )
+                            ],
+                          ),
+                          Text('${medNames[reminderItem.id]}')
+                        ],
+                      )
+                      )
+                      .toList(),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class CalenderReminderRow extends StatelessWidget {
+  const CalenderReminderRow(this.reminderItem, {
+    Key? key,
+  }) : super(key: key);
+
+  final Reminder reminderItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Column(
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 75,
+              ),
+              child: Text('${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour} :'
+                          '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}'),
+
+            )
+          ],
+        ),
+        Text('${reminderItem.label}')
+      ],
     );
   }
 }
