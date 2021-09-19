@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
+import 'package:pill_pal/dao/reminder_check_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
@@ -15,6 +16,7 @@ import 'package:pill_pal/pages/medicineAddPage/medicineAddPage.dart';
 import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
+import 'package:pill_pal/pages/reminderItemPage/reminderItemPage.dart';
 import 'package:pill_pal/pages/splash.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:pill_pal/util/databaseTestUtil.dart';
@@ -45,11 +47,12 @@ Future<void> main() async {
       .build();
   final medicineDao = database.medicineDao;
   final reminderDao = database.reminderDao;
+  final reminderCheckDao = database.reminderCheckDao;
 
   await addDatabaseDumpData(medicineDao, reminderDao);
 
 
-  runApp(MyApp(reminderDao: reminderDao, medicineDao: medicineDao));
+  runApp(MyApp(reminderDao: reminderDao, medicineDao: medicineDao, reminderCheckDao: reminderCheckDao,));
 
 
 }
@@ -57,12 +60,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({
     Key? key,
-    required this.reminderDao,
     required this.medicineDao,
+    required this.reminderDao,
+    required this.reminderCheckDao
   }) : super(key: key);
 
-  final ReminderDao reminderDao;
   final MedicineDao medicineDao;
+  final ReminderDao reminderDao;
+  final ReminderCheckDao reminderCheckDao;
 
   static final navigatorKey = new GlobalKey<NavigatorState>();
 
@@ -106,6 +111,14 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) {
                 return ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao, savedSelectedMedicine: med);
+              },
+            );
+          }
+          else if (settings.name == '/reminder_item') {
+            final dateTime = settings.arguments as DateTime;
+            return MaterialPageRoute(
+              builder: (context) {
+                return ReminderItemPage(reminderDao: reminderDao, reminderCheckDao: reminderCheckDao, dateTime: dateTime);
               },
             );
           }

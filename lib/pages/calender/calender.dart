@@ -125,7 +125,7 @@ class _CalenderState extends State<Calender> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               DateCard(_focusedDay),
-              DetailsButton(),
+              DetailsButton(_focusedDay),
             ],
           ),
           SizedBox(height: 32),

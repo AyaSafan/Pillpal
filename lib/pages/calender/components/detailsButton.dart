@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DetailsButton extends StatelessWidget {
-  const DetailsButton({Key? key}) : super(key: key);
+
+  final DateTime dateTime;
+  const DetailsButton(this.dateTime);
+
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +16,9 @@ class DetailsButton extends StatelessWidget {
         textStyle: const TextStyle(
             fontSize: 15, letterSpacing: 1, fontFamily: 'Raleway'),
       ),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, '/reminder_item', arguments: dateTime);
+      },
       child: Row(
         children: [
           Text("More details "),
