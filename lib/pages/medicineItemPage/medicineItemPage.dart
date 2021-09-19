@@ -306,12 +306,12 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
     }
 
     if(medicineItem.supplyCurrent == 0){
-      singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply empty.',
-          DateTime.now(), '${medicineItem.id}').then((value) => null);
+      singleNotificationCallback( 0, '${medicineItem.name} Refill', 'current supply empty.',
+          DateTime.now(), '${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
     else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
-      singleNotificationCallback( 0, '${medicineItem.name} refill', 'current supply running out.',
-          DateTime.now(), '${medicineItem.id}').then((value) => null);
+      singleNotificationCallback( 0, '${medicineItem.name} Refill', 'current supply running out.',
+          DateTime.now(), '${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
   }
 }

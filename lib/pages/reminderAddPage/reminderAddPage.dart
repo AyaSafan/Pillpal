@@ -97,7 +97,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
             date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
         );
         widget.reminderDao.insertReminder(reminder).then((value) => null);
-        singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
+        singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
             dateTime, '${savedSelectedMedicine?.id}').then((value) => null);
 
       }
@@ -120,7 +120,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
               dateTime: dateTime
           );
           widget.reminderDao.insertReminder(reminder).then((value) => null);
-          repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
+          repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
               dateTime, '${savedSelectedMedicine?.id}').then((value) => null);
         });
       }
@@ -144,7 +144,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           );
           widget.reminderDao.insertReminder(reminder).then((value) => null);
 
-          singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} reminder', notificationSubtext,
+          singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
               dateTime, '${savedSelectedMedicine?.id}').then((value) => null);
         });
       }
