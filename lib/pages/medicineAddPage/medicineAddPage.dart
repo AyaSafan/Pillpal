@@ -32,7 +32,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   double dose=1;
   double doseFrequency=1;
   double capSize=0;
-  Color pillColor = Color(0xFFCCCCCC);
+  Color pillColor = MyColors.MiddleRed;
   List<String> tags =[];
 
   final myTagController = TextEditingController();
@@ -44,6 +44,13 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   }
 
   void changeColor(Color color) => setState(() => pillColor = color);
+  final List<Color> pallet = [
+    Colors.pink.shade900, Colors.deepPurple, Colors.blue, MyColors.TealBlue, MyColors.MiddleBlueGreen,
+    Colors.lightGreen.shade800, Colors.lightGreen.shade300, Colors.amberAccent, Colors.amberAccent.shade100,  Colors.orange, Colors.red,
+    MyColors.MiddleRed, Colors.pink.shade100,Colors.orange.shade100, Colors.brown,
+    Colors.grey.shade400, Colors.white70
+  ];
+
 
   Future<void> insertMedicine() async{
     final med = Medicine(
@@ -265,11 +272,14 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                    context: context,
                    builder: (BuildContext context) {
                  return AlertDialog(
+                   backgroundColor: MyColors.Landing2,
                    title: Text('Select a color'),
                    content: SingleChildScrollView(
-                     child: BlockPicker(
+                     child: 
+                     BlockPicker(
                        pickerColor: pillColor,
                        onColorChanged: changeColor,
+                       availableColors: pallet,
                      ),
                    ),
                  );
