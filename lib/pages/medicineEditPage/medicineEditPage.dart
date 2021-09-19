@@ -35,7 +35,7 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
   double dose=1;
   double doseFrequency=1;
   double capSize=0;
-  Color pillColor = Color(0xFFCCCCCC);
+  Color pillColor = MyColors.MiddleRed;
   List<String> tags =[];
 
   @override

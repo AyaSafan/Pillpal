@@ -251,21 +251,32 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
             child:
             Column(
               children: [
-                Text('${medicineItem.name} will be permanently deleted.',
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
+                RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyText2,
+                    children: <TextSpan>[
+                      TextSpan(text: '${medicineItem.name}', style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: ' will be permanently deleted.'),
+                    ],
+                  ),
+                )
               ],
             )
           ),
           actions: [
             TextButton(
-              child: Text("Delete"),
+              child: Text("Delete",
+                style: TextStyle(fontSize: 16),
+              ),
               onPressed: () {
                 onDeleteMedicine(context);
               },
+
             ),
             TextButton(
-              child: Text("Cancel"),
+              child: Text("Cancel",
+                style: TextStyle(fontSize: 16),
+              ),
               onPressed: () {
                 Navigator.pop(context);
               },
