@@ -8,6 +8,7 @@ import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/cabinet/cabinet.dart';
 import 'package:pill_pal/pages/calender/calender.dart';
+import 'package:pill_pal/pages/dayRemindersPage/dayRemindersPage.dart';
 import 'package:pill_pal/pages/home.dart';
 import 'package:pill_pal/pages/landing/landing1.dart';
 import 'package:pill_pal/pages/landing/landing2.dart';
@@ -16,7 +17,6 @@ import 'package:pill_pal/pages/medicineAddPage/medicineAddPage.dart';
 import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
-import 'package:pill_pal/pages/reminderItemPage/reminderItemPage.dart';
 import 'package:pill_pal/pages/splash.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:pill_pal/util/databaseTestUtil.dart';
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
         '/landing2': (context) => Landing2(),
         '/landing3': (context) => Landing3(),
         '/home': (context) => Home(),
-        '/calender': (context) => Calender(reminderDao: reminderDao,),
+        '/calender': (context) => Calender(reminderDao: reminderDao, medicineDao: medicineDao,),
         '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
         '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
       },
@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
             final dateTime = settings.arguments as DateTime;
             return MaterialPageRoute(
               builder: (context) {
-                return ReminderItemPage(reminderDao: reminderDao, reminderCheckDao: reminderCheckDao, dateTime: dateTime);
+                return DayRemindersPage(reminderDao: reminderDao, reminderCheckDao: reminderCheckDao, dateTime: dateTime);
               },
             );
           }

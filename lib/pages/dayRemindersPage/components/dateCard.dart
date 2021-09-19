@@ -55,7 +55,7 @@ class DateCard extends StatelessWidget {
 
                   ),
                   Text(
-                    '${_focusedDay.day< 10? '0': ''}${_focusedDay.day} ${DateFormat('MMM').format(_focusedDay)}',
+                    '${_focusedDay.day< 10? '0': ''}${_focusedDay.day} ${DateFormat('MMM').format(_focusedDay)}.',
                     style: TextStyle(
                         fontSize: 24,
                         letterSpacing: 2,

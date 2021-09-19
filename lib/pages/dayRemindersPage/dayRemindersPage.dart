@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/dao/reminder_check_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
-import 'package:pill_pal/pages/reminderItemPage/components/dateCard.dart';
+import 'package:pill_pal/pages/dayRemindersPage/components/dateCard.dart';
 
 
-class ReminderItemPage extends StatefulWidget {
-  const ReminderItemPage({Key? key,
+class DayRemindersPage extends StatefulWidget {
+  const DayRemindersPage({Key? key,
     required this.reminderDao,
     required this.reminderCheckDao,
     required this.dateTime
@@ -16,10 +16,10 @@ class ReminderItemPage extends StatefulWidget {
   final DateTime dateTime;
 
   @override
-  _ReminderItemPageState createState() => _ReminderItemPageState();
+  _DayRemindersPageState createState() => _DayRemindersPageState();
 }
 
-class _ReminderItemPageState extends State<ReminderItemPage> {
+class _DayRemindersPageState extends State<DayRemindersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

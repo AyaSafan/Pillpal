@@ -11,7 +11,7 @@ class DetailsButton extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         primary: Colors.black,
-        padding: EdgeInsets.only(bottom: 0),
+        //padding: EdgeInsets.only(bottom: 0),
         alignment: Alignment.bottomLeft,
         textStyle: const TextStyle(
             fontSize: 15, letterSpacing: 1, fontFamily: 'Raleway'),
