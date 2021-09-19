@@ -15,6 +15,7 @@ import 'package:pill_pal/pages/medicineAddPage/medicineAddPage.dart';
 import 'package:pill_pal/pages/medicineEditPage/medicineEditPage.dart';
 import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
+import 'package:pill_pal/pages/splash.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:pill_pal/util/databaseTestUtil.dart';
 import 'package:pill_pal/util/notificationUtil.dart';
@@ -72,8 +73,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: defaultTheme,
       navigatorKey: navigatorKey,
-      initialRoute: '/landing1',
+      initialRoute: '/',
       routes: {
+        '/': (context) => Splash(),
         '/landing1': (context) => Landing1(),
         '/landing2': (context) => Landing2(),
         '/landing3': (context) => Landing3(),

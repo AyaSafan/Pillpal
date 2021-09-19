@@ -36,6 +36,8 @@ dependencies:
   # Use with FlutterLocalNotificationsPlugin class for local push notifications.
   flutter_local_notifications: ^8.2.0
   flutter_native_timezone: ^2.0.0
+  #after_layout: ^1.1.0
+  shared_preferences: ^2.0.7
 
 dev_dependencies:
   flutter_test:
