@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/entities/reminder.dart';
 
 @Entity(
   tableName: 'reminders_check',
@@ -7,7 +7,7 @@ import 'package:pill_pal/entities/medicine.dart';
     ForeignKey(
         childColumns: ['reminder_id'],
         parentColumns: ['id'],
-        entity: Medicine,
+        entity: Reminder,
         onDelete: ForeignKeyAction.cascade
     )
   ],

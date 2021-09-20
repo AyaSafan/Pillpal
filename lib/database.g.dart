@@ -89,7 +89,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `medicineName` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `repeated` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER, `scheduledDateTime` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER, `scheduledDateTime` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `reminders` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
 
         await callback?.onCreate?.call(database, version);
       },

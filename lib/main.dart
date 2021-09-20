@@ -118,7 +118,7 @@ class MyApp extends StatelessWidget {
             final args = settings.arguments as Map;
             return MaterialPageRoute(
               builder: (context) {
-                return DayRemindersPage(reminderDao: reminderDao, reminderCheckDao: reminderCheckDao,
+                return DayRemindersPage(medicineDao:medicineDao, reminderDao: reminderDao, reminderCheckDao: reminderCheckDao,
                     dateTime: args['dateTime'], reminders: args['reminders']);
               },
             );
