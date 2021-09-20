@@ -22,11 +22,14 @@ Future<void> addDatabaseDumpData(medicineDao, reminderDao) async {
   await medicineDao.insertMedicine(Medicine(name: 'c'));
   await medicineDao.insertMedicine(Medicine(name: 'd'));
 
+  var dateTime = new DateTime.now();
+  dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute);
+
   await reminderDao.deleteAllReminders();
-  final reminder = Reminder(medicineId: 12, label: 'first reminder', dateTime: DateTime.now());
+  final reminder = Reminder(medicineId: 12,medicineName: 'Paracetamol' ,label: 'first reminder', dateTime: dateTime);
 
   await reminderDao.insertReminder(reminder);
-  final reminder2 = Reminder(medicineId: 12,  day: DateTime.monday, label: 'cyclic reminder', repeated: true, dateTime: DateTime.now());
+  final reminder2 = Reminder(medicineId: 12,medicineName: 'Paracetamol',  day: DateTime.monday, label: 'cyclic reminder', repeated: true, dateTime: dateTime);
   await reminderDao.insertReminder(reminder2);
   print('added');
 

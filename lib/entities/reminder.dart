@@ -20,6 +20,7 @@ class Reminder {
 
   @ColumnInfo(name: 'medicine_id')
   final int medicineId;
+  final String medicineName;
   //to query reminders with date
   final String date;
   // to query reminders with weekday (for repeated reminders)
@@ -35,6 +36,7 @@ class Reminder {
       {
         this.id,
         required this.medicineId,
+        this.medicineName : '',
         String? date,
         int? day,
         required this.dateTime,

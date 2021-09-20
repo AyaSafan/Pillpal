@@ -87,9 +87,9 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `medicines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `desc` TEXT NOT NULL, `supplyCurrent` REAL NOT NULL, `supplyMin` REAL NOT NULL, `dose` REAL NOT NULL, `doseFrequency` REAL NOT NULL, `capSize` REAL NOT NULL, `pillShape` TEXT NOT NULL, `pillColor` INTEGER NOT NULL, `tags` TEXT NOT NULL)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `repeated` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `medicineName` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `repeated` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER NOT NULL, `scheduledDateTime` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
+            'CREATE TABLE IF NOT EXISTS `reminders_check` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `reminder_id` INTEGER, `scheduledDateTime` INTEGER NOT NULL, `checkedDateTime` INTEGER NOT NULL, FOREIGN KEY (`reminder_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -312,6 +312,7 @@ class _$ReminderDao extends ReminderDao {
             (Reminder item) => <String, Object?>{
                   'id': item.id,
                   'medicine_id': item.medicineId,
+                  'medicineName': item.medicineName,
                   'date': item.date,
                   'day': item.day,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
@@ -325,6 +326,7 @@ class _$ReminderDao extends ReminderDao {
             (Reminder item) => <String, Object?>{
                   'id': item.id,
                   'medicine_id': item.medicineId,
+                  'medicineName': item.medicineName,
                   'date': item.date,
                   'day': item.day,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
@@ -338,6 +340,7 @@ class _$ReminderDao extends ReminderDao {
             (Reminder item) => <String, Object?>{
                   'id': item.id,
                   'medicine_id': item.medicineId,
+                  'medicineName': item.medicineName,
                   'date': item.date,
                   'day': item.day,
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
@@ -363,6 +366,7 @@ class _$ReminderDao extends ReminderDao {
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
             date: row['date'] as String,
             day: row['day'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
@@ -376,6 +380,7 @@ class _$ReminderDao extends ReminderDao {
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
             date: row['date'] as String,
             day: row['day'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
@@ -391,6 +396,7 @@ class _$ReminderDao extends ReminderDao {
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
             date: row['date'] as String,
             day: row['day'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
@@ -406,6 +412,7 @@ class _$ReminderDao extends ReminderDao {
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
             date: row['date'] as String,
             day: row['day'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
@@ -420,6 +427,7 @@ class _$ReminderDao extends ReminderDao {
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
             date: row['date'] as String,
             day: row['day'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
@@ -434,6 +442,7 @@ class _$ReminderDao extends ReminderDao {
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
             date: row['date'] as String,
             day: row['day'] as int,
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
@@ -471,7 +480,7 @@ class _$ReminderCheckDao extends ReminderCheckDao {
             'reminders_check',
             (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
-                  'reminder_id': item.reminderID,
+                  'reminder_id': item.reminderId,
                   'scheduledDateTime':
                       _dateTimeConverter.encode(item.scheduledDateTime),
                   'checkedDateTime':
@@ -483,7 +492,7 @@ class _$ReminderCheckDao extends ReminderCheckDao {
             ['id'],
             (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
-                  'reminder_id': item.reminderID,
+                  'reminder_id': item.reminderId,
                   'scheduledDateTime':
                       _dateTimeConverter.encode(item.scheduledDateTime),
                   'checkedDateTime':
@@ -495,7 +504,7 @@ class _$ReminderCheckDao extends ReminderCheckDao {
             ['id'],
             (ReminderCheck item) => <String, Object?>{
                   'id': item.id,
-                  'reminder_id': item.reminderID,
+                  'reminder_id': item.reminderId,
                   'scheduledDateTime':
                       _dateTimeConverter.encode(item.scheduledDateTime),
                   'checkedDateTime':
@@ -515,40 +524,12 @@ class _$ReminderCheckDao extends ReminderCheckDao {
   final DeletionAdapter<ReminderCheck> _reminderCheckDeletionAdapter;
 
   @override
-  Future<List<ReminderCheck>> findAllReminderChecks() async {
-    return _queryAdapter.queryList('SELECT * FROM reminders_check',
-        mapper: (Map<String, Object?> row) => ReminderCheck(
-            id: row['id'] as int?,
-            reminderID: row['reminder_id'] as int,
-            scheduledDateTime:
-                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
-            checkedDateTime: row['checkedDateTime'] as int));
-  }
-
-  @override
-  Future<ReminderCheck?> findReminderCheckById(int id) async {
-    return _queryAdapter.query('SELECT * FROM reminders_check WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => ReminderCheck(
-            id: row['id'] as int?,
-            reminderID: row['reminder_id'] as int,
-            scheduledDateTime:
-                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
-            checkedDateTime: row['checkedDateTime'] as int),
-        arguments: [id]);
-  }
-
-  @override
-  Future<List<ReminderCheck>> findReminderByScheduledDate(
-      DateTime datetime) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM reminders_check WHERE scheduledDateTime =?1',
-        mapper: (Map<String, Object?> row) => ReminderCheck(
-            id: row['id'] as int?,
-            reminderID: row['reminder_id'] as int,
-            scheduledDateTime:
-                _dateTimeConverter.decode(row['scheduledDateTime'] as int),
-            checkedDateTime: row['checkedDateTime'] as int),
-        arguments: [_dateTimeConverter.encode(datetime)]);
+  Future<ReminderCheck?> findReminderByScheduledDate(
+      DateTime datetime, int reminderId) async {
+    return _queryAdapter.query(
+        'SELECT * FROM reminders_check WHERE scheduledDateTime =?1 AND reminder_id =?2',
+        mapper: (Map<String, Object?> row) => ReminderCheck(id: row['id'] as int?, reminderId: row['reminder_id'] as int?, scheduledDateTime: _dateTimeConverter.decode(row['scheduledDateTime'] as int), checkedDateTime: _dateTimeConverter.decode(row['checkedDateTime'] as int)),
+        arguments: [_dateTimeConverter.encode(datetime), reminderId]);
   }
 
   @override

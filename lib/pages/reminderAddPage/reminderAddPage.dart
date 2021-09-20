@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
@@ -33,7 +31,7 @@ final Medicine? savedSelectedMedicine;
 class _ReminderAddPageState extends State<ReminderAddPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TimeOfDay _time = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+  TimeOfDay _time = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute+1);
   bool repeat = false;
   List<int> days = [];
   String label = '';
@@ -85,15 +83,22 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       var notificationSubtext = label.isNotEmpty? label : '${savedSelectedMedicine?.name} dose ${savedSelectedMedicine?.dose} pills';
       //no day is marked
       if (days.isEmpty){
-        int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
+        int timestamp = DateTime.now().millisecondsSinceEpoch;
+        int reminderId = timestamp ~/ 1000 + timestamp % 1000;
         var dateTime = new DateTime.now();
-        dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.second ,dateTime.millisecond, dateTime.microsecond);
+        dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
+        //if time chosen already passed on that day.. schedule next day
+        if (dateTime.isBefore(DateTime.now())){
+          dateTime.add(Duration(days: 1));
+        }
         Reminder reminder = Reminder(
             id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,
+            medicineName: savedSelectedMedicine?.name ?? '',
             day: dateTime.weekday,
             label: label,
             dateTime: dateTime,
+            //single time reminders are collected by date
             date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
         );
         widget.reminderDao.insertReminder(reminder).then((value) => null);
@@ -104,17 +109,23 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       //repeat days are marked
       else if (repeat){
         days.forEach((day) {
-          int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
+          int timestamp = DateTime.now().millisecondsSinceEpoch;
+          int reminderId = timestamp ~/ 1000 + timestamp % 1000;
           var dateTime = new DateTime.now();
           while(dateTime.weekday!=day)
           {
             dateTime=dateTime.add(new Duration(days: 1));
           }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.second ,dateTime.millisecond, dateTime.microsecond);
+          //today is monday ..if time chosen already passed on that monday.. schedule monday next week
+          if (dateTime.isBefore(DateTime.now())){
+            dateTime.add(Duration(days: 7));
+          }
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
           Reminder reminder = Reminder(
               repeated: true,
               id : reminderId,
               medicineId: savedSelectedMedicine?.id ?? 0,
+              medicineName: savedSelectedMedicine?.name ?? '',
               day: day,
               label: label,
               dateTime: dateTime
@@ -127,19 +138,26 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       //upcoming days are marked
       else{
         days.forEach((day) {
-          int reminderId = DateTime.now().millisecondsSinceEpoch ~/ 1000 + Random().nextInt(1000);
+          int timestamp = DateTime.now().millisecondsSinceEpoch;
+          int reminderId = timestamp ~/ 1000 + timestamp % 1000;
           var dateTime = new DateTime.now();
           while(dateTime.weekday!=day)
           {
             dateTime=dateTime.add(new Duration(days: 1));
           }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute, dateTime.second ,dateTime.millisecond, dateTime.microsecond);
+          //today is monday ..if time chosen already passed on that monday.. schedule monday next week
+          if (dateTime.isBefore(DateTime.now())){
+            dateTime.add(Duration(days: 7));
+          }
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
           Reminder reminder = Reminder(
               id : reminderId,
               medicineId: savedSelectedMedicine?.id ?? 0,
+              medicineName: savedSelectedMedicine?.name ?? '',
               day: day,
               label:label,
               dateTime: dateTime,
+              //single time reminders are collected by date
               date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
           );
           widget.reminderDao.insertReminder(reminder).then((value) => null);
@@ -166,6 +184,24 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
               key: _formKey,
               child: Column(
                 children: [
+                  CustomDropdownMenu(formKey: _formKey, allMedicine: allMedicine,
+                    selectedMedicine: widget.savedSelectedMedicine,
+                    onSaved:(value){
+                      // if condition is optimization if route is from med item and selected medicine didn't change
+                      // if the saved medicine name here doesn't equal the nam from the dropdown
+                      // if user changed to another med, then search for the med with that name and set it
+                      if (savedSelectedMedicine?.name != value) {
+                        allMedicine.forEach((element) {
+                          if (element.name == value) {
+                            setState(() {
+                              savedSelectedMedicine = element;
+                            });
+                          }
+                        });
+                      }
+                    },
+                  ),
+                  SizedBox(height: 24,),
                   GestureDetector(
                     onTap: _selectTime,
                     child: TextFormField(
@@ -287,24 +323,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       });
                     },
                   ),
-                  SizedBox(height: 24,),
-                  CustomDropdownMenu(formKey: _formKey, allMedicine: allMedicine,
-                    selectedMedicine: widget.savedSelectedMedicine,
-                    onSaved:(value){
-                    // if condition is optimization if route is from med item and selected medicine didn't change
-                    // if the saved medicine name here doesn't equal the nam from the dropdown
-                    // if user changed to another med, then search for the med with that name and set it
-                      if (savedSelectedMedicine?.name != value) {
-                        allMedicine.forEach((element) {
-                          if (element.name == value) {
-                            setState(() {
-                              savedSelectedMedicine = element;
-                            });
-                          }
-                        });
-                      }
-                    },
-                  ),
+
                   SizedBox(height: 32,),
                   Center(
                     child:

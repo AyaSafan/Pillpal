@@ -17,7 +17,7 @@ class ReminderCheck {
   int? id;
 
   @ColumnInfo(name: 'reminder_id')
-  final int reminderID;
+  final int? reminderId;
   //added for repeated reminders check
   final DateTime scheduledDateTime;
   final DateTime checkedDateTime;
@@ -26,8 +26,8 @@ class ReminderCheck {
   ReminderCheck(
       {
         this.id,
-        required this.reminderID,
+        this.reminderId,
         required this. scheduledDateTime,
-        int? checkedDateTime,
-      }) : this.checkedDateTime = DateTime.fromMillisecondsSinceEpoch(checkedDateTime?? DateTime.now().millisecondsSinceEpoch );
+        required this.checkedDateTime,
+      });
 }
