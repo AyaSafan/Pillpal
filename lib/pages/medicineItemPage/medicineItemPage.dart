@@ -173,7 +173,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
 
   Widget buildBottomSheet(BuildContext context) {
       return Container(
-        height: 240,
+        //height: 240,
         child:
         SingleChildScrollView(
           child: Padding(
@@ -319,12 +319,12 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
     }
 
     if(medicineItem.supplyCurrent == 0){
-      singleNotificationCallback( 0, '${medicineItem.name} Refill', 'current supply empty.',
-          DateTime.now(), '${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
+      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply empty.',
+          DateTime.now(), 'medicine ${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
     else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
-      singleNotificationCallback( 0, '${medicineItem.name} Refill', 'current supply running out.',
-          DateTime.now(), '${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
+      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply running out.',
+          DateTime.now(), 'medicine ${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
   }
 }

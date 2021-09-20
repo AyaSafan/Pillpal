@@ -12,11 +12,13 @@ class Calender extends StatefulWidget {
   const Calender({
     Key? key,
     required this.reminderDao,
+    this.passedDay
     //required this.medicineDao
   }) : super(key: key);
 
 
   final ReminderDao reminderDao;
+  final DateTime? passedDay;
 
   @override
   _CalenderState createState() => _CalenderState();
@@ -48,7 +50,7 @@ class _CalenderState extends State<Calender> {
   void initState() {
     super.initState();
     setState(() {
-      _selectedDay = _focusedDay;
+      _selectedDay = widget.passedDay?? _focusedDay;
     });
     getDayReminders(_selectedDay!).then((value) {
       setState(() {

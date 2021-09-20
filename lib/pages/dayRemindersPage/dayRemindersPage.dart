@@ -7,6 +7,7 @@ import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/entities/reminderCheck.dart';
+import 'package:pill_pal/pages/calender/calender.dart';
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:pill_pal/util/notificationUtil.dart';
@@ -78,6 +79,15 @@ class _DayRemindersPageState extends State<DayRemindersPage> {
     return PageSecondLayout(
       showFAB: false,
       color: MyColors.Landing1,
+      appBarLeading: IconButton(
+        onPressed:(){
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute (builder: (BuildContext context) => Calender(reminderDao: widget.reminderDao, passedDay: widget.dateTime,)),
+              ModalRoute.withName('/home'));
+        },
+        icon: Icon(Icons.arrow_back,),
+        ) ,
       appBarRight:Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Image.asset('assets/pill.png', height: 60, width: 80),
@@ -247,6 +257,7 @@ class _DayRemindersPageState extends State<DayRemindersPage> {
                           Icons.delete,
                         ),
                         onPressed: () {
+                          delete(reminder, index, context);
                         },
                       ),
                     ],
@@ -317,6 +328,16 @@ class _DayRemindersPageState extends State<DayRemindersPage> {
 
   }
 
+  void delete(Reminder reminder, int index, BuildContext context) {
+    widget.reminderDao.deleteReminder(reminder).then((value){
+      setState(() {
+        checkList.removeAt(index);
+      });
+      cancelNotification(reminder.id ?? 0);
+      Navigator.pop(context);
+    });
+  }
+
   void goToMedicinePage(Reminder reminder, BuildContext context) {
     if (med == null) {
       widget.medicineDao.findMedicineById(reminder.medicineId).then((medicineItem) {
@@ -368,17 +389,17 @@ class _DayRemindersPageState extends State<DayRemindersPage> {
     else{
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${medicineItem.name}supply is empty' )),
+        SnackBar(content: Text('${medicineItem.name} supply is empty' )),
       );
     }
 
     if(medicineItem.supplyCurrent == 0){
-      singleNotificationCallback( 0, '${medicineItem.name} Refill', 'current supply empty.',
-          DateTime.now(), '${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
+      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply empty.',
+          DateTime.now(), 'medicine ${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
     else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
-      singleNotificationCallback( 0, '${medicineItem.name} Refill', 'current supply running out.',
-          DateTime.now(), '${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
+      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply running out.',
+          DateTime.now(), 'medicine ${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
   }
 

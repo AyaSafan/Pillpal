@@ -8,6 +8,7 @@ class PageSecondLayout extends StatelessWidget {
       {
         this.appBarTitle ='',
         this.appBarRight = const SizedBox(height: 0, width: 0),
+        this.appBarLeading,
         this.color = MyColors.Landing2,
         this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
@@ -17,6 +18,7 @@ class PageSecondLayout extends StatelessWidget {
   final Widget topChild;
   final Widget containerChild;
   final Widget appBarRight;
+  final Widget? appBarLeading;
   final String appBarTitle;
   final Color color;
   final bool showFAB;
@@ -41,6 +43,7 @@ class PageSecondLayout extends StatelessWidget {
         actions: [
           appBarRight
         ],
+        leading: appBarLeading,
         elevation: 0.0,
         backgroundColor: color,
         iconTheme: IconThemeData(

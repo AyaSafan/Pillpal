@@ -30,10 +30,54 @@ Future onSelectNotification(payload) async {
   final database = await $FloorAppDatabase
       .databaseBuilder('app_database.db')
       .build();
-  final medicineDao = database.medicineDao;
-  Medicine? med = await medicineDao.findMedicineById(int.parse(payload));
+  final route = payload.toString().split(" ")[0];
+  final value = payload.toString().split(" ")[1];
+  print(route);
+  print(value);
+  if(route == 'medicine') {
+    final medicineDao = database.medicineDao;
+    Medicine? med = await medicineDao.findMedicineById(int.parse(value));
+    await Navigator.pushNamedAndRemoveUntil(
+        MyApp.navigatorKey.currentState!.context,
+        '/medicine_item', ModalRoute.withName('/home'), arguments: med);
+  }else{
+    final reminderDao = database.reminderDao;
+    DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(value));
+    final reminders = await reminderDao.findReminderByDate(
+        DateTime(dateTime.year, dateTime.month, dateTime.day).toString());
+    final dayRepeatedReminders = await reminderDao.findRepeatedReminderByDay(dateTime.weekday);
+    reminders.addAll(dayRepeatedReminders);
+    reminders.sort((a,b)=> DateTime(1,1,1999,a.dateTime.hour, a.dateTime.minute).compareTo(DateTime(1,1,1999,b.dateTime.hour, b.dateTime.minute)));
+
+    await Navigator.pushNamedAndRemoveUntil(MyApp.navigatorKey.currentState!.context,
+        '/day_reminders',  ModalRoute.withName('/home'),
+        arguments: {
+          'dateTime': dateTime,
+          'reminders': reminders
+        });
+
+  }
+}
+
+Future onSelectReminderNotification(payload) async {
+  final database = await $FloorAppDatabase
+      .databaseBuilder('app_database.db')
+      .build();
+  final reminderDao = database.reminderDao;
+  DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(payload);
+
+  final reminders = await reminderDao.findReminderByDate(
+      DateTime(dateTime.year, dateTime.month, dateTime.day).toString());
+  final dayRepeatedReminders = await reminderDao.findRepeatedReminderByDay(dateTime.weekday);
+  reminders.addAll(dayRepeatedReminders);
+
   await Navigator.pushNamedAndRemoveUntil(MyApp.navigatorKey.currentState!.context,
-      '/medicine_item',  ModalRoute.withName('/home'), arguments: med);
+      '/day_reminders',  ModalRoute.withName('/home'),
+      arguments: {
+        'dateTime': dateTime,
+        'reminders': reminders
+  });
+
 }
 
 Future<void> main() async {

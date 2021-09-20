@@ -103,7 +103,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         );
         widget.reminderDao.insertReminder(reminder).then((value) => null);
         singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
-            dateTime, '${savedSelectedMedicine?.id}').then((value) => null);
+            dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
 
       }
       //repeat days are marked
@@ -132,7 +132,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           );
           widget.reminderDao.insertReminder(reminder).then((value) => null);
           repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
-              dateTime, '${savedSelectedMedicine?.id}').then((value) => null);
+              dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
         });
       }
       //upcoming days are marked
@@ -163,7 +163,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           widget.reminderDao.insertReminder(reminder).then((value) => null);
 
           singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
-              dateTime, '${savedSelectedMedicine?.id}').then((value) => null);
+              dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
         });
       }
     }
