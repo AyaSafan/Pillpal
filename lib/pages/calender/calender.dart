@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
-import 'package:pill_pal/dao/medicine_dao.dart';
+//import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/reminder.dart';
 import 'package:pill_pal/pages/calender/components/dateCard.dart';
-import 'package:pill_pal/pages/calender/components/detailsButton.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -13,12 +12,11 @@ class Calender extends StatefulWidget {
   const Calender({
     Key? key,
     required this.reminderDao,
-    required this.medicineDao
+    //required this.medicineDao
   }) : super(key: key);
 
 
   final ReminderDao reminderDao;
-  final MedicineDao medicineDao;
 
   @override
   _CalenderState createState() => _CalenderState();
@@ -31,7 +29,7 @@ class _CalenderState extends State<Calender> {
   DateTime? _selectedDay;
 
   var cyclicEvents = new Map();
-  var medNames = new Map();
+  Map timeMap = new Map();
 
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
@@ -45,14 +43,6 @@ class _CalenderState extends State<Calender> {
     return reminders;
   }
 
-  //reconsider
-  Future<void> getMedicinesById(List<Reminder> reminders) async {
-    reminders.forEach((reminder) async {
-      final med = await widget.medicineDao.findMedicineById(reminder.medicineId);
-      medNames[reminder.id] = med?.name;
-    });
-    return;
-  }
 
   @override
   void initState() {
@@ -63,9 +53,9 @@ class _CalenderState extends State<Calender> {
     getDayReminders(_selectedDay!).then((value) {
       setState(() {
         _selectedEvents = value;
+        _selectedEvents.sort((a,b)=> DateTime(1,1,1999,a.dateTime.hour, a.dateTime.minute).compareTo(DateTime(1,1,1999,b.dateTime.hour, b.dateTime.minute)));
       });
-      //reconsider
-      getMedicinesById(_selectedEvents).then((value) => null);
+      //getMedicinesById(_selectedEvents).then((value) => null);
     });
   }
 
@@ -78,6 +68,7 @@ class _CalenderState extends State<Calender> {
       getDayReminders(_selectedDay!).then((value) {
         setState(() {
           _selectedEvents = value;
+          _selectedEvents.sort((a,b)=> DateTime(1,1,1999,a.dateTime.hour, a.dateTime.minute).compareTo(DateTime(1,1,1999,b.dateTime.hour, b.dateTime.minute)));
         });
       });
     }
@@ -86,10 +77,14 @@ class _CalenderState extends State<Calender> {
   @override
   Widget build(BuildContext context) {
    final defaultPadding = MediaQuery. of(context). size. width / 20;
+   setState(() {
+     timeMap.clear();
+   });
 
     return PageSecondLayout(
       appBarTitle: "My Calender",
       color: MyColors.Landing1,
+      showFAB: false,
       topChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -106,7 +101,7 @@ class _CalenderState extends State<Calender> {
                   shape: BoxShape.circle),
             ),
             firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.utc(2050, 1, 1),
+            lastDay: DateTime.now().add(Duration(days: 7300)),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             onDaySelected: _onDaySelected,
@@ -140,34 +135,38 @@ class _CalenderState extends State<Calender> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 DateCard(_focusedDay),
-                DetailsButton(_focusedDay),
+                TextButton(
+                  child: Row(
+                    children: [
+                      Text("Checklist",
+                        style: TextStyle(color: Colors.black, fontSize: 16)
+                      ),
+                      Icon(
+                        Icons.double_arrow_outlined,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/day_reminders',
+                        arguments: {
+                          'dateTime': _focusedDay,
+                          'reminders': _selectedEvents
+                        });
+                  },
+                ),
               ],
             ),
             SizedBox(height: 32),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: _selectedEvents
-                      .map((reminderItem) =>
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              ConstrainedBox(
-                                constraints: const BoxConstraints(
-                                  minWidth: 75,
-                                ),
-                                child: Text('${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour} :'
-                                    '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}'),
-
-                              )
-                            ],
-                          ),
-                          Text('${medNames[reminderItem.id]}')
-                        ],
-                      )
-                      )
-                      .toList(),
+                      .map((reminderItem) {
+                        return getReminderRow(reminderItem);
+                      }).toList(),
                 )
               ],
             ),
@@ -176,33 +175,46 @@ class _CalenderState extends State<Calender> {
       ),
     );
   }
-}
 
-class CalenderReminderRow extends StatelessWidget {
-  const CalenderReminderRow(this.reminderItem, {
-    Key? key,
-  }) : super(key: key);
-
-  final Reminder reminderItem;
-
-  @override
-  Widget build(BuildContext context) {
+  Row getReminderRow(Reminder reminderItem) {
+    var time = '${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour}:'
+        '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}';
+    setState(() {
+      timeMap.containsKey(time)? timeMap[time]+=1 : timeMap[time] =1;
+    });
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ConstrainedBox(
               constraints: const BoxConstraints(
                 minWidth: 75,
               ),
-              child: Text('${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour} :'
-                          '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}'),
+              child:
+              Text('${timeMap[time] ==1? time : ''}',
+                style: TextStyle(fontSize: 18, color: MyColors.TealBlue, fontWeight: FontWeight.bold),
+              ),
 
-            )
+            ),
+            SizedBox(height: 24,),
           ],
         ),
-        Text('${reminderItem.label}')
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(width: 3.0, color: MyColors.MiddleBlueGreen),
+            ),
+            color: Colors.white,
+          ),
+          child: Text('   ${reminderItem.medicineName}', style: TextStyle(fontSize: 18),),
+        ),
+
       ],
     );
   }
 }
+
+

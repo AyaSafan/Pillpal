@@ -52,78 +52,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(MediaQuery. of(context). size. width / 20),
             ),
-            builder: (BuildContext context) {
-              return Container(
-                height: 240,
-                child:
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.all(MediaQuery. of(context). size. width / 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextButton.icon(
-                          style: TextButton.styleFrom(
-                            primary: Colors.black,
-                            textStyle: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          label: Text('Take Dose'),
-                          icon: Icon(
-                            Icons.timelapse,
-                          ),
-                          onPressed: () {
-                            takeDose(context);
-                          },
-                        ),
-                        TextButton.icon(
-                          style: TextButton.styleFrom(
-                            primary: Colors.black,
-                            textStyle: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          label: Text('Add Reminder'),
-                          icon: Icon(
-                            Icons.notification_add,
-                          ),
-                          onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, '/reminder_add', arguments: medicineItem);
-                          },
-                        ),
-                        TextButton.icon(
-                          style: TextButton.styleFrom(
-                            primary: Colors.black,
-                            textStyle: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          label: Text('Edit Medicine'),
-                          icon: Icon(
-                            Icons.edit,
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/medicine_edit', arguments: medicineItem);
-                          },
-                        ),
-                        TextButton.icon(
-                          style: TextButton.styleFrom(
-                            primary: Colors.black,
-                            textStyle: Theme.of(context).textTheme.bodyText2,
-                          ),
-                          label: Text('Delete Medicine'),
-                          icon: Icon(
-                            Icons.delete,
-                          ),
-                          onPressed: () {
-                            showDeleteDialog(context);
-
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
+            builder: buildBottomSheet,
           );
         },
       ),
@@ -241,6 +170,79 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
       )
     );
   }
+
+  Widget buildBottomSheet(BuildContext context) {
+      return Container(
+        height: 240,
+        child:
+        SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(MediaQuery. of(context). size. width / 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
+                    textStyle: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  label: Text('Take Dose'),
+                  icon: Icon(
+                    Icons.timelapse,
+                  ),
+                  onPressed: () {
+                    takeDose(context);
+                  },
+                ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
+                    textStyle: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  label: Text('Add Reminder'),
+                  icon: Icon(
+                    Icons.notification_add,
+                  ),
+                  onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/reminder_add', arguments: medicineItem);
+                  },
+                ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
+                    textStyle: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  label: Text('Edit Medicine'),
+                  icon: Icon(
+                    Icons.edit,
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/medicine_edit', arguments: medicineItem);
+                  },
+                ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
+                    textStyle: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  label: Text('Delete Medicine'),
+                  icon: Icon(
+                    Icons.delete,
+                  ),
+                  onPressed: () {
+                    showDeleteDialog(context);
+
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
   void showDeleteDialog(BuildContext context) {
     showDialog(

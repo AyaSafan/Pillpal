@@ -16,11 +16,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return PageFirstLayout(
-      appBarTitle: 'PillPal',
-      appBarRight:Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: Image.asset('assets/pill.png', height: 60, width: 80),
-      ) ,
+      toolbarHeight: 50,
       containerChild:
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,10 +49,14 @@ class _HomeState extends State<Home> {
                     Navigator.pushNamed(context, '/cabinet');
                   },
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [Image.asset('assets/pill.png', height: 60, width: 80)],
+                ),
                 Divider(
                   color: Colors.black12,
                   thickness: 2,
-                  height: 32,
+                  height: 2,
                 ),
 
               ],

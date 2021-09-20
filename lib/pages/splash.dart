@@ -16,7 +16,7 @@ class SplashState extends State<Splash>  {
     bool _seen = (prefs.getBool('seen') ?? false);
 
     if (_seen) {
-      Navigator.of(context).pushNamed('/home');
+      Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
     } else {
       await prefs.setBool('seen', true);
       Navigator.of(context).pushNamed('/landing1');

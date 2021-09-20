@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
         '/landing2': (context) => Landing2(),
         '/landing3': (context) => Landing3(),
         '/home': (context) => Home(),
-        '/calender': (context) => Calender(reminderDao: reminderDao, medicineDao: medicineDao,),
+        '/calender': (context) => Calender(reminderDao: reminderDao),
         '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
         '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
       },
@@ -114,11 +114,12 @@ class MyApp extends StatelessWidget {
               },
             );
           }
-          else if (settings.name == '/reminder_item') {
-            final dateTime = settings.arguments as DateTime;
+          else if (settings.name == '/day_reminders') {
+            final args = settings.arguments as Map;
             return MaterialPageRoute(
               builder: (context) {
-                return DayRemindersPage(reminderDao: reminderDao, reminderCheckDao: reminderCheckDao, dateTime: dateTime);
+                return DayRemindersPage(reminderDao: reminderDao, reminderCheckDao: reminderCheckDao,
+                    dateTime: args['dateTime'], reminders: args['reminders']);
               },
             );
           }

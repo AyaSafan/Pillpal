@@ -9,10 +9,10 @@ class PageFirstLayout extends StatelessWidget {
       {
         this.appBarTitle ='',
         this.appBarRight = const SizedBox(height: 0, width: 0),
+        this.toolbarHeight = 80,
         this.color = MyColors.Landing2,
         this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
-        //this.colorFAB = MyColors.MiddleBlueGreen,
         this.showFAB = true
       });
 
@@ -20,8 +20,8 @@ class PageFirstLayout extends StatelessWidget {
   final Widget containerChild;
   final Widget appBarRight;
   final String appBarTitle;
+  final double? toolbarHeight;
   final Color color;
-  //final Color colorFAB;
   final bool showFAB;
 
 
@@ -30,7 +30,7 @@ class PageFirstLayout extends StatelessWidget {
     return Scaffold(
       backgroundColor: color,
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: toolbarHeight,
         titleSpacing: 30,
         title: Text(
           appBarTitle,
