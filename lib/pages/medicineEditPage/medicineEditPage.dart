@@ -177,7 +177,7 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
     return PageFirstLayout(
       appBarTitle: name,
       color: MyColors.Landing2,
-      showFAB: false,
+      //showFAB: false,
       containerChild: ListView(
         children: [
         Form(

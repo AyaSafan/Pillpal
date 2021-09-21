@@ -80,9 +80,17 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     final defaultPadding = MediaQuery.of(context).size.width / 20;
     return PageSecondLayout(
-      toolbarHeight: 30,
+      //toolbarHeight: 60,
+      //showFAB: false,
+      appBarRight: Container(
+        margin: EdgeInsets.all(defaultPadding),
+        child: IconButton(
+          icon: Icon(Icons.more_vert, size: 30, color: MyColors.TealBlue,),
+          onPressed:(){},
+        ),
+      ) ,
       topChild: Padding(
-        padding: EdgeInsets.all(defaultPadding),
+        padding: EdgeInsets.fromLTRB(defaultPadding,0,defaultPadding,defaultPadding),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -234,18 +242,18 @@ class _HomeState extends State<Home> {
                           Text(
                             '${reminder.medicineName}',
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold),
                           ),
                           reminder.repeated
                               ? Text(
                                   'Every ${DateFormat('EEEE').format(reminder.dateTime)}',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black54),
+                                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                                      color: Colors.black54),
                                 )
                               : Text(
                                   'Once',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.black54),
+                                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                                      color: Colors.black54),
                                 ),
                           isChecked
                               ? Text(
@@ -254,7 +262,7 @@ class _HomeState extends State<Home> {
                                   ? Text(
                                       '${reminder.label}',
                                       softWrap: true,
-                                      style: TextStyle(fontSize: 16),
+                                      style: Theme.of(context).textTheme.subtitle2,
                                     )
                                   : Container(),
                         ],

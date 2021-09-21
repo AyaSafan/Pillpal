@@ -8,8 +8,9 @@ class TextSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultPadding = MediaQuery. of(context). size. width / 20;
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: EdgeInsets.symmetric(horizontal: defaultPadding),
       child: Row(
         children: [
           Expanded(
@@ -21,19 +22,12 @@ class TextSection extends StatelessWidget {
                   title,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
-                    fontSize: 24,
-                    fontFamily: 'Raleway',
                   ),
                 ),
                 SizedBox(height: 8,),
                 Text(
                   paragraph,
                   softWrap: true,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                    fontFamily: 'Raleway',
-                  ),
                 ),
               ],
             ),

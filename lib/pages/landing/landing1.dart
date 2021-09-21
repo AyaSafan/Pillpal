@@ -22,7 +22,7 @@ class Landing1 extends StatelessWidget {
                     CustomImage(imagePath: 'assets/landing1.png'),
                     TextSection(
                         'Your PillPal is Here!',
-                        'Pill Pal fulfills all your medication needs in one place. '
+                        'Pill Pal fulfills all your medication needs in one place.'
                     ),
                   ]
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class CustomImage extends StatelessWidget {
   const CustomImage({Key? key, required this.imagePath}) : super(key: key);
@@ -12,9 +13,15 @@ class CustomImage extends StatelessWidget {
       children: [
         Expanded(
           child:
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Image.asset(imagePath, fit: BoxFit.fitWidth),
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery. of(context). size. width*0.9,
+              minWidth: MediaQuery. of(context). size. width*0.9,
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+              child: Image.asset(imagePath, fit: BoxFit.fill),
+            ),
           ),
         )
       ],

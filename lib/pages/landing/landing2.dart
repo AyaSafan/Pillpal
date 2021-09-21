@@ -20,8 +20,7 @@ class Landing2 extends StatelessWidget {
                   children: [
                     TextSection(
                         'PillPal Reminders',
-                        'Pill reminder app for all medications. '
-                        'Support for a wide range of dosing schemes within medication reminder. '
+                        'Pill reminder for all medications with a logbook for skipped and confirmed intakes.'
                     ),
                     CustomImage(imagePath: 'assets/landing2.png'),
                   ]

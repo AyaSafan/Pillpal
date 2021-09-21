@@ -28,8 +28,6 @@ class MedicineCard extends StatelessWidget {
                    Text(
                        '${medicineItem.name}',
                      style: TextStyle(
-                       fontSize: 18,
-                       fontFamily: 'Raleway',
                        color: Colors.black,
                      ),
                    ),
@@ -44,7 +42,7 @@ class MedicineCard extends StatelessWidget {
                   spacing: 5,
                   children: medicineItem.tags.map((tag) =>
                       Chip(
-                          label: Text('$tag'),
+                          label: Text('$tag',),
                           backgroundColor: Color(0xFFEEEEEE),
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       )

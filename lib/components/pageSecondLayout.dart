@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pill_pal/components/FAB.dart';
+//import 'package:pill_pal/components/FAB.dart';
 import 'package:pill_pal/theme.dart';
 
 
@@ -9,11 +9,11 @@ class PageSecondLayout extends StatelessWidget {
         this.appBarTitle ='',
         this.appBarRight = const SizedBox(height: 0, width: 0),
         this.appBarLeading,
-        this.toolbarHeight = 80,
+        //this.toolbarHeight = 80,
         this.color = MyColors.Landing2,
         this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
-        this.showFAB = true
+        //this.showFAB = true
       });
 
   final Widget topChild;
@@ -21,9 +21,9 @@ class PageSecondLayout extends StatelessWidget {
   final Widget appBarRight;
   final Widget? appBarLeading;
   final String appBarTitle;
-  final double? toolbarHeight;
+  //final double? toolbarHeight;
   final Color color;
-  final bool showFAB;
+  //final bool showFAB;
 
 
   @override
@@ -32,13 +32,11 @@ class PageSecondLayout extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: toolbarHeight,
+        toolbarHeight: 80,
         titleSpacing: 30,
         title: Text(
           appBarTitle,
-          style: TextStyle(
-            fontSize: 24,
-            fontFamily: 'Raleway',
+          style: Theme.of(context).textTheme.headline6!.copyWith(
             color: Colors.black,
           ),
         ),
@@ -81,8 +79,8 @@ class PageSecondLayout extends StatelessWidget {
 
         ],
       ),
-      floatingActionButton:
-      Visibility(child: FAB(), visible: showFAB,),
+      // floatingActionButton:
+      // Visibility(child: FAB(), visible: showFAB,),
     );
   }
 }

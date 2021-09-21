@@ -18,9 +18,8 @@ class Landing3 extends StatelessWidget {
                   shrinkWrap: true,
                   children: [
                     CustomImage(imagePath: 'assets/landing3.png'),
-                    TextSection('PillPal Tracker',
-                        'Pill tracker with a logbook for skipped and confirmed intakes. '
-                        'Track your tablets, dose, measurements in a comprehensive health journal. '
+                    TextSection('PillPal Cabinet',
+                        'Track your supply, dose, measurements in a comprehensive health journal. '
                     ),
                   ]
               ),

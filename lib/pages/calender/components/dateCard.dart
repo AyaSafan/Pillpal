@@ -13,15 +13,13 @@ class DateCard extends StatelessWidget {
       children: [
         Text(
           '${_selectedDay!.day< 10? '0': ''}${_selectedDay!.day} ${DateFormat('MMM').format(_selectedDay!)}.',
-          style: TextStyle(
-              fontSize: 24,
+          style: Theme.of(context).textTheme.headline5!.copyWith(
               letterSpacing: 2,
           ),
         ),
         Text(
           '${DateFormat('EEEE').format(_selectedDay!)}'.toUpperCase(),
-          style: TextStyle(
-              fontSize: 20,
+          style: Theme.of(context).textTheme.headline6!.copyWith(
               letterSpacing: 2,
               color: MyColors.TealBlue,
               fontWeight: FontWeight.bold

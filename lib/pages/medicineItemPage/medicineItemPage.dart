@@ -38,6 +38,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
 
   @override
   Widget build(BuildContext context) {
+    final defaultPadding = MediaQuery. of(context). size. width / 20;
     return PageSecondLayout(
       appBarTitle: medicineItem.name ,
       appBarRight: IconButton(
@@ -46,13 +47,13 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
           showModalBottomSheet<void>(
             context: context,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(MediaQuery. of(context). size. width / 20),
+              borderRadius: BorderRadius.circular(defaultPadding),
             ),
             builder: buildBottomSheet,
           );
         },
       ),
-      showFAB: false,
+      //showFAB: false,
       topChild:  Column(
         children: [
           Padding(
@@ -65,10 +66,6 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                     Text(
                       medicineItem.desc,
                       softWrap: true,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Raleway',
-                      ),
                     ),
                     SizedBox(height: 16,),
                   ],
@@ -88,10 +85,6 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
 
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [Image.asset('assets/pill.png', height: 60, width: 80)],
           ),
         ],
       ),

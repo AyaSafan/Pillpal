@@ -26,6 +26,7 @@ class _CabinetState extends State<Cabinet> {
   Widget build(BuildContext context) {
     return PageFirstLayout(
       appBarTitle: "My Cabinet",
+      //showFAB: false,
       topChild: Container(
         margin: EdgeInsets.fromLTRB(30,0,30,15),
         child: TextField(
