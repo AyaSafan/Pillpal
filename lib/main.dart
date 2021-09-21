@@ -5,9 +5,9 @@ import 'package:pill_pal/dao/reminder_check_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/pages/Home/home.dart';
 import 'package:pill_pal/pages/cabinet/cabinet.dart';
 import 'package:pill_pal/pages/calender/calender.dart';
-import 'package:pill_pal/pages/home.dart';
 import 'package:pill_pal/pages/landing/landing1.dart';
 import 'package:pill_pal/pages/landing/landing2.dart';
 import 'package:pill_pal/pages/landing/landing3.dart';
@@ -21,59 +21,63 @@ import 'package:pill_pal/util/databaseTestUtil.dart';
 import 'package:pill_pal/util/notificationUtil.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
-
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    new FlutterLocalNotificationsPlugin();
 
 Future onSelectNotification(payload) async {
-  final database = await $FloorAppDatabase
-      .databaseBuilder('app_database.db')
-      .build();
+  final database =
+      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   final route = payload.toString().split(" ")[0];
   final value = payload.toString().split(" ")[1];
-  if(route == 'medicine') {
+  if (route == 'medicine') {
     final medicineDao = database.medicineDao;
     Medicine? med = await medicineDao.findMedicineById(int.parse(value));
     await Navigator.pushNamedAndRemoveUntil(
         MyApp.navigatorKey.currentState!.context,
-        '/medicine_item', ModalRoute.withName('/home'), arguments: med);
-  }else{
+        '/medicine_item',
+        ModalRoute.withName('/home'),
+        arguments: med);
+  } else {
     DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(value));
     await Navigator.pushAndRemoveUntil(
         MyApp.navigatorKey.currentState!.context,
-        MaterialPageRoute (builder: (BuildContext context) => Calender(medicineDao: database.medicineDao ,reminderDao: database.reminderDao, reminderCheckDao: database.reminderCheckDao , passedDay: dateTime)),
+        MaterialPageRoute(
+            builder: (BuildContext context) => Calender(
+                medicineDao: database.medicineDao,
+                reminderDao: database.reminderDao,
+                reminderCheckDao: database.reminderCheckDao,
+                passedDay: dateTime)),
         ModalRoute.withName('/home'));
-
   }
 }
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await initializeNotifications();
   tz.initializeTimeZones();
 
-  final database = await $FloorAppDatabase
-      .databaseBuilder('app_database.db')
-      .build();
+  final database =
+      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   final medicineDao = database.medicineDao;
   final reminderDao = database.reminderDao;
   final reminderCheckDao = database.reminderCheckDao;
 
   await addDatabaseDumpData(medicineDao, reminderDao);
 
-
-  runApp(MyApp(reminderDao: reminderDao, medicineDao: medicineDao, reminderCheckDao: reminderCheckDao,));
-
-
+  runApp(MyApp(
+    reminderDao: reminderDao,
+    medicineDao: medicineDao,
+    reminderCheckDao: reminderCheckDao,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({
-    Key? key,
-    required this.medicineDao,
-    required this.reminderDao,
-    required this.reminderCheckDao
-  }) : super(key: key);
+  const MyApp(
+      {Key? key,
+      required this.medicineDao,
+      required this.reminderDao,
+      required this.reminderCheckDao})
+      : super(key: key);
 
   final MedicineDao medicineDao;
   final ReminderDao reminderDao;
@@ -81,53 +85,74 @@ class MyApp extends StatelessWidget {
 
   static final navigatorKey = new GlobalKey<NavigatorState>();
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: defaultTheme,
-      navigatorKey: navigatorKey,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Splash(),
-        '/landing1': (context) => Landing1(),
-        '/landing2': (context) => Landing2(),
-        '/landing3': (context) => Landing3(),
-        '/home': (context) => Home(),
-        '/calender': (context) => Calender(medicineDao:medicineDao, reminderDao: reminderDao, reminderCheckDao: reminderCheckDao,),
-        '/cabinet': (context) => Cabinet(medicineDao: medicineDao,),
-        '/medicine_add': (context) => MedicineAddPage(medicineDao: medicineDao,),
-      },
+        debugShowCheckedModeBanner: false,
+        theme: defaultTheme,
+        navigatorKey: navigatorKey,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => Splash(),
+          '/landing1': (context) => Landing1(),
+          '/landing2': (context) => Landing2(),
+          '/landing3': (context) => Landing3(),
+          '/home': (context) => Home(
+                reminderDao: reminderDao,
+                reminderCheckDao: reminderCheckDao,
+              ),
+          '/cabinet': (context) => Cabinet(
+                medicineDao: medicineDao,
+              ),
+          '/medicine_add': (context) => MedicineAddPage(
+                medicineDao: medicineDao,
+              ),
+        },
         onGenerateRoute: (settings) {
-          if (settings.name == '/medicine_edit') {
+          if (settings.name == '/calender') {
+            final args = settings.arguments as Map;
+            return MaterialPageRoute(
+              builder: (context) {
+                return Calender(
+                  medicineDao: medicineDao,
+                  reminderDao: reminderDao,
+                  reminderCheckDao: reminderCheckDao,
+                  passedDay: args['passedDay'],
+                  selectedEvents: args['selectedEvents'],
+                  checkList: args['checkList'],
+                );
+              },
+            );
+          } else if (settings.name == '/medicine_edit') {
             final med = settings.arguments as Medicine;
             return MaterialPageRoute(
               builder: (context) {
                 return MedicineEditPage(medicineDao: medicineDao, med: med);
               },
             );
-          }
-          else if (settings.name == '/medicine_item') {
+          } else if (settings.name == '/medicine_item') {
             final med = settings.arguments as Medicine;
             return MaterialPageRoute(
               builder: (context) {
-                return MedicineItemPage(medicineDao: medicineDao,reminderDao: reminderDao ,med: med);
+                return MedicineItemPage(
+                    medicineDao: medicineDao,
+                    reminderDao: reminderDao,
+                    med: med);
               },
             );
-          }
-          else if (settings.name == '/reminder_add') {
+          } else if (settings.name == '/reminder_add') {
             final med = settings.arguments as Medicine;
             return MaterialPageRoute(
               builder: (context) {
-                return ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao, savedSelectedMedicine: med);
+                return ReminderAddPage(
+                    medicineDao: medicineDao,
+                    reminderDao: reminderDao,
+                    savedSelectedMedicine: med);
               },
             );
           }
           //print('Need to implement ${settings.name}');
           return null;
-        }
-    );
+        });
   }
 }
-

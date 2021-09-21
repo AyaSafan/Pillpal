@@ -9,6 +9,7 @@ class PageSecondLayout extends StatelessWidget {
         this.appBarTitle ='',
         this.appBarRight = const SizedBox(height: 0, width: 0),
         this.appBarLeading,
+        this.toolbarHeight = 80,
         this.color = MyColors.Landing2,
         this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
@@ -20,6 +21,7 @@ class PageSecondLayout extends StatelessWidget {
   final Widget appBarRight;
   final Widget? appBarLeading;
   final String appBarTitle;
+  final double? toolbarHeight;
   final Color color;
   final bool showFAB;
 
@@ -30,7 +32,7 @@ class PageSecondLayout extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 80,
+        toolbarHeight: toolbarHeight,
         titleSpacing: 30,
         title: Text(
           appBarTitle,

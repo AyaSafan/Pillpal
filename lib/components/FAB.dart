@@ -4,18 +4,11 @@ import 'package:pill_pal/theme.dart';
 
 class FAB extends StatelessWidget {
   const FAB({Key? key}) : super(key: key);
-  // const FAB({Key? key,
-  //   this.color = MyColors.Landing2,
-  //   this.colorFAB = MyColors.MiddleBlueGreen,
-  // }) : super(key: key);
-  //
-  // final Color color;
-  // final Color colorFAB;
 
   @override
   Widget build(BuildContext context) {
     return FabCircularMenu(
-        fabOpenIcon: Icon(Icons.add),
+        fabOpenIcon: Icon(Icons.add, color: Colors.black54),
         fabColor: MyColors.MiddleBlueGreen,
         ringColor: MyColors.Landing2,
         ringDiameter: 200,
