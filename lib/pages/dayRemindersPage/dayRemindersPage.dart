@@ -39,7 +39,6 @@ class _DayRemindersPageState extends State<DayRemindersPage> {
   Map timeMap = new Map();
   //[ [reminder object, bool checked or not, reminderCheck object if exists] ]
   final List<List<dynamic>> checkList = [];
-
   Medicine? med;
 
 
@@ -83,7 +82,7 @@ class _DayRemindersPageState extends State<DayRemindersPage> {
         onPressed:(){
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute (builder: (BuildContext context) => Calender(reminderDao: widget.reminderDao, passedDay: widget.dateTime,)),
+              MaterialPageRoute (builder: (BuildContext context) => Calender(medicineDao: widget.medicineDao ,reminderDao: widget.reminderDao, reminderCheckDao: widget.reminderCheckDao , passedDay: widget.dateTime,)),
               ModalRoute.withName('/home'));
         },
         icon: Icon(Icons.arrow_back,),

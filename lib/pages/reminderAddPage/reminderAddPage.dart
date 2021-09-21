@@ -89,7 +89,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
         //if time chosen already passed on that day.. schedule next day
         if (dateTime.isBefore(DateTime.now())){
-          dateTime.add(Duration(days: 1));
+          dateTime = dateTime.add(Duration(days: 1));
         }
         Reminder reminder = Reminder(
             id: reminderId,
@@ -118,7 +118,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           }
           //today is monday ..if time chosen already passed on that monday.. schedule monday next week
           if (dateTime.isBefore(DateTime.now())){
-            dateTime.add(Duration(days: 7));
+            dateTime = dateTime.add(Duration(days: 7));
           }
           dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
           Reminder reminder = Reminder(
@@ -147,7 +147,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           }
           //today is monday ..if time chosen already passed on that monday.. schedule monday next week
           if (dateTime.isBefore(DateTime.now())){
-            dateTime.add(Duration(days: 7));
+            dateTime = dateTime.add(Duration(days: 7));
           }
           dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
           Reminder reminder = Reminder(
