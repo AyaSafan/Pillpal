@@ -41,23 +41,7 @@ Future onSelectNotification(payload) async {
         MyApp.navigatorKey.currentState!.context,
         '/medicine_item', ModalRoute.withName('/home'), arguments: med);
   }else{
-    // final reminderDao = database.reminderDao;
-    // DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(value));
-    // final reminders = await reminderDao.findReminderByDate(
-    //     DateTime(dateTime.year, dateTime.month, dateTime.day).toString());
-    // final dayRepeatedReminders = await reminderDao.findRepeatedReminderByDay(dateTime.weekday);
-    // reminders.addAll(dayRepeatedReminders);
-    // reminders.sort((a,b)=> DateTime(1,1,1999,a.dateTime.hour, a.dateTime.minute).compareTo(DateTime(1,1,1999,b.dateTime.hour, b.dateTime.minute)));
-    //
-    // await Navigator.pushNamedAndRemoveUntil(MyApp.navigatorKey.currentState!.context,
-    //     '/day_reminders',  ModalRoute.withName('/home'),
-    //     arguments: {
-    //       'dateTime': dateTime,
-    //       'reminders': reminders
-    //     });
-
     DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(value));
-
     await Navigator.pushAndRemoveUntil(
         MyApp.navigatorKey.currentState!.context,
         MaterialPageRoute (builder: (BuildContext context) => Calender(medicineDao: database.medicineDao ,reminderDao: database.reminderDao, reminderCheckDao: database.reminderCheckDao , passedDay: dateTime)),

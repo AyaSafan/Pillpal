@@ -60,6 +60,7 @@ class _CalenderState extends State<Calender> {
   }
 
   Future<void> getCheckList() async{
+    checkList.clear();
     _selectedEvents.forEach((reminder) {
       var scheduledDateTime = DateTime(_selectedDay!.year, _selectedDay!.month,_selectedDay!.day,
           reminder.dateTime.hour, reminder.dateTime.minute);
@@ -91,7 +92,6 @@ class _CalenderState extends State<Calender> {
         _selectedEvents.sort((a,b)=> DateTime(1,1,1999,a.dateTime.hour, a.dateTime.minute).compareTo(DateTime(1,1,1999,b.dateTime.hour, b.dateTime.minute)));
       });
       getCheckList().then((value) => null);
-      //getMedicinesById(_selectedEvents).then((value) => null);
     });
   }
 
@@ -166,34 +166,9 @@ class _CalenderState extends State<Calender> {
       containerChild: Padding(
         padding: EdgeInsets.fromLTRB(defaultPadding, defaultPadding, 0,0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                DateCard(_focusedDay),
-                TextButton(
-                  child: Row(
-                    children: [
-                      Text("Checklist",
-                        style: TextStyle(color: Colors.black, fontSize: 16)
-                      ),
-                      Icon(
-                        Icons.double_arrow_outlined,
-                        size: 16,
-                      ),
-                    ],
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/day_reminders',
-                        arguments: {
-                          'dateTime': _focusedDay,
-                          'reminders': _selectedEvents
-                        });
-                  },
-                ),
-              ],
-            ),
+            DateCard(_focusedDay),
             SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
