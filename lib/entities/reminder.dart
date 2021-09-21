@@ -21,14 +21,14 @@ class Reminder {
   @ColumnInfo(name: 'medicine_id')
   final int medicineId;
   final String medicineName;
-  //to query reminders with date
+  //to query reminders with date (for once reminders)
   final String date;
   // to query reminders with weekday (for repeated reminders)
   final int day;
   // mostly to get the time actually
   final DateTime dateTime;  
   final String label;
-  // is it repeated or a one time thing
+  // is it repeated or a once?
   final bool repeated;
 
   @TypeConverters([DateTimeConverter])
@@ -43,8 +43,6 @@ class Reminder {
         this.label: '',
         this.repeated: false
 
-      }) : //this.dateTime = DateTime.fromMillisecondsSinceEpoch(dateTime?? DateTime.now().millisecondsSinceEpoch ) ,
-           //this.dateTime = dateTime ?? DateTime.now(),
-           this.date = date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toString(),
+      }) : this.date = date ?? DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day).toString(),
            this.day = day ?? DateTime.now().day ;
 }

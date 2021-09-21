@@ -220,24 +220,6 @@ class _$MedicineDao extends MedicineDao {
   }
 
   @override
-  Future<List<Medicine>> findMedicineByName(String name) async {
-    return _queryAdapter.queryList('SELECT * FROM medicines WHERE name =?1',
-        mapper: (Map<String, Object?> row) => Medicine(
-            id: row['id'] as int?,
-            name: row['name'] as String,
-            desc: row['desc'] as String,
-            supplyCurrent: row['supplyCurrent'] as double,
-            supplyMin: row['supplyMin'] as double,
-            dose: row['dose'] as double,
-            doseFrequency: row['doseFrequency'] as double,
-            capSize: row['capSize'] as double,
-            pillShape: row['pillShape'] as String,
-            pillColor: _colorIntConverter.decode(row['pillColor'] as int),
-            tags: _listStringConverter.decode(row['tags'] as String)),
-        arguments: [name]);
-  }
-
-  @override
   Future<Medicine?> findMedicineById(int id) async {
     return _queryAdapter.query('SELECT * FROM medicines WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Medicine(
@@ -253,33 +235,6 @@ class _$MedicineDao extends MedicineDao {
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
             tags: _listStringConverter.decode(row['tags'] as String)),
         arguments: [id]);
-  }
-
-  @override
-  Future<void> updateSupplyCurrent(int amount, int id) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE medicines SET supplyCurrent =?1 WHERE id = ?2',
-        arguments: [amount, id]);
-  }
-
-  @override
-  Future<void> takeDose(int id) async {
-    await _queryAdapter.queryNoReturn(
-        'UPDATE medicines SET supplyCurrent = supplyCurrent-dose WHERE id = ?1',
-        arguments: [id]);
-  }
-
-  @override
-  Future<void> updateTags(List<String> tags, int id) async {
-    const offset = 2;
-    final _sqliteVariablesForTags =
-        Iterable<String>.generate(tags.length, (i) => '?${i + offset}')
-            .join(',');
-    await _queryAdapter.queryNoReturn(
-        'UPDATE medicines SET tags IN (' +
-            _sqliteVariablesForTags +
-            ') WHERE id = ?1',
-        arguments: [id, ...tags]);
   }
 
   @override
@@ -361,35 +316,6 @@ class _$ReminderDao extends ReminderDao {
   final DeletionAdapter<Reminder> _reminderDeletionAdapter;
 
   @override
-  Future<List<Reminder>> findAllReminders() async {
-    return _queryAdapter.queryList('SELECT * FROM reminders',
-        mapper: (Map<String, Object?> row) => Reminder(
-            id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            medicineName: row['medicineName'] as String,
-            date: row['date'] as String,
-            day: row['day'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            repeated: (row['repeated'] as int) != 0));
-  }
-
-  @override
-  Future<Reminder?> findReminderById(int id) async {
-    return _queryAdapter.query('SELECT * FROM reminders WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => Reminder(
-            id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            medicineName: row['medicineName'] as String,
-            date: row['date'] as String,
-            day: row['day'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            repeated: (row['repeated'] as int) != 0),
-        arguments: [id]);
-  }
-
-  @override
   Future<List<Reminder>> findReminderByMedicineId(int medicineId) async {
     return _queryAdapter.queryList(
         'SELECT * FROM reminders WHERE medicine_id = ?1',
@@ -419,20 +345,6 @@ class _$ReminderDao extends ReminderDao {
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0),
         arguments: [date]);
-  }
-
-  @override
-  Future<List<Reminder>> findRepeatedReminders() async {
-    return _queryAdapter.queryList('SELECT * FROM reminders WHERE repeated = 1',
-        mapper: (Map<String, Object?> row) => Reminder(
-            id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            medicineName: row['medicineName'] as String,
-            date: row['date'] as String,
-            day: row['day'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            repeated: (row['repeated'] as int) != 0));
   }
 
   @override
@@ -486,18 +398,6 @@ class _$ReminderCheckDao extends ReminderCheckDao {
                   'checkedDateTime':
                       _dateTimeConverter.encode(item.checkedDateTime)
                 }),
-        _reminderCheckUpdateAdapter = UpdateAdapter(
-            database,
-            'reminders_check',
-            ['id'],
-            (ReminderCheck item) => <String, Object?>{
-                  'id': item.id,
-                  'reminder_id': item.reminderId,
-                  'scheduledDateTime':
-                      _dateTimeConverter.encode(item.scheduledDateTime),
-                  'checkedDateTime':
-                      _dateTimeConverter.encode(item.checkedDateTime)
-                }),
         _reminderCheckDeletionAdapter = DeletionAdapter(
             database,
             'reminders_check',
@@ -519,8 +419,6 @@ class _$ReminderCheckDao extends ReminderCheckDao {
 
   final InsertionAdapter<ReminderCheck> _reminderCheckInsertionAdapter;
 
-  final UpdateAdapter<ReminderCheck> _reminderCheckUpdateAdapter;
-
   final DeletionAdapter<ReminderCheck> _reminderCheckDeletionAdapter;
 
   @override
@@ -533,19 +431,9 @@ class _$ReminderCheckDao extends ReminderCheckDao {
   }
 
   @override
-  Future<void> deleteAllReminderChecks() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM reminders_check');
-  }
-
-  @override
   Future<void> insertReminderCheck(ReminderCheck check) async {
     await _reminderCheckInsertionAdapter.insert(
         check, OnConflictStrategy.abort);
-  }
-
-  @override
-  Future<void> updateReminderCheck(ReminderCheck check) async {
-    await _reminderCheckUpdateAdapter.update(check, OnConflictStrategy.abort);
   }
 
   @override

@@ -10,9 +10,9 @@ String currentTimezone = 'Unknown';
 initializeNotifications() async {
 
   var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
-  var IOS = new IOSInitializationSettings();
+  var iOS = new IOSInitializationSettings();
 
-  var settings = new InitializationSettings(android: android, iOS: IOS);
+  var settings = new InitializationSettings(android: android, iOS: iOS);
   flutterLocalNotificationsPlugin.initialize(settings, onSelectNotification: onSelectNotification);
   currentTimezone = await FlutterNativeTimezone.getLocalTimezone();
 

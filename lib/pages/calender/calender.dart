@@ -20,7 +20,6 @@ class Calender extends StatefulWidget {
     required this.reminderDao,
     required this.reminderCheckDao,
     this.passedDay
-    //required this.medicineDao
   }) : super(key: key);
 
 
@@ -35,16 +34,13 @@ class Calender extends StatefulWidget {
 
 class _CalenderState extends State<Calender> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
-  List<Reminder> _selectedEvents = [];
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
+  List<Reminder> _selectedEvents = [];
   var cyclicEvents = new Map();
-  //Map timeMap = new Map();
-
+  final List<List<dynamic>> checkList = []; //[ [reminder object, bool checked or not, reminderCheck object if exists] ]
   Map timeMap = new Map();
-  //[ [reminder object, bool checked or not, reminderCheck object if exists] ]
-  final List<List<dynamic>> checkList = [];
   Medicine? med;
 
 
@@ -78,7 +74,6 @@ class _CalenderState extends State<Calender> {
     });
     return;
   }
-
 
   @override
   void initState() {
@@ -119,7 +114,7 @@ class _CalenderState extends State<Calender> {
    });
 
     return PageSecondLayout(
-      appBarTitle: "My Calender",
+      appBarTitle: "My Reminders",
       color: MyColors.Landing1,
       showFAB: false,
       topChild: Column(
@@ -157,10 +152,7 @@ class _CalenderState extends State<Calender> {
               _focusedDay = focusedDay;
             },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [Image.asset('assets/pill.png', height: 60, width: 80)],
-          ),
+          SizedBox(height: 32,)
         ],
       ),
       containerChild: Padding(
@@ -249,9 +241,9 @@ class _CalenderState extends State<Calender> {
                           primary: Colors.black,
                           textStyle: Theme.of(context).textTheme.bodyText2,
                         ),
-                        label: Text('Take Dose'),
+                        label: Text('Check Dose'),
                         icon: Icon(
-                          Icons.timelapse,
+                          Icons.task_alt,
                         ),
                         onPressed: () {
                           if(med == null) {
@@ -271,30 +263,27 @@ class _CalenderState extends State<Calender> {
                           }
                         },
                       ),
-                      isChecked? Container(): TextButton.icon(
-                        style: TextButton.styleFrom(
-                          primary: Colors.black,
-                          textStyle: Theme.of(context).textTheme.bodyText2,
-                        ),
-                        label: Text('Check'),
-                        icon: Icon(
-                          Icons.task_alt,
-                        ),
-                        onPressed: () {
-                          markDone(reminder, scheduledDateTime, now, index, context);
-                        },
-                      ),
                       !isChecked? Container(): TextButton.icon(
                         style: TextButton.styleFrom(
                           primary: Colors.black,
                           textStyle: Theme.of(context).textTheme.bodyText2,
                         ),
-                        label: Text('Uncheck'),
+                        label: Text('Uncheck Dose'),
                         icon: Icon(
                           Icons.highlight_off,
                         ),
                         onPressed: () {
-                          unDone(index, context);
+                          if(med == null) {
+                            widget.medicineDao.findMedicineById(reminder.medicineId).then((medicineItem) {
+                              setState(() {
+                                med = medicineItem;
+                              });
+                              unTakeDose(medicineItem,  index, context);
+
+                            });
+                          }else{
+                            unTakeDose(med,  index, context);
+                          }
                         },
                       ),
                       TextButton.icon(
@@ -320,7 +309,7 @@ class _CalenderState extends State<Calender> {
                           Icons.delete,
                         ),
                         onPressed: () {
-                          delete(reminder, index, context);
+                          showDeleteDialog(reminder, index, context);
                         },
                       ),
                     ],
@@ -391,13 +380,50 @@ class _CalenderState extends State<Calender> {
 
   }
 
-  void delete(Reminder reminder, int index, BuildContext context) {
+  void showDeleteDialog(Reminder reminder, int index, BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+              child:
+              Column(
+                children: [
+                  Text('This reminder will be permanently deleted.'),
+                ],
+              )
+          ),
+          actions: [
+            TextButton(
+              child: Text("Delete",
+                style: TextStyle(fontSize: 16),
+              ),
+              onPressed: () {
+                onDeleteReminder(reminder, index, context);
+              },
+
+            ),
+            TextButton(
+              child: Text("Cancel",
+                style: TextStyle(fontSize: 16),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void onDeleteReminder(Reminder reminder, int index, BuildContext context) {
     widget.reminderDao.deleteReminder(reminder).then((value){
       setState(() {
         checkList.removeAt(index);
       });
       cancelNotification(reminder.id ?? 0);
-      Navigator.pop(context);
+      Navigator.popUntil(context, ModalRoute.withName('/calender'));
     });
   }
 
@@ -414,18 +440,7 @@ class _CalenderState extends State<Calender> {
     }
   }
 
-  void unDone(int index, BuildContext context) {
-    ReminderCheck check = checkList[index][2];
-    widget.reminderCheckDao.deleteReminderCheck(check).then((value){
-      setState(() {
-        checkList[index][1] = false;
-        checkList[index].removeAt(2);
-      });
-      Navigator.pop(context);
-    });
-  }
-
-  void markDone(Reminder reminder, DateTime scheduledDateTime, DateTime now, int index, BuildContext context) {
+  void done(Reminder reminder, DateTime scheduledDateTime, DateTime now, int index, BuildContext context) {
     int timestamp = DateTime.now().millisecondsSinceEpoch;
     int checkId = timestamp ~/ 1000 + timestamp % 1000;
     ReminderCheck check = ReminderCheck(id:checkId, reminderId: reminder.id ,scheduledDateTime: scheduledDateTime, checkedDateTime: now);
@@ -446,7 +461,7 @@ class _CalenderState extends State<Calender> {
           supplyCurrent: medicineItem
               .supplyCurrent - medicineItem.dose);
       widget.medicineDao.updateMedicine(medicineItem).then((value) {
-        markDone(reminder, scheduledDateTime, now, index, context);
+        done(reminder, scheduledDateTime, now, index, context);
       });
     }
     else{
@@ -466,7 +481,26 @@ class _CalenderState extends State<Calender> {
     }
   }
 
+  void unDone(int index, BuildContext context) {
+    ReminderCheck check = checkList[index][2];
+    widget.reminderCheckDao.deleteReminderCheck(check).then((value){
+      setState(() {
+        checkList[index][1] = false;
+        checkList[index].removeAt(2);
+      });
+      Navigator.pop(context);
+    });
+  }
 
+  void unTakeDose(Medicine? medicineItem, int index, BuildContext context) {
+      medicineItem = medicineItem!.copyWith(
+          supplyCurrent: medicineItem
+              .supplyCurrent + medicineItem.dose);
+      widget.medicineDao.updateMedicine(medicineItem).then((value) {
+        unDone(index, context);
+      });
+
+  }
 
 }
 

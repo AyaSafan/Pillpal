@@ -9,7 +9,7 @@ import 'package:pill_pal/entities/reminder.dart';
         parentColumns: ['id'],
         entity: Reminder,
         onDelete: ForeignKeyAction.cascade
-    )
+    ),
   ],
 )
 class ReminderCheck {

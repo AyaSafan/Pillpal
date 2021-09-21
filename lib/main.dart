@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
@@ -8,7 +7,6 @@ import 'package:pill_pal/database.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/cabinet/cabinet.dart';
 import 'package:pill_pal/pages/calender/calender.dart';
-import 'package:pill_pal/pages/dayRemindersPage/dayRemindersPage.dart';
 import 'package:pill_pal/pages/home.dart';
 import 'package:pill_pal/pages/landing/landing1.dart';
 import 'package:pill_pal/pages/landing/landing2.dart';
@@ -32,8 +30,6 @@ Future onSelectNotification(payload) async {
       .build();
   final route = payload.toString().split(" ")[0];
   final value = payload.toString().split(" ")[1];
-  print(route);
-  print(value);
   if(route == 'medicine') {
     final medicineDao = database.medicineDao;
     Medicine? med = await medicineDao.findMedicineById(int.parse(value));
@@ -48,27 +44,6 @@ Future onSelectNotification(payload) async {
         ModalRoute.withName('/home'));
 
   }
-}
-
-Future onSelectReminderNotification(payload) async {
-  final database = await $FloorAppDatabase
-      .databaseBuilder('app_database.db')
-      .build();
-  final reminderDao = database.reminderDao;
-  DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(payload);
-
-  final reminders = await reminderDao.findReminderByDate(
-      DateTime(dateTime.year, dateTime.month, dateTime.day).toString());
-  final dayRepeatedReminders = await reminderDao.findRepeatedReminderByDay(dateTime.weekday);
-  reminders.addAll(dayRepeatedReminders);
-
-  await Navigator.pushNamedAndRemoveUntil(MyApp.navigatorKey.currentState!.context,
-      '/day_reminders',  ModalRoute.withName('/home'),
-      arguments: {
-        'dateTime': dateTime,
-        'reminders': reminders
-  });
-
 }
 
 Future<void> main() async {
@@ -146,15 +121,6 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (context) {
                 return ReminderAddPage(medicineDao: medicineDao, reminderDao: reminderDao, savedSelectedMedicine: med);
-              },
-            );
-          }
-          else if (settings.name == '/day_reminders') {
-            final args = settings.arguments as Map;
-            return MaterialPageRoute(
-              builder: (context) {
-                return DayRemindersPage(medicineDao:medicineDao, reminderDao: reminderDao, reminderCheckDao: reminderCheckDao,
-                    dateTime: args['dateTime'], reminders: args['reminders']);
               },
             );
           }

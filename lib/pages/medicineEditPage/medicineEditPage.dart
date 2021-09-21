@@ -7,7 +7,6 @@ import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
 import 'package:pill_pal/theme.dart';
 
-
 class MedicineEditPage extends StatefulWidget {
   const MedicineEditPage({
     Key? key,

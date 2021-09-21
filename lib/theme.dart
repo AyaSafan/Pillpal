@@ -14,7 +14,7 @@ class MyColors {
   static const Color Landing3 = const Color.fromRGBO(255, 241, 204 ,1);
 }
 
-ColorScheme _MyColorScheme = ColorScheme(
+ColorScheme myColorScheme = ColorScheme(
   primary: MyColors.TealBlue,
   primaryVariant: MyColors.LapisLazuli,
   secondary: MyColors.Landing1,
@@ -33,17 +33,16 @@ ColorScheme _MyColorScheme = ColorScheme(
 ThemeData _buildCustomTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-    colorScheme: _MyColorScheme,
+    colorScheme: myColorScheme,
     toggleableActiveColor: MyColors.TealBlue,
     accentColor: MyColors.MiddleRed,
     primaryColor: MyColors.TealBlue,
     buttonColor: MyColors.TealBlue,
     scaffoldBackgroundColor: Colors.white,
     cardColor: Colors.white,
-    textSelectionColor: MyColors.TealBlue,
     errorColor: MyColors.MiddleBlueGreen,
     buttonTheme: ButtonThemeData(
-      colorScheme: _MyColorScheme,
+      colorScheme: myColorScheme,
       textTheme: ButtonTextTheme.normal,
       shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
@@ -51,18 +50,12 @@ ThemeData _buildCustomTheme() {
 
 
     ),
-    //primaryIconTheme: _customIconTheme(base.iconTheme),
     textTheme: _buildCustomTextTheme(base.textTheme),
     primaryTextTheme: _buildCustomTextTheme(base.primaryTextTheme),
     accentTextTheme: _buildCustomTextTheme(base.accentTextTheme),
-    //iconTheme: _customIconTheme(base.iconTheme),
   );
 }
 const defaultLetterSpacing = 0.03;
-//
-// IconThemeData _customIconTheme(IconThemeData original) {
-//   return original.copyWith(color: MyColors.TealBlue);
-// }
 
 TextTheme _buildCustomTextTheme(TextTheme base) {
   return base
@@ -79,14 +72,10 @@ TextTheme _buildCustomTextTheme(TextTheme base) {
       letterSpacing: 2,
       color: Colors.white
     ),
-    //headline1: base.headline1?.copyWith( fontSize: 24, fontFamily: 'Raleway',color: Colors.black, ),
-    //headline2: base.headline2?.copyWith(fontSize: 18, letterSpacing: 2, fontFamily: 'Raleway',),
     bodyText2: base.bodyText2?.copyWith(fontSize: 16, fontFamily: 'Raleway', ),
   )
       .apply(
     fontFamily: 'Raleway',
-    // displayColor: MyColors.TealBlue,
-    // bodyColor: MyColors.TealBlue,
   );
 }
 

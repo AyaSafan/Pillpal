@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageSecondLayout.dart';
@@ -8,9 +7,6 @@ import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineItemPage/components/CustomCard.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:pill_pal/util/notificationUtil.dart';
-
-
-
 
 class MedicineItemPage extends StatefulWidget {
   const MedicineItemPage({Key? key,
@@ -314,16 +310,16 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
     else{
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Current Supply Empty' )),
+        SnackBar(content: Text('${medicineItem.name} supply is empty' )),
       );
     }
 
     if(medicineItem.supplyCurrent == 0){
-      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply empty.',
+      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply is empty.',
           DateTime.now(), 'medicine ${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
     else if(medicineItem.supplyCurrent <= medicineItem.supplyMin){
-      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply running out.',
+      singleNotificationCallback( 1, '${medicineItem.name} Refill', 'current supply  is running out.',
           DateTime.now(), 'medicine ${medicineItem.id}', sound: 'happy_tone_short').then((value) => null);
     }
   }

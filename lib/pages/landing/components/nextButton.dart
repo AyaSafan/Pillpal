@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 class NextButton extends StatelessWidget {
-  //const NextButton({Key? key}) : super(key: key);
 
   final String nextRoute;
   const NextButton(this.nextRoute);
-
 
   @override
   Widget build(BuildContext context) {

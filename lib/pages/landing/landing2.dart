@@ -5,7 +5,6 @@ import 'package:pill_pal/pages/landing/components/skipButton.dart';
 import 'package:pill_pal/pages/landing/components/textSection.dart';
 import 'package:pill_pal/theme.dart';
 
-
 class Landing2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

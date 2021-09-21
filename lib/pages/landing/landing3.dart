@@ -4,7 +4,6 @@ import 'package:pill_pal/pages/landing/components/nextButton.dart';
 import 'package:pill_pal/pages/landing/components/textSection.dart';
 import 'package:pill_pal/theme.dart';
 
-
 class Landing3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

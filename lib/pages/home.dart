@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/theme.dart';
 
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 

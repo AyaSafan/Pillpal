@@ -7,8 +7,6 @@ import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
 import 'package:pill_pal/theme.dart';
 
-
-
 class MedicineAddPage extends StatefulWidget {
   const MedicineAddPage({
     Key? key,
@@ -69,13 +67,9 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
 
   onSubmit(){
     _formKey.currentState!.save();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Adding to Cabinet ...' )),
-    );
     insertMedicine().then((value) => null);
     Navigator.pop(context);
   }
-
 
   @override
   Widget build(BuildContext context) {

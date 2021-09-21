@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TextSection extends StatelessWidget {
-  //const TextSection({Key? key}) : super(key: key);
 
   final String title;
   final String paragraph;

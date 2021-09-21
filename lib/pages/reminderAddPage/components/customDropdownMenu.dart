@@ -85,7 +85,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
           ),
         ),
 
-        //This Widget is actually the dropdown List
+        //This Widget is the dropdown List
         Visibility(
             visible: dropdownShow,
             child:

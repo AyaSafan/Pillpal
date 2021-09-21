@@ -30,7 +30,7 @@ class Medicine {
         this.dose: 1,
         this.doseFrequency: 1,
         this.capSize: 0,
-        this.pillShape: 'other',
+        this.pillShape: '',
         this.pillColor: const Color(0xFFCCCCCC),
         this.tags: const [],
       });
@@ -65,17 +65,4 @@ class Medicine {
       );
     }
 
-  Map toJson() => {
-    'id': this.id,
-    'name': this.name,
-    'desc': this.desc,
-    'supplyCurrent': this.supplyCurrent,
-    'supplyMin': this.supplyMin,
-    'dose': this.dose,
-    'doseFrequency': this.doseFrequency,
-    'capSize': this.capSize,
-    'pillShape': this.pillShape,
-    'pillColor': this.pillColor,
-    'tags': this.tags,
-  };
 }

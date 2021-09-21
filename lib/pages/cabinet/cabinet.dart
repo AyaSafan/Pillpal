@@ -4,7 +4,6 @@ import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
 import 'package:pill_pal/pages/cabinet/components/medicineCard.dart';
 
-
 class Cabinet extends StatefulWidget {
 
   const Cabinet({
@@ -56,20 +55,14 @@ class _CabinetState extends State<Cabinet> {
               borderSide: BorderSide(color: Theme.of(context).primaryColor),
             ),
           ),
-
-
         ),
       ),
       containerChild:  StreamBuilder<List<Medicine>> (
           stream: widget.medicineDao.findAllMedicinesAsStream(),
           builder: (context, snapshot) {
-            // if(snapshot.connectionState != ConnectionState.done) {
-            //   print(snapshot.requireData);
-            // }
             if(snapshot.hasError) {
               return Text('error');
             }
-            //List<Medicine> medList = snapshot.data ?? [];
             if (!snapshot.hasData) return Container();
 
             final medList = snapshot.requireData;

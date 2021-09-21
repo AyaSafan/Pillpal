@@ -26,7 +26,7 @@ class PageSecondLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final curveSize = MediaQuery. of(context). size. width / 20;
+    final defaultPadding = MediaQuery. of(context). size. width / 20;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -60,12 +60,12 @@ class PageSecondLayout extends StatelessWidget {
               children: [
                 topChild,
                 Container(
-                  height: curveSize,
-                  padding: EdgeInsets.all(curveSize),
+                  height: defaultPadding,
+                  padding: EdgeInsets.all(defaultPadding),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(curveSize),
+                      top: Radius.circular(defaultPadding),
                     ),
                   ),
                 ),
@@ -73,7 +73,7 @@ class PageSecondLayout extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(curveSize, 0, curveSize, 60),
+            padding: EdgeInsets.fromLTRB(defaultPadding, 0, defaultPadding, 60),
             child: containerChild,
           ),
 

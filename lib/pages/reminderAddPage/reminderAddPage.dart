@@ -11,7 +11,6 @@ import 'package:pill_pal/pages/reminderAddPage/components/dayChip.dart';
 import 'package:pill_pal/theme.dart';
 import 'package:pill_pal/util/notificationUtil.dart';
 
-
 class ReminderAddPage extends StatefulWidget {
   const ReminderAddPage({Key? key,
       required this.reminderDao,
@@ -71,103 +70,9 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
 
     onSubmit() {
       _formKey.currentState!.save();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Adding to Calender ...')),
-      );
       registerReminders();
       Navigator.pop(context);
     }
-
-
-    void registerReminders() {
-      var notificationSubtext = label.isNotEmpty? label : '${savedSelectedMedicine?.name} dose ${savedSelectedMedicine?.dose} pills';
-      //no day is marked
-      if (days.isEmpty){
-        int timestamp = DateTime.now().millisecondsSinceEpoch;
-        int reminderId = timestamp ~/ 1000 + timestamp % 1000;
-        var dateTime = new DateTime.now();
-        dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
-        //if time chosen already passed on that day.. schedule next day
-        if (dateTime.isBefore(DateTime.now())){
-          dateTime = dateTime.add(Duration(days: 1));
-        }
-        Reminder reminder = Reminder(
-            id: reminderId,
-            medicineId: savedSelectedMedicine?.id ?? 0,
-            medicineName: savedSelectedMedicine?.name ?? '',
-            day: dateTime.weekday,
-            label: label,
-            dateTime: dateTime,
-            //single time reminders are collected by date
-            date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
-        );
-        widget.reminderDao.insertReminder(reminder).then((value) => null);
-        singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
-            dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
-
-      }
-      //repeat days are marked
-      else if (repeat){
-        days.forEach((day) {
-          int timestamp = DateTime.now().millisecondsSinceEpoch;
-          int reminderId = timestamp ~/ 1000 + timestamp % 1000;
-          var dateTime = new DateTime.now();
-          while(dateTime.weekday!=day)
-          {
-            dateTime=dateTime.add(new Duration(days: 1));
-          }
-          //today is monday ..if time chosen already passed on that monday.. schedule monday next week
-          if (dateTime.isBefore(DateTime.now())){
-            dateTime = dateTime.add(Duration(days: 7));
-          }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
-          Reminder reminder = Reminder(
-              repeated: true,
-              id : reminderId,
-              medicineId: savedSelectedMedicine?.id ?? 0,
-              medicineName: savedSelectedMedicine?.name ?? '',
-              day: day,
-              label: label,
-              dateTime: dateTime
-          );
-          widget.reminderDao.insertReminder(reminder).then((value) => null);
-          repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
-              dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
-        });
-      }
-      //upcoming days are marked
-      else{
-        days.forEach((day) {
-          int timestamp = DateTime.now().millisecondsSinceEpoch;
-          int reminderId = timestamp ~/ 1000 + timestamp % 1000;
-          var dateTime = new DateTime.now();
-          while(dateTime.weekday!=day)
-          {
-            dateTime=dateTime.add(new Duration(days: 1));
-          }
-          //today is monday ..if time chosen already passed on that monday.. schedule monday next week
-          if (dateTime.isBefore(DateTime.now())){
-            dateTime = dateTime.add(Duration(days: 7));
-          }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
-          Reminder reminder = Reminder(
-              id : reminderId,
-              medicineId: savedSelectedMedicine?.id ?? 0,
-              medicineName: savedSelectedMedicine?.name ?? '',
-              day: day,
-              label:label,
-              dateTime: dateTime,
-              //single time reminders are collected by date
-              date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
-          );
-          widget.reminderDao.insertReminder(reminder).then((value) => null);
-
-          singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
-              dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
-        });
-      }
-    }
-
 
     @override
     Widget build(BuildContext context) {
@@ -187,8 +92,8 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                   CustomDropdownMenu(formKey: _formKey, allMedicine: allMedicine,
                     selectedMedicine: widget.savedSelectedMedicine,
                     onSaved:(value){
-                      // if condition is optimization if route is from med item and selected medicine didn't change
-                      // if the saved medicine name here doesn't equal the nam from the dropdown
+                      // if condition is optimization --> if route is from med item and selected medicine didn't change
+                      // if the saved medicine name here doesn't equal the name from the dropdown
                       // if user changed to another med, then search for the med with that name and set it
                       if (savedSelectedMedicine?.name != value) {
                         allMedicine.forEach((element) {
@@ -359,7 +264,95 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
           ],
         ),
 
-
       );
     }
+
+    void registerReminders() {
+    var notificationSubtext = label.isNotEmpty? label : '${savedSelectedMedicine?.name} dose ${savedSelectedMedicine?.dose} pills';
+    //no day is marked
+    if (days.isEmpty){
+      int timestamp = DateTime.now().millisecondsSinceEpoch;
+      int reminderId = timestamp ~/ 1000 + timestamp % 1000;
+      var dateTime = new DateTime.now();
+      dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
+      //if time chosen already passed on that day.. schedule next day
+      if (dateTime.isBefore(DateTime.now())){
+        dateTime = dateTime.add(Duration(days: 1));
+      }
+      Reminder reminder = Reminder(
+          id: reminderId,
+          medicineId: savedSelectedMedicine?.id ?? 0,
+          medicineName: savedSelectedMedicine?.name ?? '',
+          day: dateTime.weekday,
+          label: label,
+          dateTime: dateTime,
+          //single time reminders are collected by date
+          date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
+      );
+      widget.reminderDao.insertReminder(reminder).then((value) => null);
+      singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
+          dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
+
+    }
+    //repeat days are marked
+    else if (repeat){
+      days.forEach((day) {
+        int timestamp = DateTime.now().millisecondsSinceEpoch;
+        int reminderId = timestamp ~/ 1000 + timestamp % 1000;
+        var dateTime = new DateTime.now();
+        while(dateTime.weekday!=day)
+        {
+          dateTime=dateTime.add(new Duration(days: 1));
+        }
+        //today is monday ..if time chosen already passed on that monday.. schedule monday next week
+        if (dateTime.isBefore(DateTime.now())){
+          dateTime = dateTime.add(Duration(days: 7));
+        }
+        dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
+        Reminder reminder = Reminder(
+            repeated: true,
+            id : reminderId,
+            medicineId: savedSelectedMedicine?.id ?? 0,
+            medicineName: savedSelectedMedicine?.name ?? '',
+            day: day,
+            label: label,
+            dateTime: dateTime
+        );
+        widget.reminderDao.insertReminder(reminder).then((value) => null);
+        repeatingNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
+            dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
+      });
+    }
+    //upcoming days are marked
+    else{
+      days.forEach((day) {
+        int timestamp = DateTime.now().millisecondsSinceEpoch;
+        int reminderId = timestamp ~/ 1000 + timestamp % 1000;
+        var dateTime = new DateTime.now();
+        while(dateTime.weekday!=day)
+        {
+          dateTime=dateTime.add(new Duration(days: 1));
+        }
+        //today is monday ..if time chosen already passed on that monday.. schedule monday next week
+        if (dateTime.isBefore(DateTime.now())){
+          dateTime = dateTime.add(Duration(days: 7));
+        }
+        dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, _time.hour, _time.minute);
+        Reminder reminder = Reminder(
+            id : reminderId,
+            medicineId: savedSelectedMedicine?.id ?? 0,
+            medicineName: savedSelectedMedicine?.name ?? '',
+            day: day,
+            label:label,
+            dateTime: dateTime,
+            //single time reminders are collected by date
+            date: DateTime(dateTime.year, dateTime.month, dateTime.day).toString()
+        );
+        widget.reminderDao.insertReminder(reminder).then((value) => null);
+
+        singleNotificationCallback( reminderId , '${savedSelectedMedicine?.name} Reminder', notificationSubtext,
+            dateTime, 'reminder ${dateTime.millisecondsSinceEpoch}').then((value) => null);
+      });
+    }
+  }
   }

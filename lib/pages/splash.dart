@@ -1,15 +1,12 @@
 import 'dart:async';
 
-//import 'package:after_layout/after_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class Splash extends StatefulWidget {
   @override
   SplashState createState() => new SplashState();
 }
-//with AfterLayoutMixin<Splash>
 class SplashState extends State<Splash>  {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,9 +20,6 @@ class SplashState extends State<Splash>  {
 
     }
   }
-
-  // @override
-  // void afterFirstLayout(BuildContext context) => checkFirstSeen();
 
   @override
   void initState() {

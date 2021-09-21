@@ -6,14 +6,14 @@ class CustomImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final paddingSize = MediaQuery. of(context). size. width / 20;
+    final defaultPadding = MediaQuery. of(context). size. width / 20;
 
     return Row(
       children: [
         Expanded(
           child:
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: paddingSize),
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Image.asset(imagePath, fit: BoxFit.fitWidth),
           ),
         )

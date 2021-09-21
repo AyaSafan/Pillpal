@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pill_pal/theme.dart';
 
-
 class DateCard extends StatelessWidget {
-  //const DateCard({Key? key}) : super(key: key);
   final DateTime _focusedDay;
   const DateCard(this._focusedDay);
 
