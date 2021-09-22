@@ -177,6 +177,14 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
     return PageFirstLayout(
       appBarTitle: name,
       color: MyColors.Landing2,
+      appBarRight: IconButton(
+          icon: Icon(Icons.check),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              onSubmit();
+            }
+          }
+      ),
       containerChild: ListView(
         children: [
         Form(
@@ -315,10 +323,10 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
                     color: Colors.black54
                 ),
                 suffixIcon:
-                Card(
-                  elevation: 4,
-                  shape: CircleBorder(),
+                Icon(
+                  Icons.fiber_manual_record,
                   color: pillColor,
+                  size: 32,
                 ),
                 disabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide( color: Colors.grey,),
@@ -334,30 +342,30 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
               children: chips,
             ),
             SizedBox(height: 32,),
-            Center(
-              child:
-              ElevatedButton.icon(
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                        )
-                    )
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    onSubmit();
-                  }
-                },
-                icon: Icon(Icons.edit),
-                label:
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                  child: Text('Edit Medicine',),
-                ),
-              ),
-            ),
-
+            // Center(
+            //   child:
+            //   ElevatedButton.icon(
+            //     style: ButtonStyle(
+            //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            //             RoundedRectangleBorder(
+            //                 borderRadius: BorderRadius.circular(18.0),
+            //             )
+            //         )
+            //     ),
+            //     onPressed: () {
+            //       if (_formKey.currentState!.validate()) {
+            //         onSubmit();
+            //       }
+            //     },
+            //     icon: Icon(Icons.edit),
+            //     label:
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            //       child: Text('Edit Medicine',),
+            //     ),
+            //   ),
+            // ),
+            //
 
           ],
         ),

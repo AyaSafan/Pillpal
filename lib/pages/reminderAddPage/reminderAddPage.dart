@@ -90,7 +90,14 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
     return PageFirstLayout(
       appBarTitle: 'Add Reminder',
       color: MyColors.Landing1,
-      //showFAB: false,
+      appBarRight: IconButton(
+        icon: Icon(Icons.check),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              onSubmit();
+            }
+          }
+      ),
       containerChild: ListView(
         shrinkWrap: true,
         children: [
@@ -248,29 +255,29 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                   },
                 ),
                 SizedBox(
-                  height: 32,
+                  height: 24,
                 ),
-                Center(
-                  child: ElevatedButton.icon(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ))),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        onSubmit();
-                      }
-                    },
-                    icon: Icon(Icons.add),
-                    label: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 15),
-                      child: Text('Add to Reminders'),
-                    ),
-                  ),
-                ),
+                // Center(
+                //   child: ElevatedButton.icon(
+                //     style: ButtonStyle(
+                //         shape:
+                //             MaterialStateProperty.all<RoundedRectangleBorder>(
+                //                 RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(18.0),
+                //     ))),
+                //     onPressed: () {
+                //       if (_formKey.currentState!.validate()) {
+                //         onSubmit();
+                //       }
+                //     },
+                //     icon: Icon(Icons.add),
+                //     label: Padding(
+                //       padding: const EdgeInsets.symmetric(
+                //           vertical: 10, horizontal: 15),
+                //       child: Text('Add to Reminders'),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
