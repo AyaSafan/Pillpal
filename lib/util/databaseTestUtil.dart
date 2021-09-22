@@ -12,7 +12,6 @@ Future<void> addDatabaseDumpData(medicineDao, reminderDao) async {
           'It can also be used to reduce a high temperature.\n'
           ' It\'s available combined with other painkillers and anti-sickness medicines. '
           'It\'s also an ingredient in a wide range of cold and flu remedies.',
-      pillShape: 'a very long vivid description of shape',
       supplyCurrent: 5,
       supplyMin: 3
   );

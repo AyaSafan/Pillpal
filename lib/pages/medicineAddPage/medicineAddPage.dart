@@ -4,7 +4,9 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
+import 'package:pill_pal/my_flutter_app_icons.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
+import 'package:pill_pal/pages/medicineEditPage/components/PillShape.dart';
 import 'package:pill_pal/theme.dart';
 
 class MedicineAddPage extends StatefulWidget {
@@ -28,9 +30,9 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   double supplyCurrent =0;
   double supplyMin=0;
   double dose=1;
-  double doseFrequency=1;
   double capSize=0;
-  Color pillColor = MyColors.MiddleRed;
+  Color pillColor = Color(0xff000000);
+  int pillShapeNum = 2;
   List<String> tags =[];
 
   final myTagController = TextEditingController();
@@ -42,12 +44,6 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   }
 
   void changeColor(Color color) => setState(() => pillColor = color);
-  final List<Color> pallet = [
-    Colors.pink.shade900, Colors.deepPurple, Colors.blue, MyColors.TealBlue, MyColors.MiddleBlueGreen,
-    Colors.lightGreen.shade800, Colors.lightGreen.shade300, Colors.amberAccent, Colors.orange.shade50,  Colors.orange, Colors.red,
-    MyColors.MiddleRed, Colors.pink.shade100, Colors.brown,
-    Colors.grey.shade400, Colors.white70
-  ];
 
 
   Future<void> insertMedicine() async{
@@ -57,9 +53,9 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
       supplyCurrent: supplyCurrent,
       supplyMin: supplyMin,
       dose: dose,
-      doseFrequency: doseFrequency,
       capSize:capSize,
       pillColor: pillColor,
+      pillShapeNum: pillShapeNum,
       tags: tags
     );
     await widget.medicineDao.insertMedicine(med);
@@ -187,83 +183,82 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
               });},
             ),
             SizedBox(height: 24,),
-            CustomUnderLineInput(
-              labelText: 'Current Supply',
-              suffixText: 'pills',
-              initialValue: '0',
-              validator: (value) {
-                if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double) {
-                  return 'Please enter a number';
-                }
-                return null;
-              },
-              onSaved: (value){setState(() {
-                supplyCurrent = double.tryParse('$value')?? 0;
-              });},
+            Row(
+              children: [
+                Flexible(
+                  child: CustomUnderLineInput(
+                    labelText: 'Current Supply',
+                    suffixText: 'pills',
+                    initialValue: '0',
+                    validator: (value) {
+                      if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double) {
+                        return 'Please enter a number';
+                      }
+                      return null;
+                    },
+                    onSaved: (value){setState(() {
+                      supplyCurrent = double.tryParse('$value')?? 0;
+                    });},
+                  ),
+                ),
+                SizedBox(width: 24,),
+                Flexible(
+                  child: CustomUnderLineInput(
+                    labelText: 'Minimum Supply',
+                    suffixText: 'pills',
+                    initialValue: '0',
+                    validator: (value) {
+                      if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
+                        return 'Please enter a number';
+                      }
+                      return null;
+                    },
+                    onSaved: (value){setState(() {
+                      supplyMin = double.tryParse('$value')?? 0;
+                    });},
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 24,),
-            CustomUnderLineInput(
-              labelText: 'Minimum Supply',
-              suffixText: 'pills',
-              initialValue: '0',
-              validator: (value) {
-                if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
-                  return 'Please enter a number';
-                }
-                return null;
-              },
-              onSaved: (value){setState(() {
-                supplyMin = double.tryParse('$value')?? 0;
-              });},
-            ),
-            SizedBox(height: 24,),
-            CustomUnderLineInput(
-              labelText: 'Dose',
-              suffixText: 'pill/dose',
-              initialValue: '1',
-              validator: (value) {
-                if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
-                  return 'Please enter a number';
-                }
-                return null;
-              },
-              onSaved: (value){setState(() {
-                dose = double.tryParse('$value') ?? 0;
-              });},
-            ),
-            SizedBox(height: 24,),
-            CustomUnderLineInput(
-              labelText: 'Daily Amount',
-              suffixText: 'dose/day',
-              initialValue: '1',
-              validator: (value) {
-                if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
-                  return 'Please enter a number';
-                }
-                return null;
-              },
-              onSaved: (value){setState(() {
-                doseFrequency = double.tryParse('$value') ?? 0;
-              });},
-            ),
-            SizedBox(height: 24,),
-            CustomUnderLineInput(
-              labelText: 'Cap Size',
-              suffixText: 'mg',
-              initialValue: '0',
-              validator: (value) {
-              if (!(value == null || value.isEmpty)) {
-                if (double
-                    .tryParse('$value')
-                    .runtimeType != double) {
-                  return 'Please enter a number';
-                }
-              }
-                return null;
-              },
-              onSaved: (value){setState(() {
-                capSize = double.tryParse('$value')?? 0;
-              });},
+            Row(
+              children: [
+                Flexible(child: CustomUnderLineInput(
+                  labelText: 'Dose',
+                  suffixText: 'pill/dose',
+                  initialValue: '1',
+                  validator: (value) {
+                    if (value == null || value.isEmpty || double.tryParse('$value').runtimeType != double ) {
+                      return 'Please enter a number';
+                    }
+                    return null;
+                  },
+                  onSaved: (value){setState(() {
+                    dose = double.tryParse('$value') ?? 0;
+                  });},
+                ),),
+                SizedBox(width: 24,),
+                Flexible(
+                  child: CustomUnderLineInput(
+                    labelText: 'Cap Size',
+                    suffixText: 'mg',
+                    initialValue: '0',
+                    validator: (value) {
+                      if (!(value == null || value.isEmpty)) {
+                        if (double
+                            .tryParse('$value')
+                            .runtimeType != double) {
+                          return 'Please enter a number';
+                        }
+                      }
+                      return null;
+                    },
+                    onSaved: (value){setState(() {
+                      capSize = double.tryParse('$value')?? 0;
+                    });},
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 24,),
             GestureDetector(
@@ -272,14 +267,12 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                    context: context,
                    builder: (BuildContext context) {
                  return AlertDialog(
-                   backgroundColor: Color(0xFFe6e6e6),
                    title: Text('Select a color'),
                    content: SingleChildScrollView(
                      child: 
                      BlockPicker(
                        pickerColor: pillColor,
                        onColorChanged: changeColor,
-                       availableColors: pallet,
                      ),
                    ),
                  );
@@ -293,12 +286,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                 labelStyle: TextStyle(
                     color: Colors.black54
                 ),
-                suffixIcon:
-                Icon(
-                  Icons.fiber_manual_record,
-                  color: pillColor,
-                  size: 32,
-                ),
+
                 disabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide( color: Colors.grey,),
                 ),
@@ -307,36 +295,62 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
           ),
            ),
             SizedBox(height: 24,),
+            // ConstrainedBox(
+            // constraints: BoxConstraints(
+            // maxHeight: 100,
+            // minWidth: 100
+            // ),
+            // child: ListView(
+            // scrollDirection: Axis.horizontal,
+            // children:[])),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PillShape(
+                    elevation: pillShapeNum==0 ? 10: 0,
+                    icon: Icon( MyFlutterApp.capsule,
+                          color: pillColor,
+                          size: 60,),
+                    pillColor: pillColor,
+                    onTap: (){
+                      setState(() {
+                        pillShapeNum = 0;
+                      });
+                }
+                ),
+                PillShape(
+                    elevation: pillShapeNum==1 ? 10: 0,
+                    icon: Icon( MyFlutterApp.roundpill,
+                      color: pillColor,
+                      size: 60,),
+                    pillColor: pillColor,
+                    onTap: (){
+                      setState(() {
+                        pillShapeNum = 1;
+                      });
+                    }
+                ),
+                PillShape(
+                    elevation: pillShapeNum==2 ? 10: 0,
+                    icon: Icon( Icons.medication,
+                      color: pillColor,
+                      size: 60,),
+                    pillColor: pillColor,
+                    onTap: (){
+                      setState(() {
+                        pillShapeNum = 2;
+                      });
+                    }
+                ),
+              ],
+            ),
+            SizedBox(height: 24,),
             Wrap(
               runSpacing: 2,
               spacing: 5,
               children: chips,
             ),
             SizedBox(height: 32,),
-            // Center(
-            //   child:
-            //   ElevatedButton.icon(
-            //     style: ButtonStyle(
-            //         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            //             RoundedRectangleBorder(
-            //                 borderRadius: BorderRadius.circular(18.0),
-            //             )
-            //         )
-            //     ),
-            //     onPressed: () {
-            //       if (_formKey.currentState!.validate()) {
-            //         onSubmit();
-            //       }
-            //     },
-            //     icon: Icon(Icons.add),
-            //     label:
-            //     Padding(
-            //       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            //       child: Text('Add to Cabinet'),
-            //     ),
-            //   ),
-            // ),
-            //
 
           ],
         ),

@@ -120,41 +120,22 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                 data: '${medicineItem.dose} pills/dose',
                 icon: Icon(
                   Icons.timelapse,
+                  color: MyColors.MiddleRed,
+                ),
+                color: MyColors.MiddleRed,
+              ),
+              CustomCard(
+                title: 'Cap Size',
+                data: '${medicineItem.capSize} mg',
+                icon: Icon(
+                  Icons.hourglass_bottom,
                   color: Colors.purple,
                 ),
                 color: Colors.purple,
               ),
-              CustomCard(
-                title: 'Daily Amount',
-                data: '${medicineItem.doseFrequency} dose/day',
-                icon: Icon(
-                  Icons.access_time_filled,
-                  color: MyColors.MiddleBlueGreen,
-                ),
-                color: MyColors.MiddleBlueGreen,
-              ),
             ],
           ),
-          Row(children: [
-            CustomCard(
-              title: 'Cap Size',
-              data: '${medicineItem.capSize} mg',
-              icon: Icon(
-                Icons.hourglass_bottom,
-                color: MyColors.MiddleRed,
-              ),
-              color: MyColors.MiddleRed,
-            ),
-            CustomCard(
-              title: 'Shape',
-              data: '${medicineItem.pillShape}',
-              icon: Icon(
-                Icons.hourglass_bottom,
-                color: MyColors.Aero,
-              ),
-              color: MyColors.Aero,
-            ),
-          ],)
+
         ],
       )
     );

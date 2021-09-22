@@ -16,7 +16,7 @@ class Medicine {
   final double dose;
   final double doseFrequency;
   final double capSize;
-  final String pillShape;
+  final int pillShapeNum;
   final Color pillColor;
   final List<String> tags;
 
@@ -30,7 +30,7 @@ class Medicine {
         this.dose: 1,
         this.doseFrequency: 1,
         this.capSize: 0,
-        this.pillShape: '',
+        this.pillShapeNum: 2,
         this.pillColor: const Color(0xFFCCCCCC),
         this.tags: const [],
       });
@@ -42,9 +42,8 @@ class Medicine {
        double? supplyCurrent,
        double? supplyMin,
        double? dose,
-       double? doseFrequency,
        double? capSize,
-       String? pillShape,
+       int? pillShapeNum,
        Color? pillColor,
        List<String>? tags,
 
@@ -56,9 +55,8 @@ class Medicine {
           supplyCurrent: supplyCurrent ?? this.supplyCurrent,
           supplyMin: supplyMin ?? this.supplyMin,
           dose: dose ?? this.dose,
-          doseFrequency: doseFrequency ?? this.doseFrequency,
           capSize: capSize ?? this.capSize,
-          pillShape: pillShape ?? this.pillShape,
+          pillShapeNum: pillShapeNum ?? this.pillShapeNum,
           pillColor: pillColor ?? this.pillColor,
           tags: tags ?? this.tags,
 

@@ -9,7 +9,7 @@ String currentTimezone = 'Unknown';
 
 initializeNotifications() async {
 
-  var android = new AndroidInitializationSettings('@drawable/ic_stat_pillpal');
+  var android = new AndroidInitializationSettings('@drawable/ic_stat_drug');
   var iOS = new IOSInitializationSettings();
 
   var settings = new InitializationSettings(android: android, iOS: iOS);

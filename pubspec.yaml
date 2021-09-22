@@ -74,11 +74,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Dosis
+     - family: MyFlutterApp # the name of your font family
        fonts:
-         - asset: fonts/Dosis-VariableFont_wght.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+         - asset: fonts/MyFlutterApp.ttf # your font file name and the directory
      - family: Raleway
        fonts:
          - asset: fonts/Raleway-VariableFont_wght.ttf

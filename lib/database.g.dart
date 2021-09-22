@@ -85,7 +85,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `medicines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `desc` TEXT NOT NULL, `supplyCurrent` REAL NOT NULL, `supplyMin` REAL NOT NULL, `dose` REAL NOT NULL, `doseFrequency` REAL NOT NULL, `capSize` REAL NOT NULL, `pillShape` TEXT NOT NULL, `pillColor` INTEGER NOT NULL, `tags` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `medicines` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `desc` TEXT NOT NULL, `supplyCurrent` REAL NOT NULL, `supplyMin` REAL NOT NULL, `dose` REAL NOT NULL, `doseFrequency` REAL NOT NULL, `capSize` REAL NOT NULL, `pillShapeNum` INTEGER NOT NULL, `pillColor` INTEGER NOT NULL, `tags` TEXT NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `reminders` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `medicine_id` INTEGER NOT NULL, `medicineName` TEXT NOT NULL, `date` TEXT NOT NULL, `day` INTEGER NOT NULL, `dateTime` INTEGER NOT NULL, `label` TEXT NOT NULL, `repeated` INTEGER NOT NULL, FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON UPDATE NO ACTION ON DELETE CASCADE)');
         await database.execute(
@@ -129,7 +129,7 @@ class _$MedicineDao extends MedicineDao {
                   'dose': item.dose,
                   'doseFrequency': item.doseFrequency,
                   'capSize': item.capSize,
-                  'pillShape': item.pillShape,
+                  'pillShapeNum': item.pillShapeNum,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
                   'tags': _listStringConverter.encode(item.tags)
                 },
@@ -147,7 +147,7 @@ class _$MedicineDao extends MedicineDao {
                   'dose': item.dose,
                   'doseFrequency': item.doseFrequency,
                   'capSize': item.capSize,
-                  'pillShape': item.pillShape,
+                  'pillShapeNum': item.pillShapeNum,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
                   'tags': _listStringConverter.encode(item.tags)
                 },
@@ -165,7 +165,7 @@ class _$MedicineDao extends MedicineDao {
                   'dose': item.dose,
                   'doseFrequency': item.doseFrequency,
                   'capSize': item.capSize,
-                  'pillShape': item.pillShape,
+                  'pillShapeNum': item.pillShapeNum,
                   'pillColor': _colorIntConverter.encode(item.pillColor),
                   'tags': _listStringConverter.encode(item.tags)
                 },
@@ -195,7 +195,7 @@ class _$MedicineDao extends MedicineDao {
             dose: row['dose'] as double,
             doseFrequency: row['doseFrequency'] as double,
             capSize: row['capSize'] as double,
-            pillShape: row['pillShape'] as String,
+            pillShapeNum: row['pillShapeNum'] as int,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
             tags: _listStringConverter.decode(row['tags'] as String)),
         queryableName: 'medicines',
@@ -214,7 +214,7 @@ class _$MedicineDao extends MedicineDao {
             dose: row['dose'] as double,
             doseFrequency: row['doseFrequency'] as double,
             capSize: row['capSize'] as double,
-            pillShape: row['pillShape'] as String,
+            pillShapeNum: row['pillShapeNum'] as int,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
             tags: _listStringConverter.decode(row['tags'] as String)));
   }
@@ -231,7 +231,7 @@ class _$MedicineDao extends MedicineDao {
             dose: row['dose'] as double,
             doseFrequency: row['doseFrequency'] as double,
             capSize: row['capSize'] as double,
-            pillShape: row['pillShape'] as String,
+            pillShapeNum: row['pillShapeNum'] as int,
             pillColor: _colorIntConverter.decode(row['pillColor'] as int),
             tags: _listStringConverter.decode(row['tags'] as String)),
         arguments: [id]);

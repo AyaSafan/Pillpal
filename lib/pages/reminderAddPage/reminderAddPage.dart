@@ -257,27 +257,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                 SizedBox(
                   height: 24,
                 ),
-                // Center(
-                //   child: ElevatedButton.icon(
-                //     style: ButtonStyle(
-                //         shape:
-                //             MaterialStateProperty.all<RoundedRectangleBorder>(
-                //                 RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(18.0),
-                //     ))),
-                //     onPressed: () {
-                //       if (_formKey.currentState!.validate()) {
-                //         onSubmit();
-                //       }
-                //     },
-                //     icon: Icon(Icons.add),
-                //     label: Padding(
-                //       padding: const EdgeInsets.symmetric(
-                //           vertical: 10, horizontal: 15),
-                //       child: Text('Add to Reminders'),
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
