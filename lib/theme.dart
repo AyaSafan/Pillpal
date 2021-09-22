@@ -60,16 +60,11 @@ const defaultLetterSpacing = 0.03;
 TextTheme _buildCustomTextTheme(TextTheme base) {
   return base
       .copyWith(
-    caption: base.caption?.copyWith(
-      fontWeight: FontWeight.w400,
-      fontSize: 14,
-      letterSpacing: defaultLetterSpacing,
-    ),
     button: base.button?.copyWith(
       fontWeight: FontWeight.w500,
-      fontSize: 18,
+      fontSize: base.headline5!.fontSize ?? 16,
       fontFamily: 'Raleway',
-      letterSpacing: 2,
+      letterSpacing: 1.5,
       color: Colors.white
     ),
     bodyText2: base.bodyText2?.copyWith(fontSize: 16, fontFamily: 'Raleway', ),

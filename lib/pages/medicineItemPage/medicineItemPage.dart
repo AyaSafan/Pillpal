@@ -162,7 +162,6 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
 
   Widget buildBottomSheet(BuildContext context) {
       return Container(
-        //height: 240,
         child:
         SingleChildScrollView(
           child: Padding(
@@ -256,18 +255,14 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
           ),
           actions: [
             TextButton(
-              child: Text("Delete",
-                style: TextStyle(fontSize: 16),
-              ),
+              child: Text("Delete"),
               onPressed: () {
                 onDeleteMedicine(context);
               },
 
             ),
             TextButton(
-              child: Text("Cancel",
-                style: TextStyle(fontSize: 16),
-              ),
+              child: Text("Cancel"),
               onPressed: () {
                 Navigator.pop(context);
               },

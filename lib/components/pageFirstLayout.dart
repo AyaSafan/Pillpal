@@ -11,7 +11,6 @@ class PageFirstLayout extends StatelessWidget {
         this.color = MyColors.Landing2,
         this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
-        //this.showFAB = true
       });
 
   final Widget topChild;
@@ -19,7 +18,6 @@ class PageFirstLayout extends StatelessWidget {
   final Widget appBarRight;
   final String appBarTitle;
   final Color color;
-  //final bool showFAB;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +50,6 @@ class PageFirstLayout extends StatelessWidget {
         ),
         ],
       ),
-      // floatingActionButton:
-      // Visibility(child: FAB(), visible: showFAB,),
     );
   }
 }

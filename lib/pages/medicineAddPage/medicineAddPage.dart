@@ -44,8 +44,8 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   void changeColor(Color color) => setState(() => pillColor = color);
   final List<Color> pallet = [
     Colors.pink.shade900, Colors.deepPurple, Colors.blue, MyColors.TealBlue, MyColors.MiddleBlueGreen,
-    Colors.lightGreen.shade800, Colors.lightGreen.shade300, Colors.amberAccent, Colors.amberAccent.shade100,  Colors.orange, Colors.red,
-    MyColors.MiddleRed, Colors.pink.shade100,Colors.orange.shade100, Colors.brown,
+    Colors.lightGreen.shade800, Colors.lightGreen.shade300, Colors.amberAccent, Colors.orange.shade50,  Colors.orange, Colors.red,
+    MyColors.MiddleRed, Colors.pink.shade100, Colors.brown,
     Colors.grey.shade400, Colors.white70
   ];
 
@@ -129,8 +129,8 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                     ),
                     actions: [
                     TextButton(
-                      child: Text("ADD"),
-                      onPressed: () { 
+                      child: Text("Add"),
+                      onPressed: () {
                         setState(() {
                           tags.add(myTagController.text);
                           Navigator.pop(context);
@@ -266,7 +266,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                    context: context,
                    builder: (BuildContext context) {
                  return AlertDialog(
-                   backgroundColor: MyColors.Landing2,
+                   backgroundColor: Color(0xFFe6e6e6),
                    title: Text('Select a color'),
                    content: SingleChildScrollView(
                      child: 
@@ -288,10 +288,10 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                     color: Colors.black54
                 ),
                 suffixIcon:
-                Card(
-                  elevation: 4,
-                  shape: CircleBorder(),
+                Icon(
+                  Icons.fiber_manual_record,
                   color: pillColor,
+                  size: 32,
                 ),
                 disabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide( color: Colors.grey,),

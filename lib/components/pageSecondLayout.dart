@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:pill_pal/components/FAB.dart';
 import 'package:pill_pal/theme.dart';
-
 
 class PageSecondLayout extends StatelessWidget {
   PageSecondLayout(
@@ -9,11 +7,9 @@ class PageSecondLayout extends StatelessWidget {
         this.appBarTitle ='',
         this.appBarRight = const SizedBox(height: 0, width: 0),
         this.appBarLeading,
-        //this.toolbarHeight = 80,
         this.color = MyColors.Landing2,
         this.topChild =  const SizedBox(height: 0, width: 0) ,
         this.containerChild = const SizedBox(height: 0, width: 0) ,
-        //this.showFAB = true
       });
 
   final Widget topChild;
@@ -21,9 +17,7 @@ class PageSecondLayout extends StatelessWidget {
   final Widget appBarRight;
   final Widget? appBarLeading;
   final String appBarTitle;
-  //final double? toolbarHeight;
   final Color color;
-  //final bool showFAB;
 
 
   @override
@@ -79,8 +73,6 @@ class PageSecondLayout extends StatelessWidget {
 
         ],
       ),
-      // floatingActionButton:
-      // Visibility(child: FAB(), visible: showFAB,),
     );
   }
 }
