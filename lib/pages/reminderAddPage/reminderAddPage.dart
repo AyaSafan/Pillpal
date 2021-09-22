@@ -253,8 +253,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                 Center(
                   child: ElevatedButton.icon(
                     style: ButtonStyle(
-                        // backgroundColor: MaterialStateProperty.all<
-                        //     Color>(MyColors.MiddleRed),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                                 RoundedRectangleBorder(

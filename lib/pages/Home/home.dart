@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pill_pal/components/pageSecondLayout.dart';
+import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/reminder_check_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/reminder.dart';
@@ -27,8 +27,7 @@ class _HomeState extends State<Home> {
   DateTime _selectedDay =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   List<Reminder> _selectedEvents = [];
-  List<List<dynamic>> checkList =
-      []; //[ [reminder object, bool checked or not, reminderCheck object if exists] ]
+  List<List<dynamic>> _checkList = [];
   Map timeMap = new Map();
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
@@ -41,7 +40,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> getCheckList() async {
-    checkList.clear();
+    _checkList.clear();
     _selectedEvents.forEach((reminder) {
       var scheduledDateTime = DateTime(_selectedDay.year, _selectedDay.month,
           _selectedDay.day, reminder.dateTime.hour, reminder.dateTime.minute);
@@ -50,11 +49,11 @@ class _HomeState extends State<Home> {
           .then((reminderCheck) {
         if (reminderCheck == null) {
           setState(() {
-            checkList.add([reminder, false]);
+            _checkList.add([reminder, false]);
           });
         } else {
           setState(() {
-            checkList.add([reminder, true, reminderCheck]);
+            _checkList.add([reminder, true, reminderCheck]);
           });
         }
       });
@@ -79,14 +78,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final defaultPadding = MediaQuery.of(context).size.width / 20;
-    return PageSecondLayout(
-      //toolbarHeight: 60,
-      //showFAB: false,
+    setState(() {
+      timeMap.clear();
+    });
+
+    return PageFirstLayout(
       appBarRight: Container(
         margin: EdgeInsets.all(defaultPadding),
         child: IconButton(
           icon: Icon(Icons.more_vert, size: 30, color: MyColors.TealBlue,),
-          onPressed:(){},
+          onPressed: (){
+            showModalBottomSheet<void>(
+              context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(defaultPadding),
+              ),
+              builder: buildBottomSheet,
+            );
+          },
         ),
       ) ,
       topChild: Padding(
@@ -94,18 +103,6 @@ class _HomeState extends State<Home> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            GestureDetector(
-              onTap: () {
-                goToCalender(context);
-              },
-              child: CustomCard(
-                icon: Image.asset(
-                  'assets/calender.png',
-                  width: 80,
-                ),
-                title: 'Reminders',
-              ),
-            ),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, '/cabinet');
@@ -118,13 +115,24 @@ class _HomeState extends State<Home> {
                 title: 'Cabinet',
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                goToCalender(context);
+              },
+              child: CustomCard(
+                icon: Image.asset(
+                  'assets/calender.png',
+                  width: 80,
+                ),
+                title: 'Reminders',
+              ),
+            ),
           ],
         ),
       ),
       containerChild: Padding(
         padding: EdgeInsets.fromLTRB(defaultPadding, defaultPadding, 0, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             DateCard(_selectedDay),
             SizedBox(height: 32),
@@ -138,7 +146,7 @@ class _HomeState extends State<Home> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: checkList.asMap().entries.map((checkItem) {
+                      children: _checkList.asMap().entries.map((checkItem) {
                         return getReminderRow(checkItem.value, checkItem.key);
                       }).toList(),
                     ),
@@ -155,11 +163,54 @@ class _HomeState extends State<Home> {
   void goToCalender(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(
         context, '/calender', ModalRoute.withName('/home'),
-        arguments: {
-          'passedDay': _selectedDay,
-          'selectedEvents': _selectedEvents,
-          'checkList': checkList
-        });
+        arguments:  _selectedDay,
+        );
+  }
+
+  Widget buildBottomSheet(BuildContext context) {
+    return Container(
+      child:
+      SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(MediaQuery. of(context). size. width / 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  primary: Colors.black,
+                  textStyle: Theme.of(context).textTheme.bodyText2,
+                ),
+                label: Text('Add Reminder'),
+                icon: Icon(
+                  Icons.notification_add,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/reminder_add');
+                },
+              ),
+              TextButton.icon(
+                style: TextButton.styleFrom(
+                  primary: Colors.black,
+                  textStyle: Theme.of(context).textTheme.bodyText2,
+                ),
+                label: Text('Add Medicine'),
+                icon: Icon(
+                  Icons.medication,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, '/medicine_add');
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Column getReminderRow(List<dynamic> checkItem, int index) {
@@ -169,19 +220,11 @@ class _HomeState extends State<Home> {
     reminderCheck = 2 < checkItem.length ? checkItem[2] : null;
 
     // determine reminder check icon
-    Widget icon = Icon(Icons.panorama_fish_eye, color: Colors.grey);
-    var now = DateTime.now();
-    var scheduledDateTime = DateTime(_selectedDay.year, _selectedDay.month,
-        _selectedDay.day, reminder.dateTime.hour, reminder.dateTime.minute);
+    Widget icon = Icon(Icons.do_disturb_on_outlined, color: Colors.grey);
     if (isChecked) {
       icon = Icon(
         Icons.task_alt,
         color: MyColors.TealBlue,
-      );
-    } else if (scheduledDateTime.add(Duration(minutes: 5)).isBefore(now)) {
-      icon = Icon(
-        Icons.highlight_off,
-        color: MyColors.MiddleRed,
       );
     }
 
@@ -244,17 +287,7 @@ class _HomeState extends State<Home> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold),
                           ),
-                          reminder.repeated
-                              ? Text(
-                                  'Every ${DateFormat('EEEE').format(reminder.dateTime)}',
-                                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                                      color: Colors.black54),
-                                )
-                              : Text(
-                                  'Once',
-                                  style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                                      color: Colors.black54),
-                                ),
+
                           isChecked
                               ? Text(
                                   '${DateFormat('dd/MM/yyyy  kk:mm').format(reminderCheck!.checkedDateTime)}')

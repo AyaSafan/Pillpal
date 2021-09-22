@@ -39,15 +39,10 @@ Future onSelectNotification(payload) async {
         arguments: med);
   } else {
     DateTime? dateTime = DateTime.fromMillisecondsSinceEpoch(int.parse(value));
-    await Navigator.pushAndRemoveUntil(
+    await Navigator.pushNamedAndRemoveUntil(
         MyApp.navigatorKey.currentState!.context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => Calender(
-                medicineDao: database.medicineDao,
-                reminderDao: database.reminderDao,
-                reminderCheckDao: database.reminderCheckDao,
-                passedDay: dateTime)),
-        ModalRoute.withName('/home'));
+        '/calender', ModalRoute.withName('/home'),
+        arguments: dateTime);
   }
 }
 
@@ -110,16 +105,14 @@ class MyApp extends StatelessWidget {
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/calender') {
-            final args = settings.arguments as Map;
+            final passedDay = settings.arguments as DateTime;
             return MaterialPageRoute(
               builder: (context) {
                 return Calender(
                   medicineDao: medicineDao,
                   reminderDao: reminderDao,
                   reminderCheckDao: reminderCheckDao,
-                  passedDay: args['passedDay'],
-                  selectedEvents: args['selectedEvents'],
-                  checkList: args['checkList'],
+                  passedDay: passedDay,
                 );
               },
             );

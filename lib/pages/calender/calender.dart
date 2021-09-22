@@ -20,16 +20,13 @@ class Calender extends StatefulWidget {
       required this.reminderDao,
       required this.reminderCheckDao,
       this.passedDay,
-      this.selectedEvents,
-      this.checkList})
+      })
       : super(key: key);
 
   final MedicineDao medicineDao;
   final ReminderDao reminderDao;
   final ReminderCheckDao reminderCheckDao;
   final DateTime? passedDay;
-  final List<Reminder>? selectedEvents;
-  final List<List<dynamic>>? checkList;
 
   @override
   _CalenderState createState() => _CalenderState();
@@ -42,13 +39,13 @@ class _CalenderState extends State<Calender> {
 
   List<Reminder> _selectedEvents = [];
   Map cyclicEvents = new Map();
-  List<List<dynamic>> checkList = [];
+  List<List<dynamic>> _checkList = [];
   Map timeMap = new Map();
   Medicine? med;
 
   bool rebuiltHomeFlag = false;
 
-  Future<List<Reminder>> _getDayReminders(DateTime date) async {
+  Future<List<Reminder>> getDayReminders(DateTime date) async {
     final reminders = await widget.reminderDao.findReminderByDate(
         DateTime(date.year, date.month, date.day).toString());
     if (!cyclicEvents.containsKey(date.weekday)) {
@@ -60,8 +57,8 @@ class _CalenderState extends State<Calender> {
     return reminders;
   }
 
-  Future<void> _getCheckList() async {
-    checkList.clear();
+  Future<void> getCheckList() async {
+    _checkList.clear();
     _selectedEvents.forEach((reminder) {
       var scheduledDateTime = DateTime(_selectedDay!.year, _selectedDay!.month,
           _selectedDay!.day, reminder.dateTime.hour, reminder.dateTime.minute);
@@ -70,11 +67,11 @@ class _CalenderState extends State<Calender> {
           .then((reminderCheck) {
         if (reminderCheck == null) {
           setState(() {
-            checkList.add([reminder, false]);
+            _checkList.add([reminder, false]);
           });
         } else {
           setState(() {
-            checkList.add([reminder, true, reminderCheck]);
+            _checkList.add([reminder, true, reminderCheck]);
           });
         }
       });
@@ -88,7 +85,7 @@ class _CalenderState extends State<Calender> {
         _focusedDay = focusedDay;
         _selectedDay = selectedDay;
       });
-      _getDayReminders(_selectedDay!).then((value) {
+      getDayReminders(_selectedDay!).then((value) {
         setState(() {
           _selectedEvents = value;
           _selectedEvents.sort((a, b) => DateTime(
@@ -96,7 +93,7 @@ class _CalenderState extends State<Calender> {
               .compareTo(
                   DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
         });
-        _getCheckList().then((value) => null);
+        getCheckList().then((value) => null);
       });
     }
   }
@@ -107,10 +104,14 @@ class _CalenderState extends State<Calender> {
     setState(() {
       _selectedDay = widget.passedDay ?? _focusedDay;
     });
-    //initialize values by passing from home
-    setState(() {
-      _selectedEvents = widget.selectedEvents!;
-      checkList = widget.checkList!;
+    getDayReminders(_selectedDay!).then((value) {
+      setState(() {
+        _selectedEvents = value;
+        _selectedEvents.sort((a, b) =>
+            DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
+                DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
+      });
+      getCheckList().then((value) => null);
     });
   }
 
@@ -124,7 +125,6 @@ class _CalenderState extends State<Calender> {
     return PageSecondLayout(
       appBarTitle: "My Reminders",
       color: MyColors.Landing1,
-      //showFAB: false,
       appBarLeading: IconButton(
         onPressed: () {
           goToHome(context);
@@ -188,7 +188,7 @@ class _CalenderState extends State<Calender> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: checkList.asMap().entries.map((checkItem) {
+                    children: _checkList.asMap().entries.map((checkItem) {
                       return getReminderRow(checkItem.value, checkItem.key);
                     }).toList(),
                   ),
@@ -216,20 +216,16 @@ class _CalenderState extends State<Calender> {
     ReminderCheck? reminderCheck;
     reminderCheck = 2 < checkItem.length ? checkItem[2] : null;
 
-    // determine reminder check icon
-    Widget icon = Icon(Icons.panorama_fish_eye, color: Colors.grey);
     var now = DateTime.now();
     var scheduledDateTime = DateTime(_selectedDay!.year, _selectedDay!.month,
         _selectedDay!.day, reminder.dateTime.hour, reminder.dateTime.minute);
+
+    // determine reminder check icon
+    Widget icon = Icon(Icons.do_disturb_on_outlined, color: Colors.grey);
     if (isChecked) {
       icon = Icon(
         Icons.task_alt,
         color: MyColors.TealBlue,
-      );
-    } else if (scheduledDateTime.add(Duration(minutes: 5)).isBefore(now)) {
-      icon = Icon(
-        Icons.highlight_off,
-        color: MyColors.MiddleRed,
       );
     }
 
@@ -489,7 +485,7 @@ class _CalenderState extends State<Calender> {
 
     widget.reminderDao.deleteReminder(reminder).then((value) {
       setState(() {
-        checkList.removeAt(index);
+        _checkList.removeAt(index);
       });
       cancelNotification(reminder.id ?? 0);
       Navigator.pop(context);
@@ -532,10 +528,10 @@ class _CalenderState extends State<Calender> {
         checkedDateTime: now);
     widget.reminderCheckDao.insertReminderCheck(check).then((value) {
       setState(() {
-        checkList[index][1] = true;
-        2 < checkList[index].length
-            ? checkList[index][2] = check
-            : checkList[index].add(check);
+        _checkList[index][1] = true;
+        2 < _checkList[index].length
+            ? _checkList[index][2] = check
+            : _checkList[index].add(check);
       });
       Navigator.pop(context);
     });
@@ -592,11 +588,11 @@ class _CalenderState extends State<Calender> {
       });
     }
 
-    ReminderCheck check = checkList[index][2];
+    ReminderCheck check = _checkList[index][2];
     widget.reminderCheckDao.deleteReminderCheck(check).then((value) {
       setState(() {
-        checkList[index][1] = false;
-        checkList[index].removeAt(2);
+        _checkList[index][1] = false;
+        _checkList[index].removeAt(2);
       });
       Navigator.pop(context);
     });
