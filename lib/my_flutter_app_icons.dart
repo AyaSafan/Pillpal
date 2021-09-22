@@ -21,7 +21,6 @@ class MyFlutterApp {
   static const _kFontFam = 'MyFlutterApp';
   static const String? _kFontPkg = null;
 
-  static const IconData longpill = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData roundpill = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData capsule = IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

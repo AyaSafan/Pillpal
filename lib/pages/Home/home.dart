@@ -136,6 +136,13 @@ class _HomeState extends State<Home> {
           children: [
             DateCard(_selectedDay),
             SizedBox(height: 32),
+            _checkList.isEmpty?
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Text('No Reminders Today', style: TextStyle(color: Colors.black54),),
+              ),
+            ):
             GestureDetector(
               onTap: () {
                 goToCalender(context);
