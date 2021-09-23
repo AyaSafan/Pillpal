@@ -220,11 +220,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
         return AlertDialog(
           content: SingleChildScrollView(
             child:
-            Column(
-              children: [
-                Text('${medicineItem.name} will be permanently deleted.', style: TextStyle(fontSize: 14),),
-              ],
-            )
+            Text('${medicineItem.name} will be permanently deleted.', style: TextStyle(fontSize: 14),)
           ),
           actions: [
             TextButton(

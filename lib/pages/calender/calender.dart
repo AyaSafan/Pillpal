@@ -462,12 +462,8 @@ class _CalenderState extends State<Calender> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: SingleChildScrollView(
-              child: Column(
-            children: [
-              Text('This reminder will be permanently deleted.',
-                style: TextStyle(fontSize: 14),),
-            ],
-          )),
+              child: Text('This reminder will be permanently deleted.',
+                style: TextStyle(fontSize: 14),)),
           actions: [
             TextButton(
               child: Text(
