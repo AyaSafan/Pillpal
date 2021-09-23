@@ -351,41 +351,17 @@ class _$ReminderDao extends ReminderDao {
   }
 
   @override
-  Future<List<Reminder>> findReminderByDate(String date) async {
+  Future<List<Reminder>> findReminderForDay(String date, int day) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1',
-        mapper: (Map<String, Object?> row) => Reminder(
-            id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            medicineName: row['medicineName'] as String,
-            date: row['date'] as String,
-            day: row['day'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            repeated: (row['repeated'] as int) != 0),
-        arguments: [date]);
+        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1 OR repeated = 1 AND day =?2',
+        mapper: (Map<String, Object?> row) => Reminder(id: row['id'] as int?, medicineId: row['medicine_id'] as int, medicineName: row['medicineName'] as String, date: row['date'] as String, day: row['day'] as int, dateTime: _dateTimeConverter.decode(row['dateTime'] as int), label: row['label'] as String, repeated: (row['repeated'] as int) != 0),
+        arguments: [date, day]);
   }
 
   @override
-  Future<List<Reminder>> findRepeatedReminderByDay(int day) async {
-    return _queryAdapter.queryList(
-        'SELECT * FROM reminders WHERE repeated = 1 AND day =?1',
-        mapper: (Map<String, Object?> row) => Reminder(
-            id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            medicineName: row['medicineName'] as String,
-            date: row['date'] as String,
-            day: row['day'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            repeated: (row['repeated'] as int) != 0),
-        arguments: [day]);
-  }
-
-  @override
-  Stream<List<Reminder>> findReminderByDateAsStream(String date) {
+  Stream<List<Reminder>> findReminderForDayAsStream(String date, int day) {
     return _queryAdapter.queryListStream(
-        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1',
+        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1 OR repeated = 1 AND day =?2',
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,
@@ -395,25 +371,7 @@ class _$ReminderDao extends ReminderDao {
             dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0),
-        arguments: [date],
-        queryableName: 'reminders',
-        isView: false);
-  }
-
-  @override
-  Stream<List<Reminder>> findRepeatedReminderByDayAsStream(int day) {
-    return _queryAdapter.queryListStream(
-        'SELECT * FROM reminders WHERE repeated = 1 AND day =?1',
-        mapper: (Map<String, Object?> row) => Reminder(
-            id: row['id'] as int?,
-            medicineId: row['medicine_id'] as int,
-            medicineName: row['medicineName'] as String,
-            date: row['date'] as String,
-            day: row['day'] as int,
-            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
-            label: row['label'] as String,
-            repeated: (row['repeated'] as int) != 0),
-        arguments: [day],
+        arguments: [date, day],
         queryableName: 'reminders',
         isView: false);
   }

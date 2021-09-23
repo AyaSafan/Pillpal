@@ -38,7 +38,7 @@ class _CalenderState extends State<Calender> {
   DateTime? _selectedDay;
 
   List<Reminder> _selectedEvents = [];
-  Map cyclicEvents = new Map();
+  //Map cyclicEvents = new Map();
   List<List<dynamic>> _checkList = [];
   Map timeMap = new Map();
   Medicine? med;
@@ -46,14 +46,17 @@ class _CalenderState extends State<Calender> {
   //bool rebuiltHomeFlag = false;
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
-    final reminders = await widget.reminderDao.findReminderByDate(
-        DateTime(date.year, date.month, date.day).toString());
-    if (!cyclicEvents.containsKey(date.weekday)) {
-      final dayRepeatedReminders =
-          await widget.reminderDao.findRepeatedReminderByDay(date.weekday);
-      cyclicEvents[date.weekday] = dayRepeatedReminders;
-    }
-    reminders.addAll(cyclicEvents[date.weekday] ?? []);
+    final reminders = widget.reminderDao.findReminderForDay(
+        DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day).toString()
+        , _selectedDay!.weekday);
+    // final reminders = await widget.reminderDao.findReminderByDate(
+    //     DateTime(date.year, date.month, date.day).toString());
+    // if (!cyclicEvents.containsKey(date.weekday)) {
+    //   final dayRepeatedReminders =
+    //       await widget.reminderDao.findRepeatedReminderByDay(date.weekday);
+    //   cyclicEvents[date.weekday] = dayRepeatedReminders;
+    // }
+    // reminders.addAll(cyclicEvents[date.weekday] ?? []);
     return reminders;
   }
 

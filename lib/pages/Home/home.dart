@@ -1,4 +1,4 @@
-import 'package:async/async.dart';
+//import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/reminder_check_dao.dart';
@@ -25,8 +25,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   DateTime _selectedDay =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  List<Reminder> _selectedEvents = [];
-  List<List<dynamic>> _checkList = [];
+  //List<Reminder> _selectedEvents = [];
+  //List<List<dynamic>> _checkList = [];
   Map timeMap = new Map();
 
   // Future<List<Reminder>> getDayReminders(DateTime date) async {
@@ -38,13 +38,13 @@ class _HomeState extends State<Home> {
   //   return reminders;
   // }
 
-  Stream<List<List<Reminder>>> getDayRemindersAsStream()  {
-    final reminders = widget.reminderDao.findReminderByDateAsStream(
-        DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toString());
-    final dayRepeatedReminders = widget.reminderDao.findRepeatedReminderByDayAsStream(_selectedDay.weekday);
-
-    return StreamZip([reminders, dayRepeatedReminders]);
-  }
+  // Stream<List<List<Reminder>>> getDayRemindersAsStream()  {
+  //   final reminders = widget.reminderDao.findReminderByDateAsStream(
+  //       DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day).toString());
+  //   final dayRepeatedReminders = widget.reminderDao.findRepeatedReminderByDayAsStream(_selectedDay.weekday);
+  //
+  //   return StreamZip([reminders, dayRepeatedReminders]);
+  // }
 
   // Future<void> getCheckList() async {
   //   _checkList.clear();
@@ -148,8 +148,9 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: StreamBuilder<List<List<Reminder>>>(
-                      stream: getDayRemindersAsStream(),
+                    child: StreamBuilder<List<Reminder>>(
+                      stream: widget.reminderDao.findReminderForDayAsStream(
+                          _selectedDay.toString(), _selectedDay.weekday),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return Text('error');
@@ -161,9 +162,10 @@ class _HomeState extends State<Home> {
                           ),
                         );
 
-                        List<List<Reminder>> querySnapshotData =  snapshot.data!.toList();
-                        List<Reminder> reminders =  querySnapshotData[0];
-                        reminders.addAll( querySnapshotData[1]);
+                        // List<List<Reminder>> querySnapshotData =  snapshot.data!.toList();
+                        // List<Reminder> reminders =  querySnapshotData[0];
+                        // reminders.addAll( querySnapshotData[1]);
+                        final reminders = snapshot.requireData;
                         reminders.sort((a, b) =>
                               DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
                                   DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
