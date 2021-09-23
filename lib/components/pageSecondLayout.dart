@@ -30,7 +30,8 @@ class PageSecondLayout extends StatelessWidget {
         titleSpacing: 30,
         title: Text(
           appBarTitle,
-          style: Theme.of(context).textTheme.headline6!.copyWith(
+          style:TextStyle(
+            fontSize: 18,
             color: Colors.black,
           ),
         ),
@@ -51,6 +52,7 @@ class PageSecondLayout extends StatelessWidget {
             color: color,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 topChild,
                 Container(

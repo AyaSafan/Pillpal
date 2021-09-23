@@ -13,12 +13,9 @@ class CustomCard extends StatelessWidget {
     final defaultPadding = MediaQuery. of(context). size. width / 20;
 
     return
-      ConstrainedBox(
-        constraints: BoxConstraints(
-        minWidth: 140,
-        maxWidth: 140,
-        maxHeight: 140
-      ),
+      Container(
+        height: 140,
+        width: 140,
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(defaultPadding),
@@ -38,7 +35,7 @@ class CustomCard extends StatelessWidget {
                   ),
                 ],
               )),
-              Text('$title', overflow: TextOverflow.ellipsis,),
+              Text('$title', overflow: TextOverflow.ellipsis),
 
             ],
           ),

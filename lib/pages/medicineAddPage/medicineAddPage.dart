@@ -137,7 +137,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                 },
               );
             },
-              child: Text('Add Tag', style: TextStyle(fontSize: 16))
+              child: Text('Add Tag')
           ),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ));

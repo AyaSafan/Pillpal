@@ -29,7 +29,7 @@ Future singleNotification(
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
         'PillPal',
         'PillPal',
-        'your channel description',
+        'PillPal',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
@@ -76,7 +76,7 @@ Future repeatingNotification(
   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
     'PillPal',
     'PillPal',
-    'your channel description',
+    'PillPal',
     importance: Importance.max,
     priority: Priority.high,
     playSound: true,

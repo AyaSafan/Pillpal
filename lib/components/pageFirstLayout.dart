@@ -29,6 +29,7 @@ class PageFirstLayout extends StatelessWidget {
         title: Text(
           appBarTitle,
           style: TextStyle(
+            fontSize: 18,
             color: Colors.black,
           ),
         ),

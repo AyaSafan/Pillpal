@@ -57,7 +57,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
       topChild:  Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -155,7 +155,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
                   label: Text('Take Dose'),
                   icon: Icon(
@@ -168,7 +168,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
                   label: Text('Add Reminder'),
                   icon: Icon(
@@ -182,7 +182,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
                   label: Text('Edit Medicine'),
                   icon: Icon(
@@ -195,7 +195,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                 TextButton.icon(
                   style: TextButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
                   label: Text('Delete Medicine'),
                   icon: Icon(
@@ -222,28 +222,20 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
             child:
             Column(
               children: [
-                RichText(
-                  text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyText2,
-                    children: <TextSpan>[
-                      TextSpan(text: '${medicineItem.name}', style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: ' will be permanently deleted.'),
-                    ],
-                  ),
-                )
+                Text('${medicineItem.name} will be permanently deleted.', style: TextStyle(fontSize: 14),),
               ],
             )
           ),
           actions: [
             TextButton(
-              child: Text("Delete"),
+              child: Text("Delete", style: TextStyle(fontSize: 14),),
               onPressed: () {
                 onDeleteMedicine(context);
               },
 
             ),
             TextButton(
-              child: Text("Cancel"),
+              child: Text("Cancel", style: TextStyle(fontSize: 14),),
               onPressed: () {
                 Navigator.pop(context);
               },

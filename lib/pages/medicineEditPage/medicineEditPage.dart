@@ -120,7 +120,6 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    //title: Text('Select a color'),
                     content: SingleChildScrollView(
                       child: TextFormField(
                         controller: myTagController,
@@ -150,7 +149,7 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
                     ),
                     actions: [
                     TextButton(
-                      child: Text("ADD"),
+                      child: Text("Add"),
                       onPressed: () { 
                         setState(() {
                           tags.add(myTagController.text);
@@ -163,7 +162,7 @@ class _MedicineAddPageState extends State<MedicineEditPage> {
                 },
               );
             },
-              child: Text('Add Tag', style: TextStyle(fontSize: 16))
+              child: Text('Add Tag')
           ),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ));

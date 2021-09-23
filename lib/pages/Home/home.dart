@@ -188,7 +188,7 @@ class _HomeState extends State<Home> {
               TextButton.icon(
                 style: TextButton.styleFrom(
                   primary: Colors.black,
-                  textStyle: Theme.of(context).textTheme.bodyText2,
+                  textStyle: Theme.of(context).textTheme.bodyText1,
                 ),
                 label: Text('Add Reminder'),
                 icon: Icon(
@@ -202,7 +202,7 @@ class _HomeState extends State<Home> {
               TextButton.icon(
                 style: TextButton.styleFrom(
                   primary: Colors.black,
-                  textStyle: Theme.of(context).textTheme.bodyText2,
+                  textStyle: Theme.of(context).textTheme.bodyText1,
                 ),
                 label: Text('Add Medicine'),
                 icon: Icon(
@@ -258,8 +258,7 @@ class _HomeState extends State<Home> {
                   ),
                   child: Text(
                     '${timeMap[time] == 1 ? time : ''}',
-                    style: TextStyle(
-                        fontSize: 18,
+                    style: Theme.of(context).textTheme.subtitle1!.copyWith(
                         color: MyColors.TealBlue,
                         fontWeight: FontWeight.bold),
                   ),
@@ -291,20 +290,32 @@ class _HomeState extends State<Home> {
                         children: [
                           Text(
                             '${reminder.medicineName}',
-                            style: TextStyle(
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(
                                 fontWeight: FontWeight.bold),
                           ),
-
+                          reminder.repeated
+                              ? Text(
+                            'Every ${DateFormat('EEEE').format(reminder.dateTime)}',
+                            style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: Colors.black54),
+                          )
+                              : Text(
+                            'Once',
+                            style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: Colors.black54),
+                          ),
                           isChecked
                               ? Text(
-                                  '${DateFormat('dd/MM/yyyy  kk:mm').format(reminderCheck!.checkedDateTime)}')
+                            '${DateFormat('dd/MM/yyyy  kk:mm').format(reminderCheck!.checkedDateTime)}',
+                            style: Theme.of(context).textTheme.caption!,
+                          )
                               : reminder.label.isNotEmpty
-                                  ? Text(
-                                      '${reminder.label}',
-                                      softWrap: true,
-                                      style: Theme.of(context).textTheme.subtitle2,
-                                    )
-                                  : Container(),
+                              ? Text(
+                            '${reminder.label}',
+                            softWrap: true,
+                            style: Theme.of(context).textTheme.caption!,
+                          )
+                              : Container(),
                         ],
                       ),
                     ),

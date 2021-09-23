@@ -62,12 +62,13 @@ TextTheme _buildCustomTextTheme(TextTheme base) {
       .copyWith(
     button: base.button?.copyWith(
       fontWeight: FontWeight.w500,
-      fontSize: base.headline5!.fontSize ?? 16,
       fontFamily: 'Raleway',
       letterSpacing: 1.5,
       color: Colors.white
     ),
-    bodyText2: base.bodyText2?.copyWith(fontSize: 16, fontFamily: 'Raleway', ),
+    caption: base.caption?.copyWith(
+      color: Colors.black
+    )
   )
       .apply(
     fontFamily: 'Raleway',

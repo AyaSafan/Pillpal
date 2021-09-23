@@ -139,12 +139,19 @@ class _CalenderState extends State<Calender> {
           TableCalendar(
             headerStyle: HeaderStyle(
               formatButtonShowsNext: false,
+              titleTextStyle : Theme.of(context).textTheme.bodyText2!,
+              formatButtonTextStyle: Theme.of(context).textTheme.overline!,
             ),
             availableCalendarFormats: const {
               CalendarFormat.month: 'Month',
               CalendarFormat.week: 'Week'
             },
+            daysOfWeekStyle :  DaysOfWeekStyle(
+                weekdayStyle: Theme.of(context).textTheme.caption!.copyWith(color: Colors.black),
+                weekendStyle: Theme.of(context).textTheme.caption!.copyWith(color: Colors.black),
+            ),
             calendarStyle: CalendarStyle(
+              defaultTextStyle: Theme.of(context).textTheme.bodyText2!,
               selectedDecoration: BoxDecoration(
                   color: MyColors.TealBlue, shape: BoxShape.circle),
               todayDecoration: BoxDecoration(
@@ -272,7 +279,7 @@ class _CalenderState extends State<Calender> {
                               style: TextButton.styleFrom(
                                 primary: Colors.black,
                                 textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
+                                    Theme.of(context).textTheme.bodyText1,
                               ),
                               label: Text('Check Dose'),
                               icon: Icon(
@@ -301,7 +308,7 @@ class _CalenderState extends State<Calender> {
                               style: TextButton.styleFrom(
                                 primary: Colors.black,
                                 textStyle:
-                                    Theme.of(context).textTheme.bodyText2,
+                                    Theme.of(context).textTheme.bodyText1,
                               ),
                               label: Text('Uncheck Dose'),
                               icon: Icon(
@@ -325,7 +332,7 @@ class _CalenderState extends State<Calender> {
                       TextButton.icon(
                         style: TextButton.styleFrom(
                           primary: Colors.black,
-                          textStyle: Theme.of(context).textTheme.bodyText2,
+                          textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                         label: Text('Medicine Info'),
                         icon: Icon(
@@ -338,7 +345,7 @@ class _CalenderState extends State<Calender> {
                       TextButton.icon(
                         style: TextButton.styleFrom(
                           primary: Colors.black,
-                          textStyle: Theme.of(context).textTheme.bodyText2,
+                          textStyle: Theme.of(context).textTheme.bodyText1,
                         ),
                         label: Text('Delete Reminder'),
                         icon: Icon(
@@ -371,7 +378,7 @@ class _CalenderState extends State<Calender> {
                     ),
                     child: Text(
                       '${timeMap[time] == 1 ? time : ''}',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
                           color: MyColors.TealBlue,
                           fontWeight: FontWeight.bold),
                     ),
@@ -403,28 +410,30 @@ class _CalenderState extends State<Calender> {
                           children: [
                             Text(
                               '${reminder.medicineName}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold),
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontWeight: FontWeight.bold),
                             ),
                             reminder.repeated
                                 ? Text(
                               'Every ${DateFormat('EEEE').format(reminder.dateTime)}',
-                              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                              style: Theme.of(context).textTheme.caption!.copyWith(
                                   color: Colors.black54),
                             )
                                 : Text(
                               'Once',
-                              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                              style: Theme.of(context).textTheme.caption!.copyWith(
                                   color: Colors.black54),
                             ),
                             isChecked
                                 ? Text(
-                                '${DateFormat('dd/MM/yyyy  kk:mm').format(reminderCheck!.checkedDateTime)}')
+                                '${DateFormat('dd/MM/yyyy  kk:mm').format(reminderCheck!.checkedDateTime)}',
+                                  style: Theme.of(context).textTheme.caption!,
+                                  )
                                 : reminder.label.isNotEmpty
                                 ? Text(
                               '${reminder.label}',
                               softWrap: true,
-                              style: Theme.of(context).textTheme.subtitle2,
+                              style: Theme.of(context).textTheme.caption!,
                             )
                                 : Container(),
                           ],
@@ -452,14 +461,15 @@ class _CalenderState extends State<Calender> {
           content: SingleChildScrollView(
               child: Column(
             children: [
-              Text('This reminder will be permanently deleted.'),
+              Text('This reminder will be permanently deleted.',
+                style: TextStyle(fontSize: 14),),
             ],
           )),
           actions: [
             TextButton(
               child: Text(
                 "Delete",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 14),
               ),
               onPressed: () {
                 onDeleteReminder(reminder, index, context);
@@ -468,7 +478,7 @@ class _CalenderState extends State<Calender> {
             TextButton(
               child: Text(
                 "Cancel",
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 14),
               ),
               onPressed: () {
                 Navigator.pop(context);

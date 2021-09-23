@@ -40,7 +40,7 @@ class MedicineCard extends StatelessWidget {
                 children: [
                   Text(
                       '${medicineItem.name}',
-                    style: TextStyle(
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       color: Colors.black,
                       fontWeight: FontWeight.bold
                     ),
@@ -51,7 +51,7 @@ class MedicineCard extends StatelessWidget {
                     spacing: 5,
                     children: medicineItem.tags.map((tag) =>
                         Chip(
-                          label: Text('$tag',),
+                          label: Text('$tag', style: Theme.of(context).textTheme.caption!,),
                           backgroundColor: Color(0xFFEEEEEE),
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         )
