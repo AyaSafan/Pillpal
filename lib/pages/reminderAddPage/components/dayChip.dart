@@ -19,7 +19,7 @@ class DayChip extends StatelessWidget {
           constraints: const BoxConstraints(
             minWidth: 20,
           ),
-          child: Text('$label', style: TextStyle(fontFamily: 'Raleway'),)),
+          child: Text('$label')),
       selected: selected,
       onSelected: onSelected,
       selectedColor: MyColors.MiddleBlueGreen,

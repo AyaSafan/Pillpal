@@ -87,21 +87,21 @@ class _HomeState extends State<Home> {
     final defaultPadding = MediaQuery.of(context).size.width / 20;
 
     return PageFirstLayout(
-      appBarRight: Container(
-        margin: EdgeInsets.all(defaultPadding),
-        child: IconButton(
-          icon: Icon(Icons.more_vert, size: 30, color: MyColors.TealBlue,),
-          onPressed: (){
-            showModalBottomSheet<void>(
-              context: context,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(defaultPadding),
-              ),
-              builder: buildBottomSheet,
-            );
-          },
-        ),
-      ) ,
+      // appBarRight: Container(
+      //   margin: EdgeInsets.all(defaultPadding),
+      //   child: IconButton(
+      //     icon: Icon(Icons.more_vert, size: 30, color: MyColors.TealBlue,),
+      //     onPressed: (){
+      //       showModalBottomSheet<void>(
+      //         context: context,
+      //         shape: RoundedRectangleBorder(
+      //           borderRadius: BorderRadius.circular(defaultPadding),
+      //         ),
+      //         builder: buildBottomSheet,
+      //       );
+      //     },
+      //   ),
+      // ) ,
       topChild: Padding(
         padding: EdgeInsets.fromLTRB(defaultPadding,0,defaultPadding,defaultPadding),
         child: Row(
@@ -116,7 +116,7 @@ class _HomeState extends State<Home> {
                   'assets/cabinet.png',
                   width: 80,
                 ),
-                title: 'Cabinet',
+                title: 'My Pills',
               ),
             ),
             GestureDetector(
@@ -157,7 +157,7 @@ class _HomeState extends State<Home> {
                         }
                         if (!snapshot.hasData) return Center(
                           child: Padding(
-                            padding: const EdgeInsets.all(32),
+                            padding: const EdgeInsets.symmetric(vertical: 50),
                             child: Text('No Reminders Today', style: TextStyle(color: Colors.black54),),
                           ),
                         );
@@ -166,6 +166,14 @@ class _HomeState extends State<Home> {
                         // List<Reminder> reminders =  querySnapshotData[0];
                         // reminders.addAll( querySnapshotData[1]);
                         final reminders = snapshot.requireData;
+
+                        if (reminders.isEmpty) return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 50),
+                            child: Text('No Reminders Today', style: TextStyle(color: Colors.black54),),
+                          ),
+                        );
+
                         reminders.sort((a, b) =>
                               DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
                                   DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
@@ -203,51 +211,51 @@ class _HomeState extends State<Home> {
         );
   }
 
-  Widget buildBottomSheet(BuildContext context) {
-    return Container(
-      child:
-      SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(MediaQuery. of(context). size. width / 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextButton.icon(
-                style: TextButton.styleFrom(
-                  primary: Colors.black,
-                  textStyle: Theme.of(context).textTheme.bodyText1,
-                ),
-                label: Text('Add Reminder'),
-                icon: Icon(
-                  Icons.notification_add,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/reminder_add');
-                },
-              ),
-              TextButton.icon(
-                style: TextButton.styleFrom(
-                  primary: Colors.black,
-                  textStyle: Theme.of(context).textTheme.bodyText1,
-                ),
-                label: Text('Add Medicine'),
-                icon: Icon(
-                  Icons.medication,
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pushNamed(context, '/medicine_add');
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  // Widget buildBottomSheet(BuildContext context) {
+  //   return Container(
+  //     child:
+  //     SingleChildScrollView(
+  //       child: Padding(
+  //         padding: EdgeInsets.all(MediaQuery. of(context). size. width / 20),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             TextButton.icon(
+  //               style: TextButton.styleFrom(
+  //                 primary: Colors.black,
+  //                 textStyle: Theme.of(context).textTheme.bodyText1,
+  //               ),
+  //               label: Text('Add Reminder'),
+  //               icon: Icon(
+  //                 Icons.notification_add,
+  //               ),
+  //               onPressed: () {
+  //                 Navigator.pop(context);
+  //                 Navigator.pushNamed(context, '/reminder_add');
+  //               },
+  //             ),
+  //             TextButton.icon(
+  //               style: TextButton.styleFrom(
+  //                 primary: Colors.black,
+  //                 textStyle: Theme.of(context).textTheme.bodyText1,
+  //               ),
+  //               label: Text('Add Medicine'),
+  //               icon: Icon(
+  //                 Icons.medication,
+  //               ),
+  //               onPressed: () {
+  //                 Navigator.pop(context);
+  //                 Navigator.pushNamed(context, '/medicine_add');
+  //               },
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Row getReminderRow(Reminder reminderItem) {
     var time = '${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour}:'
@@ -266,7 +274,10 @@ class _HomeState extends State<Home> {
               ),
               child:
               Text('${timeMap[time] ==1? time : ''}',
-                style: TextStyle(fontSize: 18, color: MyColors.TealBlue, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 18,
+                    color: MyColors.TealBlue,
+                    fontWeight: FontWeight.bold),
               ),
 
             ),
@@ -280,7 +291,11 @@ class _HomeState extends State<Home> {
             ),
             color: Colors.white,
           ),
-          child: Text('   ${reminderItem.medicineName}', style: TextStyle(fontSize: 18),),
+          child: Text('   ${reminderItem.medicineName}',
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600),
+          ),
         ),
 
       ],

@@ -57,7 +57,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
           },
           validator: (value){
             if(!widget.allMedicine.any((element) => element.name == medTextController.text)){
-              return 'Please select medicine from cabinet';
+              return 'Please select pill';
             }
             return null;
           },
@@ -65,7 +65,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
 
           controller: medTextController,
           decoration: InputDecoration(
-            labelText: '${'select medicine' }',
+            labelText: '${'select pill' }',
             labelStyle: TextStyle(
                 color: dropdownShow? MyColors.TealBlue : Colors.black54
             ),
@@ -101,17 +101,14 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
                       itemBuilder: (context, index) {
                         Medicine med = widget.allMedicine[index];
                         return med.name.toLowerCase().contains(searchString.toLowerCase())
-                            ? TextButton.icon(
+                            ? TextButton(
                             style: TextButton.styleFrom(
                               primary: Colors.black,
                               padding: EdgeInsets.zero,
                               alignment:Alignment.centerLeft,
                               textStyle: Theme.of(context).textTheme.caption?.copyWith(fontSize: 16),
                             ),
-                            icon: Icon(
-                              Icons.medication,
-                              color: med.pillColor,
-                            ),
+
                             onPressed: (){
                               setState(() {
                                 medTextController.text = med.name;
@@ -121,7 +118,7 @@ class _CustomDropdownMenuState extends State<CustomDropdownMenu> {
                                 dropdownShow = false;
                               });
                             },
-                            label: Text('${med.name}',
+                            child: Text('${med.name}',
                             )
                         )
                             :Container();

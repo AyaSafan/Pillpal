@@ -128,6 +128,12 @@ class _CalenderState extends State<Calender> {
     return PageSecondLayout(
       appBarTitle: "My Reminders",
       color: MyColors.Landing1,
+      appBarRight: IconButton(
+        icon: Icon(Icons.add),
+        onPressed: (){
+          Navigator.pushNamed(context, '/reminder_add');
+        },
+      ),
       // appBarLeading: IconButton(
       //   onPressed: () {
       //     goToHome(context);
@@ -139,46 +145,48 @@ class _CalenderState extends State<Calender> {
       topChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TableCalendar(
-            headerStyle: HeaderStyle(
-              formatButtonShowsNext: false,
-              titleTextStyle : Theme.of(context).textTheme.bodyText2!,
-              formatButtonTextStyle: Theme.of(context).textTheme.overline!,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: TableCalendar(
+              headerStyle: HeaderStyle(
+                formatButtonShowsNext: false,
+                titleTextStyle : Theme.of(context).textTheme.bodyText2!,
+                formatButtonTextStyle: Theme.of(context).textTheme.overline!,
+              ),
+              availableCalendarFormats: const {
+                CalendarFormat.month: 'Month',
+                CalendarFormat.week: 'Week'
+              },
+              daysOfWeekStyle :  DaysOfWeekStyle(
+                  weekdayStyle: Theme.of(context).textTheme.caption!,
+                  weekendStyle: Theme.of(context).textTheme.caption!,
+              ),
+              calendarStyle: CalendarStyle(
+                selectedDecoration: BoxDecoration(
+                    color: MyColors.TealBlue, shape: BoxShape.circle),
+                todayDecoration: BoxDecoration(
+                    color: MyColors.TealBlue.withOpacity(0.5),
+                    shape: BoxShape.circle),
+              ),
+              firstDay: DateTime.utc(2020, 1, 1),
+              lastDay: DateTime.now().add(Duration(days: 7300)),
+              focusedDay: _focusedDay,
+              calendarFormat: _calendarFormat,
+              onDaySelected: _onDaySelected,
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDay, day);
+              },
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
+              },
             ),
-            availableCalendarFormats: const {
-              CalendarFormat.month: 'Month',
-              CalendarFormat.week: 'Week'
-            },
-            daysOfWeekStyle :  DaysOfWeekStyle(
-                weekdayStyle: Theme.of(context).textTheme.caption!.copyWith(color: Colors.black),
-                weekendStyle: Theme.of(context).textTheme.caption!.copyWith(color: Colors.black),
-            ),
-            calendarStyle: CalendarStyle(
-              defaultTextStyle: Theme.of(context).textTheme.bodyText2!,
-              selectedDecoration: BoxDecoration(
-                  color: MyColors.TealBlue, shape: BoxShape.circle),
-              todayDecoration: BoxDecoration(
-                  color: MyColors.TealBlue.withOpacity(0.5),
-                  shape: BoxShape.circle),
-            ),
-            firstDay: DateTime.utc(2020, 1, 1),
-            lastDay: DateTime.now().add(Duration(days: 7300)),
-            focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
-            onDaySelected: _onDaySelected,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              _focusedDay = focusedDay;
-            },
           ),
           SizedBox(
             height: 32,
@@ -381,7 +389,8 @@ class _CalenderState extends State<Calender> {
                     ),
                     child: Text(
                       '${timeMap[time] == 1 ? time : ''}',
-                        style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                        style: TextStyle(
+                            fontSize: 18,
                           color: MyColors.TealBlue,
                           fontWeight: FontWeight.bold),
                     ),
@@ -413,8 +422,9 @@ class _CalenderState extends State<Calender> {
                           children: [
                             Text(
                               '${reminder.medicineName}',
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 17,
+                            fontWeight: FontWeight.w600),
                             ),
                             reminder.repeated
                                 ? Text(

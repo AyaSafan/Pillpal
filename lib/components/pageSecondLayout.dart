@@ -31,8 +31,9 @@ class PageSecondLayout extends StatelessWidget {
         title: Text(
           appBarTitle,
           style:TextStyle(
-            fontSize: 18,
             color: Colors.black,
+            fontWeight: FontWeight.normal,
+            letterSpacing: 0.6
           ),
         ),
         actions: [

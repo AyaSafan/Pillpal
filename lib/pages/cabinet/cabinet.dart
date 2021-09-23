@@ -25,7 +25,13 @@ class _CabinetState extends State<Cabinet> {
   @override
   Widget build(BuildContext context) {
     return PageFirstLayout(
-      appBarTitle: "My Cabinet",
+      appBarTitle: "My Pills",
+      appBarRight: IconButton(
+        icon: Icon(Icons.add),
+        onPressed: (){
+          Navigator.pushNamed(context, '/medicine_add');
+        },
+      ),
       topChild: Container(
         margin: EdgeInsets.fromLTRB(30,0,30,15),
         child: TextField(

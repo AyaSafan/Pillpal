@@ -21,7 +21,8 @@ class TextSection extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16
                   ),
                 ),
                 SizedBox(height: 8,),

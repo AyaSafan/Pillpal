@@ -74,7 +74,8 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   onSubmit() {
     _formKey.currentState!.save();
     registerReminders();
-    Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(context, '/calender',  ModalRoute.withName('/home'));
+    //Navigator.pop(context);
     //goToHome();
   }
   //
@@ -269,7 +270,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   void registerReminders() {
     var notificationSubtext = label.isNotEmpty
         ? label
-        : '${savedSelectedMedicine?.name} dose ${savedSelectedMedicine?.dose} pills';
+        : 'Dose ${savedSelectedMedicine?.dose} pills';
     //no day is marked
     if (days.isEmpty) {
       int timestamp = DateTime.now().millisecondsSinceEpoch;

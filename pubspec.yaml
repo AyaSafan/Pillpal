@@ -79,11 +79,16 @@ flutter:
          - asset: fonts/MyFlutterApp.ttf # your font file name and the directory
      - family: Raleway
        fonts:
-         - asset: fonts/Raleway-VariableFont_wght.ttf
+         - asset: fonts/Raleway-Black.ttf
+         - asset: fonts/Raleway-Bold.ttf
+         - asset: fonts/Raleway-ExtraBold.ttf
+         - asset: fonts/Raleway-ExtraLight.ttf
+         - asset: fonts/Raleway-Light.ttf
+         - asset: fonts/Raleway-Medium.ttf
          - asset: fonts/Raleway-Regular.ttf
          - asset: fonts/Raleway-SemiBold.ttf
-         - asset: fonts/Raleway-Bold.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
+         - asset: fonts/Raleway-Thin.ttf
+
   #         weight: 700
 
   # For details regarding fonts from package dependencies,

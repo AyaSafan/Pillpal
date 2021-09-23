@@ -7,19 +7,24 @@ class MedicineCard extends StatelessWidget {
 
   final Medicine medicineItem;
 
+  Widget _buildIcon(double size, Color color, IconData iconData) {
+    return Container(
+      height: 30,
+      width: 30,
+      alignment: Alignment.center,
+      child: Icon( iconData,
+        color: color,
+        size: size,),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    final List<Icon> icons = [
-      Icon( MyFlutterApp.capsule,
-        color: medicineItem.pillColor,
-        size: 30),
-      Icon( MyFlutterApp.roundpill,
-        color: medicineItem.pillColor,
-        size: 30),
-      Icon( Icons.medication,
-        color: medicineItem.pillColor,
-        size: 30)
+    final List<IconData> icons = [
+      MyFlutterApp.capsule,
+      MyFlutterApp.roundpill,
+      Icons.medication,
     ];
     return
       GestureDetector(
@@ -30,19 +35,21 @@ class MedicineCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              Container(
-                  height: 30,
-                  width: 30,
-                  child: icons[medicineItem.pillShapeNum]
+              Stack(
+                children: [
+                  _buildIcon(30, Colors.black, icons[medicineItem.pillShapeNum]),
+                  _buildIcon(26, medicineItem.pillColor, icons[medicineItem.pillShapeNum]),
+                ],
               ),
               SizedBox(width: 16),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                       '${medicineItem.name}',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold
+                      fontWeight: FontWeight.w600
                     ),
                   ),
                   SizedBox(height: 8),

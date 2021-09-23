@@ -3,13 +3,24 @@ import 'package:flutter/material.dart';
 
 class PillShape extends StatelessWidget {
   final double? elevation;
-  final Icon icon;
+  final IconData iconData;
   final Color  pillColor;
   final void Function()? onTap;
   const PillShape(
-      {this.elevation = 4, required this.icon ,
+      {this.elevation = 4, required this.iconData ,
         this.pillColor = Colors.black, required this.onTap }
         );
+
+  Widget _buildIcon(double size, Color color) {
+    return Container(
+      height: 60,
+      width: 60,
+      alignment: Alignment.center,
+      child: Icon( iconData,
+        color: color,
+        size: size,),
+    );
+  }
 
 
   @override
@@ -28,7 +39,12 @@ class PillShape extends StatelessWidget {
             ),
           ),
           child: Center(
-            child: icon
+            child: Stack(
+              children: [
+                _buildIcon(60, Colors.black),
+                _buildIcon(56, pillColor),
+              ],
+            ),
           ),
         ),
       ),

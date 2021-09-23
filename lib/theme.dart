@@ -55,22 +55,17 @@ ThemeData _buildCustomTheme() {
     accentTextTheme: _buildCustomTextTheme(base.accentTextTheme),
   );
 }
-const defaultLetterSpacing = 0.03;
 
 TextTheme _buildCustomTextTheme(TextTheme base) {
   return base
       .copyWith(
-    button: base.button?.copyWith(
-      fontWeight: FontWeight.w500,
-      fontFamily: 'Raleway',
-      letterSpacing: 1.5,
-      color: Colors.white
-    ),
     caption: base.caption?.copyWith(
       color: Colors.black
+    ),
+    button: base.button?.copyWith(
+      letterSpacing: 0.7
     )
-  )
-      .apply(
+  ).apply(
     fontFamily: 'Raleway',
   );
 }

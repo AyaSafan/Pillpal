@@ -16,6 +16,7 @@ class DateCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             letterSpacing: 2,
+            fontWeight: FontWeight.w500
           ),
         ),
         Text(

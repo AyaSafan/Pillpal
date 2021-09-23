@@ -125,7 +125,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                 color: MyColors.MiddleRed,
               ),
               CustomCard(
-                title: 'Cap Size',
+                title: 'Strength',
                 data: '${medicineItem.capSize} mg',
                 icon: Icon(
                   Icons.hourglass_bottom,
@@ -184,7 +184,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                     primary: Colors.black,
                     textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
-                  label: Text('Edit Medicine'),
+                  label: Text('Edit Pill'),
                   icon: Icon(
                     Icons.edit,
                   ),
@@ -197,7 +197,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
                     primary: Colors.black,
                     textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
-                  label: Text('Delete Medicine'),
+                  label: Text('Delete Pill'),
                   icon: Icon(
                     Icons.delete,
                   ),

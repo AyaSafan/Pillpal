@@ -44,6 +44,12 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   }
 
   void changeColor(Color color) => setState(() => pillColor = color);
+  final List<Color> pallet = [
+    Colors.pink.shade900, Colors.deepPurple, Colors.blue, MyColors.TealBlue, MyColors.MiddleBlueGreen,
+    Colors.lightGreen.shade800, Colors.lightGreen.shade300, Colors.amberAccent, Colors.orange.shade50,  Colors.orange, Colors.red,
+    MyColors.MiddleRed, Colors.pink.shade100, Colors.brown,
+    Colors.grey.shade400, Colors.grey.shade50
+  ];
 
 
   Future<void> insertMedicine() async{
@@ -144,7 +150,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
 
 
     return PageFirstLayout(
-      appBarTitle: 'Add Medicine',
+      appBarTitle: 'Add Pill',
       color: MyColors.Landing2,
       appBarRight: IconButton(
           icon: Icon(Icons.check),
@@ -240,7 +246,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                 SizedBox(width: 24,),
                 Flexible(
                   child: CustomUnderLineInput(
-                    labelText: 'Cap Size',
+                    labelText: 'Strength',
                     suffixText: 'mg',
                     initialValue: '0',
                     validator: (value) {
@@ -267,12 +273,24 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                    context: context,
                    builder: (BuildContext context) {
                  return AlertDialog(
-                   title: Text('Select a color'),
+                   backgroundColor: Colors.black87,
+                   title: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text('Select a color', style: TextStyle(color: Colors.white),),
+                       IconButton(onPressed: (){
+                         Navigator.pop(context);
+                       },
+                       icon: Icon(Icons.arrow_forward, color: Colors.white,)
+                      )
+                     ],
+                   ),
                    content: SingleChildScrollView(
                      child: 
                      BlockPicker(
                        pickerColor: pillColor,
                        onColorChanged: changeColor,
+                       availableColors: pallet,
                      ),
                    ),
                  );
@@ -308,9 +326,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
               children: [
                 PillShape(
                     elevation: pillShapeNum==0 ? 10: 0,
-                    icon: Icon( MyFlutterApp.capsule,
-                          color: pillColor,
-                          size: 60,),
+                    iconData: MyFlutterApp.capsule,
                     pillColor: pillColor,
                     onTap: (){
                       setState(() {
@@ -320,9 +336,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                 ),
                 PillShape(
                     elevation: pillShapeNum==1 ? 10: 0,
-                    icon: Icon( MyFlutterApp.roundpill,
-                      color: pillColor,
-                      size: 60,),
+                    iconData:  MyFlutterApp.roundpill,
                     pillColor: pillColor,
                     onTap: (){
                       setState(() {
@@ -332,9 +346,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
                 ),
                 PillShape(
                     elevation: pillShapeNum==2 ? 10: 0,
-                    icon: Icon( Icons.medication,
-                      color: pillColor,
-                      size: 60,),
+                    iconData: Icons.medication,
                     pillColor: pillColor,
                     onTap: (){
                       setState(() {
