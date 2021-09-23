@@ -43,7 +43,7 @@ class _CalenderState extends State<Calender> {
   Map timeMap = new Map();
   Medicine? med;
 
-  bool rebuiltHomeFlag = false;
+  //bool rebuiltHomeFlag = false;
 
   Future<List<Reminder>> getDayReminders(DateTime date) async {
     final reminders = await widget.reminderDao.findReminderByDate(
@@ -125,14 +125,14 @@ class _CalenderState extends State<Calender> {
     return PageSecondLayout(
       appBarTitle: "My Reminders",
       color: MyColors.Landing1,
-      appBarLeading: IconButton(
-        onPressed: () {
-          goToHome(context);
-        },
-        icon: Icon(
-          Icons.arrow_back,
-        ),
-      ),
+      // appBarLeading: IconButton(
+      //   onPressed: () {
+      //     goToHome(context);
+      //   },
+      //   icon: Icon(
+      //     Icons.arrow_back,
+      //   ),
+      // ),
       topChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -215,14 +215,14 @@ class _CalenderState extends State<Calender> {
     );
   }
 
-  void goToHome(BuildContext context) {
-    if (rebuiltHomeFlag) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/home', (route) => false);
-    } else {
-      Navigator.pop(context);
-    }
-  }
+  // void goToHome(BuildContext context) {
+  //   if (rebuiltHomeFlag) {
+  //     Navigator.pushNamedAndRemoveUntil(
+  //         context, '/home', (route) => false);
+  //   } else {
+  //     Navigator.pop(context);
+  //   }
+  // }
 
   GestureDetector getReminderRow(List<dynamic> checkItem, int index) {
     Reminder reminder = checkItem[0];
@@ -492,13 +492,13 @@ class _CalenderState extends State<Calender> {
 
   void onDeleteReminder(Reminder reminder, int index, BuildContext context) {
     //if date is today, rebuild home screen
-    final now = new DateTime.now();
-    if (DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)
-        .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-      setState(() {
-        rebuiltHomeFlag = true;
-      });
-    }
+    // final now = new DateTime.now();
+    // if (DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)
+    //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+    //   setState(() {
+    //     rebuiltHomeFlag = true;
+    //   });
+    // }
 
     widget.reminderDao.deleteReminder(reminder).then((value) {
       setState(() {
@@ -527,14 +527,14 @@ class _CalenderState extends State<Calender> {
 
   void done(Reminder reminder, DateTime scheduledDateTime, DateTime now,
       int index, BuildContext context) {
-    //if date is today, rebuild home screen
-    final now = new DateTime.now();
-    if (DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)
-        .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-      setState(() {
-        rebuiltHomeFlag = true;
-      });
-    }
+    // //if date is today, rebuild home screen
+    // final now = new DateTime.now();
+    // if (DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)
+    //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+    //   setState(() {
+    //     rebuiltHomeFlag = true;
+    //   });
+    // }
 
     int timestamp = DateTime.now().millisecondsSinceEpoch;
     int checkId = timestamp ~/ 1000 + timestamp % 1000;
@@ -596,14 +596,14 @@ class _CalenderState extends State<Calender> {
   }
 
   void unDone(int index, BuildContext context) {
-    //if date is today, rebuild home screen
-    final now = new DateTime.now();
-    if (DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)
-        .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-      setState(() {
-        rebuiltHomeFlag = true;
-      });
-    }
+    // //if date is today, rebuild home screen
+    // final now = new DateTime.now();
+    // if (DateTime(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day)
+    //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+    //   setState(() {
+    //     rebuiltHomeFlag = true;
+    //   });
+    // }
 
     ReminderCheck check = _checkList[index][2];
     widget.reminderCheckDao.deleteReminderCheck(check).then((value) {

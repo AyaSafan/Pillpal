@@ -260,7 +260,7 @@ class _$MedicineDao extends MedicineDao {
 
 class _$ReminderDao extends ReminderDao {
   _$ReminderDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _reminderInsertionAdapter = InsertionAdapter(
             database,
             'reminders',
@@ -273,7 +273,8 @@ class _$ReminderDao extends ReminderDao {
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'label': item.label,
                   'repeated': item.repeated ? 1 : 0
-                }),
+                },
+            changeListener),
         _reminderUpdateAdapter = UpdateAdapter(
             database,
             'reminders',
@@ -287,7 +288,8 @@ class _$ReminderDao extends ReminderDao {
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'label': item.label,
                   'repeated': item.repeated ? 1 : 0
-                }),
+                },
+            changeListener),
         _reminderDeletionAdapter = DeletionAdapter(
             database,
             'reminders',
@@ -301,7 +303,8 @@ class _$ReminderDao extends ReminderDao {
                   'dateTime': _dateTimeConverter.encode(item.dateTime),
                   'label': item.label,
                   'repeated': item.repeated ? 1 : 0
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -314,6 +317,22 @@ class _$ReminderDao extends ReminderDao {
   final UpdateAdapter<Reminder> _reminderUpdateAdapter;
 
   final DeletionAdapter<Reminder> _reminderDeletionAdapter;
+
+  @override
+  Stream<List<Reminder>> findAllRemindersAsStream() {
+    return _queryAdapter.queryListStream('SELECT * FROM reminders',
+        mapper: (Map<String, Object?> row) => Reminder(
+            id: row['id'] as int?,
+            medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            label: row['label'] as String,
+            repeated: (row['repeated'] as int) != 0),
+        queryableName: 'reminders',
+        isView: false);
+  }
 
   @override
   Future<List<Reminder>> findReminderByMedicineId(int medicineId) async {
@@ -361,6 +380,42 @@ class _$ReminderDao extends ReminderDao {
             label: row['label'] as String,
             repeated: (row['repeated'] as int) != 0),
         arguments: [day]);
+  }
+
+  @override
+  Stream<List<Reminder>> findReminderByDateAsStream(String date) {
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1',
+        mapper: (Map<String, Object?> row) => Reminder(
+            id: row['id'] as int?,
+            medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            label: row['label'] as String,
+            repeated: (row['repeated'] as int) != 0),
+        arguments: [date],
+        queryableName: 'reminders',
+        isView: false);
+  }
+
+  @override
+  Stream<List<Reminder>> findRepeatedReminderByDayAsStream(int day) {
+    return _queryAdapter.queryListStream(
+        'SELECT * FROM reminders WHERE repeated = 1 AND day =?1',
+        mapper: (Map<String, Object?> row) => Reminder(
+            id: row['id'] as int?,
+            medicineId: row['medicine_id'] as int,
+            medicineName: row['medicineName'] as String,
+            date: row['date'] as String,
+            day: row['day'] as int,
+            dateTime: _dateTimeConverter.decode(row['dateTime'] as int),
+            label: row['label'] as String,
+            repeated: (row['repeated'] as int) != 0),
+        arguments: [day],
+        queryableName: 'reminders',
+        isView: false);
   }
 
   @override

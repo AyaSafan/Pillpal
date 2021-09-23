@@ -37,7 +37,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   String label = '';
   List<Medicine> allMedicine = [];
 
-  bool rebuiltHomeFlag = false;
+  //bool rebuiltHomeFlag = false;
 
   Medicine? savedSelectedMedicine;
 
@@ -74,16 +74,17 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   onSubmit() {
     _formKey.currentState!.save();
     registerReminders();
-    goToHome();
+    Navigator.pop(context);
+    //goToHome();
   }
-
-  void goToHome() {
-    if (rebuiltHomeFlag) {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-    } else {
-      Navigator.pop(context);
-    }
-  }
+  //
+  // void goToHome() {
+  //   if (rebuiltHomeFlag) {
+  //     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+  //   } else {
+  //     Navigator.pop(context);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -277,13 +278,13 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
           _time.hour, _time.minute);
       //if time chosen already passed on that day.. schedule next day
-      if (dateTime.isBefore(DateTime.now())) {
-        dateTime = dateTime.add(Duration(days: 1));
-      } else {
-        setState(() {
-          rebuiltHomeFlag = true;
-        });
-      }
+      // if (dateTime.isBefore(DateTime.now())) {
+      //   dateTime = dateTime.add(Duration(days: 1));
+      // } else {
+      //   setState(() {
+      //     rebuiltHomeFlag = true;
+      //   });
+      // }
       Reminder reminder = Reminder(
           id: reminderId,
           medicineId: savedSelectedMedicine?.id ?? 0,
@@ -319,13 +320,13 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         }
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
-        //if reminder added to today, rebuild home screen
-        if (DateTime(dateTime.year, dateTime.month, dateTime.day)
-            .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-          setState(() {
-            rebuiltHomeFlag = true;
-          });
-        }
+        // //if reminder added to today, rebuild home screen
+        // if (DateTime(dateTime.year, dateTime.month, dateTime.day)
+        //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+        //   setState(() {
+        //     rebuiltHomeFlag = true;
+        //   });
+        // }
         Reminder reminder = Reminder(
             repeated: true,
             id: reminderId,
@@ -361,12 +362,12 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
         //if reminder added to today, rebuild home screen
-        if (DateTime(dateTime.year, dateTime.month, dateTime.day)
-            .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-          setState(() {
-            rebuiltHomeFlag = true;
-          });
-        }
+        // if (DateTime(dateTime.year, dateTime.month, dateTime.day)
+        //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
+        //   setState(() {
+        //     rebuiltHomeFlag = true;
+        //   });
+        // }
         Reminder reminder = Reminder(
             id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,

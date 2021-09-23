@@ -250,6 +250,7 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
     widget.reminderDao.findReminderByMedicineId(medicineItem.id ?? 0).then((reminders) {
       reminders.forEach((reminder) {
         cancelNotification(reminder.id ?? 0);
+        widget.reminderDao.deleteReminder(reminder);
       });
       widget.medicineDao.deleteMedicine(medicineItem).then((value) => null);
       Navigator.popUntil(context, ModalRoute.withName('/cabinet'));
