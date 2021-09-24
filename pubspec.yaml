@@ -74,9 +74,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: MyFlutterApp # the name of your font family
-       fonts:
-         - asset: fonts/MyFlutterApp.ttf # your font file name and the directory
+
      - family: Raleway
        fonts:
          - asset: fonts/Raleway-Black.ttf

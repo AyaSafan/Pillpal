@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pill_pal/theme.dart';
 
 class CustomUnderLineInput extends StatelessWidget {
-  const CustomUnderLineInput({Key? key, this.labelText , this.initialValue, this.suffixText, this.maxLines:1, this.keyboardType ,this.validator, this.onSaved}) : super(key: key);
+  const CustomUnderLineInput({Key? key, this.labelText , this.initialValue, this.suffixText, this.maxLines:1,
+    this.keyboardType ,this.validator, this.onSaved, this.onChanged}) : super(key: key);
 
   final String? labelText;
   final String? suffixText;
@@ -11,6 +12,7 @@ class CustomUnderLineInput extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final void Function(String?)? onSaved;
+  final void Function(String)? onChanged;
 
 
   @override
@@ -28,6 +30,7 @@ class CustomUnderLineInput extends StatelessWidget {
       ),
       validator: validator,
       onSaved: onSaved ,
+      onChanged:onChanged ,
     );
   }
 }

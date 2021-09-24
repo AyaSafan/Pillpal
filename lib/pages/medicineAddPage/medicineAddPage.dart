@@ -4,7 +4,6 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/my_flutter_app_icons.dart';
 import 'package:pill_pal/pages/medicineAddPage/components/customUnderLineInput.dart';
 import 'package:pill_pal/pages/medicineEditPage/components/PillShape.dart';
 import 'package:pill_pal/theme.dart';
@@ -31,8 +30,8 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
   double supplyMin=0;
   double dose=1;
   double capSize=0;
-  Color pillColor = Color(0xff000000);
-  int pillShapeNum = 2;
+  Color pillColor = Colors.teal;
+  String pillShape = 'assets/medicine.png';
   List<String> tags =[];
 
   final myTagController = TextEditingController();
@@ -45,10 +44,10 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
 
   void changeColor(Color color) => setState(() => pillColor = color);
   final List<Color> pallet = [
-    Colors.pink.shade900, Colors.deepPurple, Colors.blue, MyColors.TealBlue, MyColors.MiddleBlueGreen,
-    Colors.lightGreen.shade800, Colors.lightGreen.shade300, Colors.amberAccent, Colors.orange.shade50,  Colors.orange, Colors.red,
-    MyColors.MiddleRed, Colors.pink.shade100, Colors.brown,
-    Colors.grey.shade400, Colors.grey.shade50
+    Colors.deepPurple, Colors.purple,  Colors.blueAccent, Colors.blue.shade200,
+    Colors.teal, Colors.green, Colors.lime, Colors.yellow.shade200,
+    Colors.pink.shade900, Colors.red, Colors.orange, Colors.amber,
+    Colors.brown, Colors.pink.shade200, Colors.grey.shade400, Colors.white
   ];
 
 
@@ -61,7 +60,7 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
       dose: dose,
       capSize:capSize,
       pillColor: pillColor,
-      pillShapeNum: pillShapeNum,
+      pillShape: pillShape,
       tags: tags
     );
     await widget.medicineDao.insertMedicine(med);
@@ -325,32 +324,32 @@ class _MedicineAddPageState extends State<MedicineAddPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PillShape(
-                    elevation: pillShapeNum==0 ? 10: 0,
-                    iconData: MyFlutterApp.capsule,
+                    elevation: pillShape== 'assets/capsule.png' ? 10: 0,
+                    pillImage: 'assets/capsule.png',
                     pillColor: pillColor,
                     onTap: (){
                       setState(() {
-                        pillShapeNum = 0;
+                        pillShape = 'assets/capsule.png';
                       });
                 }
                 ),
                 PillShape(
-                    elevation: pillShapeNum==1 ? 10: 0,
-                    iconData:  MyFlutterApp.roundpill,
+                    elevation: pillShape== 'assets/roundedpill.png' ? 10: 0,
+                    pillImage: 'assets/roundedpill.png',
                     pillColor: pillColor,
                     onTap: (){
                       setState(() {
-                        pillShapeNum = 1;
+                        pillShape = 'assets/roundedpill.png';
                       });
                     }
                 ),
                 PillShape(
-                    elevation: pillShapeNum==2 ? 10: 0,
-                    iconData: Icons.medication,
+                    elevation: pillShape== 'assets/medicine.png' ? 10: 0,
+                    pillImage: 'assets/medicine.png',
                     pillColor: pillColor,
                     onTap: (){
                       setState(() {
-                        pillShapeNum = 2;
+                        pillShape = 'assets/medicine.png';
                       });
                     }
                 ),

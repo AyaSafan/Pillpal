@@ -1,31 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/my_flutter_app_icons.dart';
 
 class MedicineCard extends StatelessWidget {
   const MedicineCard({Key? key, required this.medicineItem }) : super(key: key);
 
   final Medicine medicineItem;
 
-  Widget _buildIcon(double size, Color color, IconData iconData) {
-    return Container(
-      height: 30,
-      width: 30,
-      alignment: Alignment.center,
-      child: Icon( iconData,
-        color: color,
-        size: size,),
-    );
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    final List<IconData> icons = [
-      MyFlutterApp.capsule,
-      MyFlutterApp.roundpill,
-      Icons.medication,
-    ];
+
     return
       GestureDetector(
         onTap: (){Navigator.pushNamed(context, '/medicine_item', arguments: medicineItem);},
@@ -37,8 +21,8 @@ class MedicineCard extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  _buildIcon(30, Colors.black, icons[medicineItem.pillShapeNum]),
-                  _buildIcon(26, medicineItem.pillColor, icons[medicineItem.pillShapeNum]),
+                  Container(height: 30, width: 30, color:medicineItem.pillColor,),
+                  Image.asset(medicineItem.pillShape, height: 30, width: 30,)
                 ],
               ),
               SizedBox(width: 16),

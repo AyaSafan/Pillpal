@@ -17,6 +17,7 @@ import 'package:pill_pal/pages/medicineItemPage/medicineItemPage.dart';
 import 'package:pill_pal/pages/reminderAddPage/reminderAddPage.dart';
 import 'package:pill_pal/pages/splash.dart';
 import 'package:pill_pal/theme.dart';
+import 'package:pill_pal/util/databaseTestUtil.dart';
 import 'package:pill_pal/util/notificationUtil.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -56,7 +57,7 @@ Future<void> main() async {
   final reminderDao = database.reminderDao;
   final reminderCheckDao = database.reminderCheckDao;
 
-  //await addDatabaseDumpData(medicineDao, reminderDao);
+  await addDatabaseDumpData(medicineDao, reminderDao);
 
 
   runApp(MyApp(

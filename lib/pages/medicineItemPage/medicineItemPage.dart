@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pill_pal/components/pageSecondLayout.dart';
 import 'package:pill_pal/dao/medicine_dao.dart';
 import 'package:pill_pal/dao/reminder_dao.dart';
 import 'package:pill_pal/entities/medicine.dart';
@@ -39,101 +38,131 @@ class _MedicineItemPageState extends State<MedicineItemPage> {
   @override
   Widget build(BuildContext context) {
     final defaultPadding = MediaQuery. of(context). size. width / 20;
-    return PageSecondLayout(
-      appBarTitle: medicineItem.name ,
-      appBarRight: IconButton(
-        icon: Icon(Icons.more_vert),
-        onPressed: (){
-          showModalBottomSheet<void>(
-            context: context,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(defaultPadding),
+    var image = 'assets/medicineBottle.png';
+    if(medicineItem.pillShape == 'assets/capsule.png'){
+      image = 'assets/capsuleGroup.png';
+    }else if(medicineItem.pillShape == 'assets/roundedpill.png'){
+      image = 'assets/roundGroup.png';
+    }
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black, //change your color here
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.more_horiz),
+              onPressed: (){
+                showModalBottomSheet<void>(
+                  context: context,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(defaultPadding),
+                  ),
+                  builder: buildBottomSheet,
+                );
+              },
             ),
-            builder: buildBottomSheet,
-          );
-        },
-      ),
-      //showFAB: false,
-      topChild:  Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: defaultPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                medicineItem.desc.isNotEmpty ? Column(
-                  children: [
-                    Text(
-                      medicineItem.desc,
-                      softWrap: true,
-                    ),
-                    SizedBox(height: 16,),
-                  ],
-                ) : SizedBox(),
-                Wrap(
-                  runSpacing: 2,
-                  spacing: 5,
-                  children: medicineItem.tags.map((tag) =>
-                      Chip(
-                        label: Text('$tag', ),
-                        backgroundColor: MyColors.TealBlue.withOpacity(0.5),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      )
-                  ).toList(),
-                ),
-                SizedBox(height: 16,),
+          ],
+        ),   //showFAB: false,
 
+      body: ListView(
+        children: [
+          Center(
+            child:Stack(
+              children: [
+                Container(height: 225, width: 150, color:medicineItem.pillColor,),
+                Image.asset(image, height: 225, width: 150,)
               ],
             ),
           ),
-        ],
-      ),
-      containerChild: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Row(
-            children: [
-              CustomCard(
-                title: 'Current Supply',
-                data: '${medicineItem.supplyCurrent} pills',
-                icon: Icon(
-                  Icons.assignment_turned_in,
-                  color: MyColors.TealBlue,
+          SizedBox(height: 32,),
+          Padding(
+            padding: EdgeInsets.all(defaultPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${medicineItem.name}', style: Theme.of(context).textTheme.headline6),
+                      SizedBox(height: 8,),
+                      medicineItem.desc.isNotEmpty ? Column(
+                        children: [
+                          Text(
+                            medicineItem.desc,
+                            softWrap: true,
+                            //style: TextStyle(color: Colors.black54),
+                          ),
+                          SizedBox(height: 16,),
+                        ],
+                      ) : SizedBox(),
+                      Wrap(
+                        runSpacing: 2,
+                        spacing: 5,
+                        children: medicineItem.tags.map((tag) =>
+                            Chip(
+                              label: Text('$tag', ),
+                              backgroundColor: MyColors.TealBlue.withOpacity(0.5),
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            )
+                        ).toList(),
+                      ),
+                    ],
+                  ),
                 ),
-                color: MyColors.TealBlue,
-              ),
-              CustomCard(
-                title: 'Minimun Supply',
-                data: '${medicineItem.supplyMin} pills',
-                icon: Icon(
-                  Icons.assignment_late,
-                  color: Color(0xffda4625),
+                SizedBox(height: 16,),
+                Row(
+                  children: [
+                    CustomCard(
+                      title: 'Available',
+                      data: '${medicineItem.supplyCurrent} pills',
+                      icon: Icon(
+                        Icons.assignment_turned_in,
+                        color: MyColors.TealBlue,
+                      ),
+                      color: MyColors.TealBlue,
+                    ),
+                    CustomCard(
+                      title: 'Alert on',
+                      data: '${medicineItem.supplyMin} pills',
+                      icon: Icon(
+                        Icons.assignment_late,
+                        color: Color(0xffda4625),
+                      ),
+                      color: Color(0xffda4625),
+                    ),
+                  ],
                 ),
-                color: Color(0xffda4625),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              CustomCard(
-                title: 'Dose',
-                data: '${medicineItem.dose} pills/dose',
-                icon: Icon(
-                  Icons.timelapse,
-                  color: MyColors.MiddleRed,
+                Row(
+                  children: [
+                    CustomCard(
+                      title: 'Dose',
+                      data: '${medicineItem.dose} pills/dose',
+                      icon: Icon(
+                        Icons.timelapse,
+                        color: MyColors.MiddleRed,
+                      ),
+                      color: MyColors.MiddleRed,
+                    ),
+                    CustomCard(
+                      title: 'Strength',
+                      data: '${medicineItem.capSize} mg',
+                      icon: Icon(
+                        Icons.hourglass_bottom,
+                        color: Colors.purple,
+                      ),
+                      color: Colors.purple,
+                    ),
+                  ],
                 ),
-                color: MyColors.MiddleRed,
-              ),
-              CustomCard(
-                title: 'Strength',
-                data: '${medicineItem.capSize} mg',
-                icon: Icon(
-                  Icons.hourglass_bottom,
-                  color: Colors.purple,
-                ),
-                color: Colors.purple,
-              ),
-            ],
+                SizedBox(height: 32,),
+              ],
+            ),
           ),
 
         ],

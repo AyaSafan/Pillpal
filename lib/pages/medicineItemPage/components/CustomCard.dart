@@ -21,7 +21,7 @@ class CustomCard extends StatelessWidget {
         maxWidth: screenWidth*0.45,
       ),
         child: Card(
-        elevation: 8,
+        elevation: 6,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
           child: Row(
