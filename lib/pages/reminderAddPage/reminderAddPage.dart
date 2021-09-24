@@ -175,7 +175,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                             });
                             if(isEveryday){
                               setState(() {
-                                days.addAll([1,2,3,4,5,6,7]);
+                                days = [1,2,3,4,5,6,7];
                               });
                             }else{
                               setState(() {
@@ -197,21 +197,29 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       label: 'Sun',
                       selected: days.contains(DateTime.sunday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
                           value
-                              ? days.add(DateTime.sunday)
-                              : days.remove(DateTime.sunday);
-                        });
+                              ?  setState(() {
+                                days.add(DateTime.sunday);
+                                isEveryday = days.length == 7;
+                                })
+                              : setState((){
+                                days.remove(DateTime.sunday);
+                                isEveryday = false;
+                              });
                       },
                     ),
                     DayChip(
                       label: 'Mon',
                       selected: days.contains(DateTime.monday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
-                          value
-                              ? days.add(DateTime.monday)
-                              : days.remove(DateTime.monday);
+                        value
+                            ?  setState(() {
+                          days.add(DateTime.monday);
+                          isEveryday = days.length == 7;
+                        })
+                            : setState((){
+                          days.remove(DateTime.monday);
+                          isEveryday = false;
                         });
                       },
                     ),
@@ -219,10 +227,14 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       label: 'Tue',
                       selected: days.contains(DateTime.tuesday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
-                          value
-                              ? days.add(DateTime.tuesday)
-                              : days.remove(DateTime.tuesday);
+                        value
+                            ?  setState(() {
+                          days.add(DateTime.tuesday);
+                          isEveryday = days.length == 7;
+                        })
+                            : setState((){
+                          days.remove(DateTime.tuesday);
+                          isEveryday = false;
                         });
                       },
                     ),
@@ -231,10 +243,14 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       selected:
                           days.contains(DateTime.wednesday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
-                          value
-                              ? days.add(DateTime.wednesday)
-                              : days.remove(DateTime.wednesday);
+                        value
+                            ?  setState(() {
+                          days.add(DateTime.wednesday);
+                          isEveryday = days.length == 7;
+                        })
+                            : setState((){
+                          days.remove(DateTime.wednesday);
+                          isEveryday = false;
                         });
                       },
                     ),
@@ -242,10 +258,14 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       label: 'Thu',
                       selected: days.contains(DateTime.thursday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
-                          value
-                              ? days.add(DateTime.thursday)
-                              : days.remove(DateTime.thursday);
+                        value
+                            ?  setState(() {
+                          days.add(DateTime.thursday);
+                          isEveryday = days.length == 7;
+                        })
+                            : setState((){
+                          days.remove(DateTime.thursday);
+                          isEveryday = false;
                         });
                       },
                     ),
@@ -253,10 +273,14 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       label: 'Fri',
                       selected: days.contains(DateTime.friday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
-                          value
-                              ? days.add(DateTime.friday)
-                              : days.remove(DateTime.friday);
+                        value
+                            ?  setState(() {
+                          days.add(DateTime.friday);
+                          isEveryday = days.length == 7;
+                        })
+                            : setState((){
+                          days.remove(DateTime.friday);
+                          isEveryday = false;
                         });
                       },
                     ),
@@ -264,10 +288,14 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                       label: 'Sat',
                       selected: days.contains(DateTime.saturday) ? true : false,
                       onSelected: (bool value) {
-                        setState(() {
-                          value
-                              ? days.add(DateTime.saturday)
-                              : days.remove(DateTime.saturday);
+                        value
+                            ?  setState(() {
+                          days.add(DateTime.saturday);
+                          isEveryday = days.length == 7;
+                        })
+                            : setState((){
+                          days.remove(DateTime.saturday);
+                          isEveryday = false;
                         });
                       },
                     ),
@@ -352,7 +380,8 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
             'reminder ${dateTime.millisecondsSinceEpoch}')
             .then((value) => null);
 
-      }else{
+      }
+      else{
         days.forEach((day) {
           int timestamp = DateTime.now().millisecondsSinceEpoch;
           int reminderId = timestamp ~/ 1000 + timestamp % 1000;
@@ -401,6 +430,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         if (dateTime.isBefore(DateTime.now())) {
           dateTime = dateTime.add(Duration(days: 7));
         }
+        print(dateTime);
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
         Reminder reminder = Reminder(

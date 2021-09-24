@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pill_pal/entities/medicine.dart';
-import 'package:pill_pal/entities/reminder.dart';
 
 Future<void> addDatabaseDumpData(medicineDao, reminderDao) async {
 
@@ -25,11 +24,11 @@ Future<void> addDatabaseDumpData(medicineDao, reminderDao) async {
   dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day, dateTime.hour, dateTime.minute);
 
   await reminderDao.deleteAllReminders();
-  final reminder = Reminder(medicineId: 12,medicineName: 'Paracetamol' ,label: 'first reminder', dateTime: dateTime);
-
-  await reminderDao.insertReminder(reminder);
-  final reminder2 = Reminder(medicineId: 12,medicineName: 'Paracetamol',  day: dateTime.weekday, label: 'cyclic reminder', repeated: true, dateTime: dateTime);
-  await reminderDao.insertReminder(reminder2);
+  // final reminder = Reminder(medicineId: 12,medicineName: 'Paracetamol' ,label: 'first reminder', dateTime: dateTime);
+  //
+  // await reminderDao.insertReminder(reminder);
+  // final reminder2 = Reminder(medicineId: 12,medicineName: 'Paracetamol',  day: dateTime.weekday, label: 'cyclic reminder', repeated: true, dateTime: dateTime);
+  // await reminderDao.insertReminder(reminder2);
   print('added');
 
 
