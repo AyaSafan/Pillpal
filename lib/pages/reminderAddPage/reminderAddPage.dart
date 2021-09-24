@@ -329,11 +329,16 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         : 'Dose ${savedSelectedMedicine?.dose} pills';
     //no day is marked
     if (days.isEmpty) {
-      int timestamp = DateTime.now().millisecondsSinceEpoch;
-      int reminderId = timestamp ~/ 1000 + timestamp % 1000;
-      var dateTime = new DateTime.now();
+      final now = new DateTime.now();
+      int timestamp = now.microsecondsSinceEpoch;
+      int reminderId = timestamp ~/ 1000000 + timestamp % 1000000;
+      var dateTime = now;
+      //today is monday ..if time chosen already passed on that monday.. schedule monday next week
       dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
           _time.hour, _time.minute);
+      if (dateTime.isBefore(now)) {
+        dateTime = dateTime.add(Duration(days: 7));
+      }
       Reminder reminder = Reminder(
           id: reminderId,
           medicineId: savedSelectedMedicine?.id ?? 0,
@@ -356,13 +361,16 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
     //repeat days are marked
     else if (repeat) {
       if(isEveryday){
-        int timestamp = DateTime.now().millisecondsSinceEpoch;
-        int reminderId = timestamp ~/ 1000 + timestamp % 1000;
         final now = new DateTime.now();
+        int timestamp = now.microsecondsSinceEpoch;
+        int reminderId = timestamp ~/ 1000000 + timestamp % 1000000;
         var dateTime = now;
         //today is monday ..if time chosen already passed on that monday.. schedule monday next week
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
+        if (dateTime.isBefore(now)) {
+          dateTime = dateTime.add(Duration(days: 7));
+        }
         Reminder reminder = Reminder(
             repeated: true,
             id: reminderId,
@@ -383,19 +391,19 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       }
       else{
         days.forEach((day) {
-          int timestamp = DateTime.now().millisecondsSinceEpoch;
-          int reminderId = timestamp ~/ 1000 + timestamp % 1000;
           final now = new DateTime.now();
+          int timestamp = now.microsecondsSinceEpoch;
+          int reminderId = timestamp ~/ 1000000 + timestamp % 1000000 + day;
           var dateTime = now;
           while (dateTime.weekday != day) {
             dateTime = dateTime.add(new Duration(days: 1));
           }
           //today is monday ..if time chosen already passed on that monday.. schedule monday next week
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
+              _time.hour, _time.minute);
           if (dateTime.isBefore(DateTime.now())) {
             dateTime = dateTime.add(Duration(days: 7));
           }
-          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
-              _time.hour, _time.minute);
           Reminder reminder = Reminder(
               repeated: true,
               id: reminderId,
@@ -414,25 +422,23 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
               .then((value) => null);
         });
       }
-
     }
     //upcoming days are marked
     else {
       days.forEach((day) {
-        int timestamp = DateTime.now().millisecondsSinceEpoch;
-        int reminderId = timestamp ~/ 1000 + timestamp % 1000;
         final now = new DateTime.now();
+        int timestamp = now.microsecondsSinceEpoch;
+        int reminderId = timestamp ~/ 1000000 + timestamp % 1000000 + day;
         var dateTime = now;
         while (dateTime.weekday != day) {
           dateTime = dateTime.add(new Duration(days: 1));
         }
         //today is monday ..if time chosen already passed on that monday.. schedule monday next week
-        if (dateTime.isBefore(DateTime.now())) {
-          dateTime = dateTime.add(Duration(days: 7));
-        }
-        print(dateTime);
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
+        if (dateTime.isBefore(now)) {
+          dateTime = dateTime.add(Duration(days: 7));
+        }
         Reminder reminder = Reminder(
             id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,

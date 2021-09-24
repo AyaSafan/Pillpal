@@ -1,4 +1,3 @@
-import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
 import 'package:pill_pal/components/pageFirstLayout.dart';
 import 'package:pill_pal/dao/reminder_check_dao.dart';
@@ -27,8 +26,8 @@ class _HomeState extends State<Home> {
   DateTime _selectedDay =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
-  Map timeMap = new Map();
-
+  //Map timeMap = new Map();
+  List timeColumnList = [];
 
 
   @override
@@ -106,31 +105,35 @@ class _HomeState extends State<Home> {
                           ),
                         );
 
-                        reminders.sort((a, b) =>
-                            DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
-                                DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
-
-                        var newMap = groupBy(reminders, (Reminder reminderItem) =>
-                        '${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour}:'
-                        '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}');
-
-                        return Column(
-                          children: newMap.entries.map((timeGroup) {
-                            return getTimeGroup(timeGroup);
-                          }).toList(),
-                        );
-
                         // reminders.sort((a, b) =>
-                        //       DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
-                        //           DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
+                        //     DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
+                        //         DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
                         //
-                        // timeMap.clear();
+                        // var newMap = groupBy(reminders, (Reminder reminderItem) =>
+                        // '${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour}:'
+                        // '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}');
+                        //
                         // return Column(
-                        //   crossAxisAlignment: CrossAxisAlignment.start,
-                        //   children: reminders.asMap().entries.map((reminder) {
-                        //     return getReminderRow(reminder.value);
+                        //   children: newMap.entries.map((timeGroup) {
+                        //     return getTimeGroup(timeGroup);
                         //   }).toList(),
                         // );
+
+
+                        reminders.sort((a, b) {
+                          int cmp = DateTime( 1, 1, 1999, a.dateTime.hour, a.dateTime.minute)
+                              .compareTo( DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute));
+                          if (cmp != 0) return cmp;
+                          return a.medicineName.compareTo(b.medicineName);
+                        });
+
+                        timeColumnList.clear();
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: reminders.asMap().entries.map((reminder) {
+                            return getReminderRow(reminder.value);
+                          }).toList(),
+                        );
 
                       }
                     )
@@ -145,7 +148,23 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Row getTimeGroup(MapEntry<String, List<Reminder>> timeGroup) {
+
+  void goToCalender(BuildContext context) {
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/calender', ModalRoute.withName('/home'),
+        arguments:  _selectedDay,
+        );
+  }
+
+  Row getReminderRow(Reminder reminderItem) {
+    var timeLabel = '${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour}:'
+        '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}';
+
+    //timeMap.containsKey(time)? timeMap[time]+=1 : timeMap[time] =1;
+    //var timeLabel = '';
+    timeColumnList.isEmpty ||timeColumnList[0] != timeLabel ? timeColumnList.insert(0, timeLabel): timeLabel ='';
+      //timeLabel = time;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +177,7 @@ class _HomeState extends State<Home> {
                 minWidth: 75,
               ),
               child:
-              Text('${timeGroup.key}',
+              Text(timeLabel,
                 style: TextStyle(
                     fontSize: 18,
                     color: MyColors.TealBlue,
@@ -169,48 +188,25 @@ class _HomeState extends State<Home> {
             SizedBox(height: 24,),
           ],
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: timeGroup.value.map((
-              reminderItem) =>
-              Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        left: BorderSide(width: 3.0,
-                            color: MyColors
-                                .MiddleBlueGreen),
-                      ),
-                      color: Colors.white,
-                    ),
-                    child: Text(
-                      '   ${reminderItem.medicineName}',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  SizedBox(height: 24,),
-                ],
-              ),
-          ).toList(),
-        )
+        Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: BorderSide(width: 3.0, color: MyColors.MiddleBlueGreen),
+            ),
+            color: Colors.white,
+          ),
+          child: Text('   ${reminderItem.medicineName}',
+            style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w600),
+          ),
+        ),
+
       ],
     );
   }
 
-  void goToCalender(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/calender', ModalRoute.withName('/home'),
-        arguments:  _selectedDay,
-        );
-  }
-
-  // Row getReminderRow(Reminder reminderItem) {
-  //   var time = '${reminderItem.dateTime.hour < 10? '0': ''}${reminderItem.dateTime.hour}:'
-  //       '${reminderItem.dateTime.minute < 10? '0': ''}${reminderItem.dateTime.minute}';
-  //     timeMap.containsKey(time)? timeMap[time]+=1 : timeMap[time] =1;
+  // Row getTimeGroup(MapEntry<String, List<Reminder>> timeGroup) {
   //   return Row(
   //     mainAxisAlignment: MainAxisAlignment.start,
   //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +219,7 @@ class _HomeState extends State<Home> {
   //               minWidth: 75,
   //             ),
   //             child:
-  //             Text('${timeMap[time] ==1? time : ''}',
+  //             Text('${timeGroup.key}',
   //               style: TextStyle(
   //                   fontSize: 18,
   //                   color: MyColors.TealBlue,
@@ -234,23 +230,35 @@ class _HomeState extends State<Home> {
   //           SizedBox(height: 24,),
   //         ],
   //       ),
-  //       Container(
-  //         decoration: BoxDecoration(
-  //           border: Border(
-  //             left: BorderSide(width: 3.0, color: MyColors.MiddleBlueGreen),
-  //           ),
-  //           color: Colors.white,
-  //         ),
-  //         child: Text('   ${reminderItem.medicineName}',
-  //           style: TextStyle(
-  //               fontSize: 17,
-  //               fontWeight: FontWeight.w600),
-  //         ),
-  //       ),
-  //
+  //       Column(
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: timeGroup.value.map((
+  //             reminderItem) =>
+  //             Column(
+  //               children: [
+  //                 Container(
+  //                   decoration: BoxDecoration(
+  //                     border: Border(
+  //                       left: BorderSide(width: 3.0,
+  //                           color: MyColors
+  //                               .MiddleBlueGreen),
+  //                     ),
+  //                     color: Colors.white,
+  //                   ),
+  //                   child: Text(
+  //                     '   ${reminderItem.medicineName}',
+  //                     style: TextStyle(
+  //                         fontSize: 17,
+  //                         fontWeight: FontWeight.w600),
+  //                   ),
+  //                 ),
+  //                 SizedBox(height: 24,),
+  //               ],
+  //             ),
+  //         ).toList(),
+  //       )
   //     ],
   //   );
   // }
-  //
 
 }

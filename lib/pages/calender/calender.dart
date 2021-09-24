@@ -40,7 +40,8 @@ class _CalenderState extends State<Calender> {
   List<Reminder> _selectedEvents = [];
   //Map cyclicEvents = new Map();
   List<List<dynamic>> _checkList = [];
-  Map timeMap = new Map();
+  //Map timeMap = new Map();
+  List timeColumnList = [];
   Medicine? med;
 
   //bool rebuiltHomeFlag = false;
@@ -70,7 +71,7 @@ class _CalenderState extends State<Calender> {
           .then((reminderCheck) {
         if (reminderCheck == null) {
           setState(() {
-            _checkList.add([reminder, false]);
+            _checkList.add([reminder, false, null]);
           });
         } else {
           setState(() {
@@ -110,9 +111,12 @@ class _CalenderState extends State<Calender> {
     getDayReminders(_selectedDay!).then((value) {
       setState(() {
         _selectedEvents = value;
-        _selectedEvents.sort((a, b) =>
-            DateTime(1, 1, 1999, a.dateTime.hour, a.dateTime.minute).compareTo(
-                DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute)));
+        _selectedEvents.sort((a, b) {
+          int cmp = DateTime( 1, 1, 1999, a.dateTime.hour, a.dateTime.minute)
+              .compareTo( DateTime(1, 1, 1999, b.dateTime.hour, b.dateTime.minute));
+          if (cmp != 0) return cmp;
+          return a.medicineName.compareTo(b.medicineName);
+        });
       });
       getCheckList().then((value) => null);
     });
@@ -121,9 +125,7 @@ class _CalenderState extends State<Calender> {
   @override
   Widget build(BuildContext context) {
     final defaultPadding = MediaQuery.of(context).size.width / 20;
-    setState(() {
-      timeMap.clear();
-    });
+    timeColumnList.clear();
 
     return PageSecondLayout(
       appBarTitle: "My Reminders",
@@ -255,12 +257,11 @@ class _CalenderState extends State<Calender> {
     }
 
     // to show time only once
-    var time =
+    var timeLabel =
         '${reminder.dateTime.hour < 10 ? '0' : ''}${reminder.dateTime.hour}:'
         '${reminder.dateTime.minute < 10 ? '0' : ''}${reminder.dateTime.minute}';
-    setState(() {
-      timeMap.containsKey(time) ? timeMap[time] += 1 : timeMap[time] = 1;
-    });
+    timeColumnList.isEmpty ||timeColumnList[0] != timeLabel ? timeColumnList.insert(0, timeLabel): timeLabel ='';
+
 
     return GestureDetector(
       onTap: () {
@@ -387,8 +388,7 @@ class _CalenderState extends State<Calender> {
                     constraints: const BoxConstraints(
                       minWidth: 75,
                     ),
-                    child: Text(
-                      '${timeMap[time] == 1 ? time : ''}',
+                    child: Text(timeLabel,
                         style: TextStyle(
                             fontSize: 18,
                           color: MyColors.TealBlue,
@@ -561,9 +561,7 @@ class _CalenderState extends State<Calender> {
     widget.reminderCheckDao.insertReminderCheck(check).then((value) {
       setState(() {
         _checkList[index][1] = true;
-        2 < _checkList[index].length
-            ? _checkList[index][2] = check
-            : _checkList[index].add(check);
+        _checkList[index][2] = check;
       });
       Navigator.pop(context);
     });
@@ -624,7 +622,7 @@ class _CalenderState extends State<Calender> {
     widget.reminderCheckDao.deleteReminderCheck(check).then((value) {
       setState(() {
         _checkList[index][1] = false;
-        _checkList[index].removeAt(2);
+        _checkList[index][2] = null;
       });
       Navigator.pop(context);
     });
