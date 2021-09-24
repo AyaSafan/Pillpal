@@ -110,6 +110,50 @@ Future<void> repeatingNotificationCallback(int notificationId, String title, Str
   //print('repeat $tzDateTime');
 }
 
+Future everydayNotification(
+    int hashcode,
+    String message,
+    String subtext,
+    tz.TZDateTime datetime,
+    String? payload,
+    String? sound) async {
+
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+    'PillPal',
+    'PillPal',
+    'PillPal',
+    importance: Importance.max,
+    priority: Priority.high,
+    playSound: true,
+    ongoing: true,
+    sound: RawResourceAndroidNotificationSound(sound),
+
+  );
+  var  iOSPlatformChannelSpecifics =
+  IOSNotificationDetails(sound: 'happy_tone.wav');
+  var  macOSPlatformChannelSpecifics =
+  MacOSNotificationDetails(sound: 'happy_tone.wav');
+  var  platformChannelSpecifics = NotificationDetails(
+    android: androidPlatformChannelSpecifics,
+    iOS: iOSPlatformChannelSpecifics,
+    macOS: macOSPlatformChannelSpecifics,
+  );
+  await flutterLocalNotificationsPlugin.zonedSchedule(
+      hashcode, message, subtext, datetime, platformChannelSpecifics,
+      payload: payload,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time);
+}
+
+Future<void> everydayNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload, {String? sound = 'happy_tone'}) async {
+  var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
+      .add(Duration(seconds: 1));
+  await repeatingNotification( notificationId , title, subtext,
+      tzDateTime , payload, sound).then((value) => null);
+  //print('repeat $tzDateTime');
+}
 
 
 Future<void> cancelNotification(int id) async {

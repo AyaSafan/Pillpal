@@ -33,6 +33,7 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
   TimeOfDay _time =
       TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute + 1);
   bool repeat = false;
+  bool isEveryday = false;
   List<int> days = [];
   String label = '';
   List<Medicine> allMedicine = [];
@@ -150,15 +151,42 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
                 ),
                 Row(
                   children: [
-                    Checkbox(
-                      value: this.repeat,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          this.repeat = value ?? false;
-                        });
-                      },
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: this.repeat,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              this.repeat = value ?? false;
+                            });
+                          },
+                        ),
+                        Text('Repeat'),
+                      ],
                     ),
-                    Text('Repeat')
+                    SizedBox(width: 8,),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: this.isEveryday,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              this.isEveryday = value ?? false;
+                            });
+                            if(isEveryday){
+                              setState(() {
+                                days.addAll([1,2,3,4,5,6,7]);
+                              });
+                            }else{
+                              setState(() {
+                                days.clear();
+                              });
+                            }
+                            },
+                        ),
+                        Text('Everyday'),
+                      ],
+                    )
                   ],
                 ),
                 Wrap(
@@ -278,14 +306,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
       var dateTime = new DateTime.now();
       dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
           _time.hour, _time.minute);
-      //if time chosen already passed on that day.. schedule next day
-      // if (dateTime.isBefore(DateTime.now())) {
-      //   dateTime = dateTime.add(Duration(days: 1));
-      // } else {
-      //   setState(() {
-      //     rebuiltHomeFlag = true;
-      //   });
-      // }
       Reminder reminder = Reminder(
           id: reminderId,
           medicineId: savedSelectedMedicine?.id ?? 0,
@@ -307,44 +327,65 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
     }
     //repeat days are marked
     else if (repeat) {
-      days.forEach((day) {
+      if(isEveryday){
         int timestamp = DateTime.now().millisecondsSinceEpoch;
         int reminderId = timestamp ~/ 1000 + timestamp % 1000;
         final now = new DateTime.now();
         var dateTime = now;
-        while (dateTime.weekday != day) {
-          dateTime = dateTime.add(new Duration(days: 1));
-        }
         //today is monday ..if time chosen already passed on that monday.. schedule monday next week
-        if (dateTime.isBefore(DateTime.now())) {
-          dateTime = dateTime.add(Duration(days: 7));
-        }
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
-        // //if reminder added to today, rebuild home screen
-        // if (DateTime(dateTime.year, dateTime.month, dateTime.day)
-        //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-        //   setState(() {
-        //     rebuiltHomeFlag = true;
-        //   });
-        // }
         Reminder reminder = Reminder(
             repeated: true,
             id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,
             medicineName: savedSelectedMedicine?.name ?? '',
-            day: day,
+            day: 0,
             label: label,
             dateTime: dateTime);
         widget.reminderDao.insertReminder(reminder).then((value) => null);
-        repeatingNotificationCallback(
-                reminderId,
-                '${savedSelectedMedicine?.name} Reminder',
-                notificationSubtext,
-                dateTime,
-                'reminder ${dateTime.millisecondsSinceEpoch}')
+        everydayNotificationCallback(
+            reminderId,
+            '${savedSelectedMedicine?.name} Reminder',
+            notificationSubtext,
+            dateTime,
+            'reminder ${dateTime.millisecondsSinceEpoch}')
             .then((value) => null);
-      });
+
+      }else{
+        days.forEach((day) {
+          int timestamp = DateTime.now().millisecondsSinceEpoch;
+          int reminderId = timestamp ~/ 1000 + timestamp % 1000;
+          final now = new DateTime.now();
+          var dateTime = now;
+          while (dateTime.weekday != day) {
+            dateTime = dateTime.add(new Duration(days: 1));
+          }
+          //today is monday ..if time chosen already passed on that monday.. schedule monday next week
+          if (dateTime.isBefore(DateTime.now())) {
+            dateTime = dateTime.add(Duration(days: 7));
+          }
+          dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
+              _time.hour, _time.minute);
+          Reminder reminder = Reminder(
+              repeated: true,
+              id: reminderId,
+              medicineId: savedSelectedMedicine?.id ?? 0,
+              medicineName: savedSelectedMedicine?.name ?? '',
+              day: day,
+              label: label,
+              dateTime: dateTime);
+          widget.reminderDao.insertReminder(reminder).then((value) => null);
+          repeatingNotificationCallback(
+              reminderId,
+              '${savedSelectedMedicine?.name} Reminder',
+              notificationSubtext,
+              dateTime,
+              'reminder ${dateTime.millisecondsSinceEpoch}')
+              .then((value) => null);
+        });
+      }
+
     }
     //upcoming days are marked
     else {
@@ -362,13 +403,6 @@ class _ReminderAddPageState extends State<ReminderAddPage> {
         }
         dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day,
             _time.hour, _time.minute);
-        //if reminder added to today, rebuild home screen
-        // if (DateTime(dateTime.year, dateTime.month, dateTime.day)
-        //     .isAtSameMomentAs(DateTime(now.year, now.month, now.day))) {
-        //   setState(() {
-        //     rebuiltHomeFlag = true;
-        //   });
-        // }
         Reminder reminder = Reminder(
             id: reminderId,
             medicineId: savedSelectedMedicine?.id ?? 0,

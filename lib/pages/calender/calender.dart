@@ -426,17 +426,23 @@ class _CalenderState extends State<Calender> {
                                 fontSize: 17,
                             fontWeight: FontWeight.w600),
                             ),
-                            reminder.repeated
-                                ? Text(
-                              'Every ${DateFormat('EEEE').format(reminder.dateTime)}',
+                            reminder.day == 0?
+                            Text(
+                              'Everyday',
                               style: Theme.of(context).textTheme.caption!.copyWith(
                                   color: Colors.black54),
                             )
+                            : reminder.repeated?
+                                Text(
+                                  'Every ${DateFormat('EEEE').format(reminder.dateTime)}',
+                                  style: Theme.of(context).textTheme.caption!.copyWith(
+                                      color: Colors.black54),
+                                    )
                                 : Text(
-                              'Once',
-                              style: Theme.of(context).textTheme.caption!.copyWith(
-                                  color: Colors.black54),
-                            ),
+                                    'Once',
+                                    style: Theme.of(context).textTheme.caption!.copyWith(
+                                        color: Colors.black54),
+                                  ),
                             isChecked
                                 ? Text(
                                 '${DateFormat('dd/MM/yyyy  kk:mm').format(reminderCheck!.checkedDateTime)}',

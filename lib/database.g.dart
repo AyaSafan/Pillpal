@@ -353,7 +353,7 @@ class _$ReminderDao extends ReminderDao {
   @override
   Future<List<Reminder>> findReminderForDay(String date, int day) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1 OR repeated = 1 AND day =?2',
+        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1 OR repeated = 1 AND day =?2 OR day=0',
         mapper: (Map<String, Object?> row) => Reminder(id: row['id'] as int?, medicineId: row['medicine_id'] as int, medicineName: row['medicineName'] as String, date: row['date'] as String, day: row['day'] as int, dateTime: _dateTimeConverter.decode(row['dateTime'] as int), label: row['label'] as String, repeated: (row['repeated'] as int) != 0),
         arguments: [date, day]);
   }
@@ -361,7 +361,7 @@ class _$ReminderDao extends ReminderDao {
   @override
   Stream<List<Reminder>> findReminderForDayAsStream(String date, int day) {
     return _queryAdapter.queryListStream(
-        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1 OR repeated = 1 AND day =?2',
+        'SELECT * FROM reminders WHERE repeated = 0 AND date =?1 OR repeated = 1 AND day =?2 OR day=0',
         mapper: (Map<String, Object?> row) => Reminder(
             id: row['id'] as int?,
             medicineId: row['medicine_id'] as int,

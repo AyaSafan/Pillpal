@@ -9,22 +9,10 @@ abstract class ReminderDao {
   @Query('SELECT * FROM reminders WHERE medicine_id = :medicineId')
   Future<List<Reminder>> findReminderByMedicineId(int medicineId);
 
-  // @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date')
-  // Future<List<Reminder>> findReminderByDate(String date);
-  //
-  // @Query('SELECT * FROM reminders WHERE repeated = 1 AND day =:day')
-  // Future<List<Reminder>> findRepeatedReminderByDay(int day);
-
-  @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date OR repeated = 1 AND day =:day')
+  @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date OR repeated = 1 AND day =:day OR day=0')
   Future<List<Reminder>> findReminderForDay(String date, int day);
 
-  // @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date')
-  // Stream<List<Reminder>> findReminderByDateAsStream(String date);
-  //
-  // @Query('SELECT * FROM reminders WHERE repeated = 1 AND day =:day')
-  // Stream<List<Reminder>> findRepeatedReminderByDayAsStream(int day);
-
-  @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date OR repeated = 1 AND day =:day')
+  @Query('SELECT * FROM reminders WHERE repeated = 0 AND date =:date OR repeated = 1 AND day =:day OR day=0')
   Stream<List<Reminder>> findReminderForDayAsStream(String date, int day);
 
   @insert
