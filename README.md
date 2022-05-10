@@ -1,10 +1,16 @@
-# pill_pal
+# Pill Pal
 
-A new Flutter application.
+PillPall is a cross-platform mobile application developed using Flutter for tracking medicine. 
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+Users can input data about their pills: name, description, dose, concentration, shape, color, how many they have, and number to alert at for a refill.
+Users can add one-time, repeated, and daily pill reminders. 
+Users keep a detailed health journal of their taken and missed pills.
+
+Demo: https://www.youtube.com/watch?v=y4-NHnCFdTU
+
+## Getting Started with Flutter
 
 A few resources to get you started if this is your first Flutter project:
 
