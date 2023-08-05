@@ -60,7 +60,7 @@ Future<void> singleNotificationCallback(int notificationId, String title, String
   .add(Duration(seconds: 1));
   await singleNotification( notificationId , title, subtext,
   tzDateTime , payload, ongoing, sound).then((value) => null);
-  //print('single $tzDateTime');
+  //print('$tzDateTime');
 }
 
 
@@ -71,8 +71,8 @@ Future repeatingNotification(
     String subtext,
     tz.TZDateTime datetime,
     String? payload,
+    bool ongoing,
     String? sound) async {
-
   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
     'PillPal',
     'PillPal',
@@ -80,7 +80,7 @@ Future repeatingNotification(
     importance: Importance.max,
     priority: Priority.high,
     playSound: true,
-    ongoing: false,
+    ongoing: ongoing,
     sound: RawResourceAndroidNotificationSound(sound),
 
   );
@@ -93,21 +93,23 @@ Future repeatingNotification(
     iOS: iOSPlatformChannelSpecifics,
     macOS: macOSPlatformChannelSpecifics,
   );
-  await flutterLocalNotificationsPlugin.zonedSchedule(
+  flutterLocalNotificationsPlugin.zonedSchedule(
       hashcode, message, subtext, datetime, platformChannelSpecifics,
       payload: payload,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime
+  );
 }
 
-Future<void> repeatingNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload, {String? sound = 'happy_tone'}) async {
+Future<void> repeatingNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload,
+    {bool ongoing = false, String? sound = 'happy_tone'}) async {
   var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
       .add(Duration(seconds: 1));
-  await repeatingNotification( notificationId , title, subtext,
-      tzDateTime , payload, sound).then((value) => null);
-  //print('repeat $tzDateTime');
+  await singleNotification( notificationId , title, subtext,
+      tzDateTime , payload, ongoing, sound).then((value) => null);
+  //print('$tzDateTime');
 }
 
 Future everydayNotification(
@@ -116,8 +118,8 @@ Future everydayNotification(
     String subtext,
     tz.TZDateTime datetime,
     String? payload,
+    bool ongoing,
     String? sound) async {
-
   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
     'PillPal',
     'PillPal',
@@ -125,7 +127,7 @@ Future everydayNotification(
     importance: Importance.max,
     priority: Priority.high,
     playSound: true,
-    ongoing: false,
+    ongoing: ongoing,
     sound: RawResourceAndroidNotificationSound(sound),
 
   );
@@ -138,21 +140,23 @@ Future everydayNotification(
     iOS: iOSPlatformChannelSpecifics,
     macOS: macOSPlatformChannelSpecifics,
   );
-  await flutterLocalNotificationsPlugin.zonedSchedule(
+  flutterLocalNotificationsPlugin.zonedSchedule(
       hashcode, message, subtext, datetime, platformChannelSpecifics,
       payload: payload,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time);
+      matchDateTimeComponents: DateTimeComponents.time
+  );
 }
 
-Future<void> everydayNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload, {String? sound = 'happy_tone'}) async {
+Future<void> everydayNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload,
+    {bool ongoing = false, String? sound = 'happy_tone'}) async {
   var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
       .add(Duration(seconds: 1));
-  await repeatingNotification( notificationId , title, subtext,
-      tzDateTime , payload, sound).then((value) => null);
-  //print('repeat $tzDateTime');
+  await singleNotification( notificationId , title, subtext,
+      tzDateTime , payload, ongoing, sound).then((value) => null);
+  //print(' $tzDateTime');
 }
 
 
