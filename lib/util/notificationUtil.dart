@@ -55,7 +55,7 @@ Future singleNotification(
 }
 
 Future<void> singleNotificationCallback(int notificationId, String title, String subtext, DateTime dateTime, String? payload,
-    {bool ongoing = true, String? sound = 'happy_tone'}) async {
+    {bool ongoing = false, String? sound = 'happy_tone'}) async {
   var tzDateTime = tz.TZDateTime.from(dateTime, tz.getLocation(await FlutterNativeTimezone.getLocalTimezone()),)
   .add(Duration(seconds: 1));
   await singleNotification( notificationId , title, subtext,
@@ -80,7 +80,7 @@ Future repeatingNotification(
     importance: Importance.max,
     priority: Priority.high,
     playSound: true,
-    ongoing: true,
+    ongoing: false,
     sound: RawResourceAndroidNotificationSound(sound),
 
   );
@@ -125,7 +125,7 @@ Future everydayNotification(
     importance: Importance.max,
     priority: Priority.high,
     playSound: true,
-    ongoing: true,
+    ongoing: false,
     sound: RawResourceAndroidNotificationSound(sound),
 
   );
