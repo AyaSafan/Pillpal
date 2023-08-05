@@ -57,7 +57,7 @@ Future<void> main() async {
   final reminderDao = database.reminderDao;
   final reminderCheckDao = database.reminderCheckDao;
 
-  await addDatabaseDumpData(medicineDao, reminderDao);
+  //await addDatabaseDumpData(medicineDao, reminderDao);
 
 
   runApp(MyApp(
