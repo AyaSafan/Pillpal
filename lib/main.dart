@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/calender') {
-            final passedDay = settings.arguments as DateTime;
+            DateTime? passedDay = settings.arguments != null? settings.arguments as DateTime : null;
             return MaterialPageRoute(
               builder: (context) {
                 return Calender(
