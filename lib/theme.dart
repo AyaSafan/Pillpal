@@ -33,11 +33,8 @@ ColorScheme myColorScheme = ColorScheme(
 ThemeData _buildCustomTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-    colorScheme: myColorScheme,
     toggleableActiveColor: MyColors.TealBlue,
-    accentColor: MyColors.MiddleRed,
     primaryColor: MyColors.TealBlue,
-    buttonColor: MyColors.TealBlue,
     scaffoldBackgroundColor: Colors.white,
     cardColor: Colors.white,
     errorColor: MyColors.MiddleBlueGreen,
@@ -51,8 +48,7 @@ ThemeData _buildCustomTheme() {
 
     ),
     textTheme: _buildCustomTextTheme(base.textTheme),
-    primaryTextTheme: _buildCustomTextTheme(base.primaryTextTheme),
-    accentTextTheme: _buildCustomTextTheme(base.accentTextTheme),
+    primaryTextTheme: _buildCustomTextTheme(base.primaryTextTheme), colorScheme: myColorScheme.copyWith(secondary: MyColors.MiddleRed),
   );
 }
 
