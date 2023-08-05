@@ -135,7 +135,7 @@ class MyApp extends StatelessWidget {
               },
             );
           } else if (settings.name == '/reminder_add') {
-            final med = settings.arguments as Medicine;
+            Medicine? med = settings.arguments != null? settings.arguments as Medicine : null;
             return MaterialPageRoute(
               builder: (context) {
                 return ReminderAddPage(
